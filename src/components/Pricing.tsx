@@ -1,75 +1,113 @@
 
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Shield, DollarSign } from "lucide-react";
+import { CheckCircle, Shield, DollarSign, ArrowRight, Sparkles } from "lucide-react";
 
 const Pricing = () => {
+  const features = [
+    "600+ targeted hiring manager contacts monthly",
+    "AI-powered job scanning across 500+ sources",
+    "Personalized resume and cover letter optimization",
+    "Weekly progress reports and detailed analytics",
+    "Priority support and strategy consultation",
+    "LinkedIn profile optimization included"
+  ];
+
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Simple, Risk-Free Pricing
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center px-4 py-2 bg-green-100 border border-green-300 rounded-full text-green-800 text-sm font-medium mb-6">
+            <Sparkles className="h-4 w-4 mr-2" />
+            Risk-free guarantee
+          </div>
+          <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6">
+            Simple,{" "}
+            <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+              Risk-Free
+            </span>{" "}
+            Pricing
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
             We're so confident in our results, we put our money where our mouth is.
+            No hidden fees, no long-term contracts.
           </p>
         </div>
 
         <div className="max-w-2xl mx-auto">
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-8 border-2 border-blue-200">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Saki Concierge Service</h3>
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <span className="text-4xl font-bold text-blue-600">$299</span>
-                <span className="text-gray-600">/month</span>
-              </div>
-              <p className="text-gray-600">Refundable security deposit</p>
-            </div>
-
-            <div className="space-y-4 mb-8">
-              <div className="flex items-center">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                <span>600+ targeted hiring manager contacts monthly</span>
-              </div>
-              <div className="flex items-center">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                <span>Automated job scanning and instant outreach</span>
-              </div>
-              <div className="flex items-center">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                <span>Personalized resume and cover letter optimization</span>
-              </div>
-              <div className="flex items-center">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                <span>Weekly progress reports and analytics</span>
-              </div>
-              <div className="flex items-center">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                <span>Priority support and strategy consultation</span>
-              </div>
-            </div>
-
-            <div className="border-t border-blue-200 pt-6 mb-8">
-              <div className="flex items-start gap-3 mb-4">
-                <Shield className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">Money-Back Guarantee</h4>
-                  <p className="text-gray-600 text-sm">If we don't land you interviews, get your $299 back. No questions asked.</p>
+          <div className="relative">
+            {/* Glow effect */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-3xl blur-xl"></div>
+            
+            <div className="relative bg-white rounded-3xl p-12 shadow-2xl border-2 border-blue-100">
+              {/* Popular badge */}
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
+                  Most Popular
                 </div>
               </div>
-              
-              <div className="flex items-start gap-3">
-                <DollarSign className="h-6 w-6 text-blue-500 mt-1 flex-shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">Success Fee</h4>
-                  <p className="text-gray-600 text-sm">Only pay 1% of your first month's compensation if you get hired through our efforts.</p>
+
+              <div className="text-center mb-10">
+                <h3 className="text-3xl font-bold text-slate-900 mb-4">Saki Concierge Service</h3>
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <span className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">$299</span>
+                  <div className="text-left">
+                    <div className="text-slate-600 text-lg">/month</div>
+                    <div className="text-sm text-green-600 font-medium">Fully refundable</div>
+                  </div>
+                </div>
+                <p className="text-slate-600 text-lg">Security deposit - get it back if no interviews</p>
+              </div>
+
+              <div className="space-y-4 mb-10">
+                {features.map((feature, index) => (
+                  <div key={index} className="flex items-start">
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 flex-shrink-0 mt-0.5" />
+                    <span className="text-slate-700 text-lg">{feature}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="border-t border-slate-200 pt-8 mb-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="flex items-start gap-4 p-4 bg-green-50 rounded-2xl border border-green-200">
+                    <Shield className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-2">Money-Back Guarantee</h4>
+                      <p className="text-slate-600 text-sm leading-relaxed">If we don't land you interviews within 30 days, get your full $299 back. No questions asked.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-4 p-4 bg-blue-50 rounded-2xl border border-blue-200">
+                    <DollarSign className="h-8 w-8 text-blue-600 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-2">Success Fee</h4>
+                      <p className="text-slate-600 text-sm leading-relaxed">Only pay 1% of your first month's total compensation if you get hired through our efforts.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 text-lg">
-              See If You Qualify
-            </Button>
+              <div className="space-y-4">
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                  See If You Qualify <ArrowRight className="ml-2 h-6 w-6" />
+                </Button>
+                <p className="text-center text-sm text-slate-500">
+                  Free consultation • No commitment • Setup in 24 hours
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Social proof */}
+        <div className="text-center mt-16">
+          <p className="text-slate-600 mb-4">Trusted by professionals at</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
+            <div className="text-2xl font-bold text-slate-400">Google</div>
+            <div className="text-2xl font-bold text-slate-400">Meta</div>
+            <div className="text-2xl font-bold text-slate-400">Microsoft</div>
+            <div className="text-2xl font-bold text-slate-400">Apple</div>
+            <div className="text-2xl font-bold text-slate-400">Netflix</div>
           </div>
         </div>
       </div>
