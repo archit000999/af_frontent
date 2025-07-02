@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface ApplicationFormProps {
   open: boolean;
@@ -23,13 +25,49 @@ const ApplicationForm = ({ open, onOpenChange }: ApplicationFormProps) => {
     linkedinUrl: "",
     isInUS: "",
     careerTrack: "",
+    isCurrentlyEmployed: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data:", formData);
-    // TODO: Save to database
-    onOpenChange(false);
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from('applications')
+        .insert({
+          full_name: formData.fullName,
+          email: formData.email,
+          phone_number: formData.phoneNumber,
+          linkedin_url: formData.linkedinUrl,
+          is_in_us: formData.isInUS,
+          career_track: formData.careerTrack,
+          is_currently_employed: formData.isCurrentlyEmployed,
+        });
+
+      if (error) {
+        toast.error("Failed to submit application. Please try again.");
+        console.error("Error submitting application:", error);
+      } else {
+        toast.success("Application submitted successfully!");
+        onOpenChange(false);
+        setFormData({
+          fullName: "",
+          email: "",
+          phoneNumber: "",
+          linkedinUrl: "",
+          isInUS: "",
+          careerTrack: "",
+          isCurrentlyEmployed: "",
+        });
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred. Please try again.");
+      console.error("Unexpected error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -161,12 +199,33 @@ const ApplicationForm = ({ open, onOpenChange }: ApplicationFormProps) => {
             </RadioGroup>
           </div>
 
+          <div>
+            <Label className="text-sm font-medium">
+              Are you currently employed?<span className="text-destructive">*</span>
+            </Label>
+            <RadioGroup
+              value={formData.isCurrentlyEmployed}
+              onValueChange={(value) => setFormData({ ...formData, isCurrentlyEmployed: value })}
+              className="mt-2"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="yes" id="employed-yes" />
+                <Label htmlFor="employed-yes">Yes</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="no" id="employed-no" />
+                <Label htmlFor="employed-no">No</Label>
+              </div>
+            </RadioGroup>
+          </div>
+
           <div className="flex justify-end pt-4">
             <Button
               type="submit"
+              disabled={isSubmitting}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-2"
             >
-              Next
+              {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
           </div>
         </form>
