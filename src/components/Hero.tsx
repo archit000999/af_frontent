@@ -36,7 +36,7 @@ const Hero = () => {
             <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
               Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
-            <Button variant="outline" size="lg" className="px-10 py-6 text-xl border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm font-semibold">
+            <Button variant="outline" size="lg" className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
               Book Free Consult
             </Button>
           </div>
