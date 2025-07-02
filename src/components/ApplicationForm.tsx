@@ -78,7 +78,7 @@ const ApplicationForm = ({ open, onOpenChange }: ApplicationFormProps) => {
             Application Form
           </DialogTitle>
           <p className="text-center text-muted-foreground">
-            It will only take a couple of minutes to fill out this form!
+            It will only take a couple of seconds to fill out this form!
           </p>
         </DialogHeader>
 
