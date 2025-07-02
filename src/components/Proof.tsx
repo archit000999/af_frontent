@@ -24,8 +24,8 @@ const Proof = () => {
     },
     {
       icon: Star,
-      number: "95%",
-      label: "User satisfaction rate with interview quality",
+      number: "100%",
+      label: "of emails land in primary inbox",
       color: "from-yellow-400 to-orange-500"
     }
   ];
