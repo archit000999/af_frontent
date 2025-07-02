@@ -4,12 +4,12 @@ import { CheckCircle, Shield, DollarSign, ArrowRight, Sparkles } from "lucide-re
 
 const Pricing = () => {
   const features = [
-    "600+ targeted hiring manager contacts monthly",
-    "AI-powered job scanning across 500+ sources",
-    "Personalized resume and cover letter optimization",
-    "Weekly progress reports and detailed analytics",
-    "Priority support and strategy consultation",
-    "LinkedIn profile optimization included"
+    "AI scans 20M+ company pages to find hidden job openings instantly",
+    "Auto-identifies hiring managers and finds verified emails using a waterfall method",
+    "600+ personalized emails/month sent from a warmed Gmail inbox in your name",
+    "Focus on referrals & screening calls — not just cold applications",
+    "6–7 interviews/month on average, targeting $100K+ roles",
+    "Saves 20+ hours/week of manual outreach so you can focus on interview prep"
   ];
 
   return (
