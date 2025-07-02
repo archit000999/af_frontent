@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
+import ApplicationForm from "./ApplicationForm";
 const Hero = () => {
+  const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
+
   return <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 opacity-20" style={{
@@ -30,10 +34,19 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+            <Button 
+              size="lg" 
+              onClick={() => setIsApplicationFormOpen(true)}
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+            >
               Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
-            <Button variant="outline" size="lg" className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              onClick={() => setIsApplicationFormOpen(true)}
+              className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300"
+            >
               Book Free Consult
             </Button>
           </div>
@@ -57,6 +70,11 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      
+      <ApplicationForm 
+        open={isApplicationFormOpen} 
+        onOpenChange={setIsApplicationFormOpen} 
+      />
     </section>;
 };
 export default Hero;
