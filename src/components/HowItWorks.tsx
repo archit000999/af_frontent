@@ -13,7 +13,7 @@ const HowItWorks = () => {
     {
       icon: Mail,
       title: "Instant Hiring Manager Outreach",
-      description: "Within 60 minutes, we email hiring managers with your tailored resume and compelling introduction that cuts through the noise.",
+      description: "Within 60 minutes, we email hiring managers with your resume and compelling introduction that cuts through the noise.",
       step: "02",
       color: "from-indigo-500 to-purple-500"
     },
