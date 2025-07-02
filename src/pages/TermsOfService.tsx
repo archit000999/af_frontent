@@ -164,8 +164,8 @@ const TermsOfService = () => {
               For questions about these Terms of Service, please contact us at:
             </p>
             <p className="text-slate-700">
-              Email: legal@saki.com<br />
-              Address: [Your Business Address]
+             Email: support@trysaki.com<br />
+             Address: 149 New Montgomery St 4th Floor, San Francisco, CA 94105
             </p>
           </section>
         </div>

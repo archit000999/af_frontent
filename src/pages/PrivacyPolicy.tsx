@@ -126,8 +126,8 @@ const PrivacyPolicy = () => {
               If you have any questions about this Privacy Policy or our privacy practices, please contact us at:
             </p>
             <p className="text-slate-700">
-              Email: privacy@saki.com<br />
-              Address: [Your Business Address]
+              Email: support@trysaki.com<br />
+              Address: 149 New Montgomery St 4th Floor, San Francisco, CA 94105
             </p>
           </section>
         </div>
