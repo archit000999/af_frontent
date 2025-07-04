@@ -29,7 +29,7 @@ const Hero = () => {
           </h1>
           
           <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-            Saki reaches out to hiring managers for you — at scale, on autopilot. 
+            ApplyFirst reaches out to hiring managers for you — at scale, on autopilot. 
             Be among the first 10 candidates they see.
           </p>
           

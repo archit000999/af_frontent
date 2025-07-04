@@ -21,7 +21,7 @@ const PrivacyPolicy = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">1. Who We Are</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              Saki is an AI-powered concierge job search service that helps professionals connect with hiring managers before job postings hit public platforms like LinkedIn. This Privacy Policy explains how we collect, use, and protect your personal information.
+              ApplyFirst is an AI-powered concierge job search service that helps professionals connect with hiring managers before job postings hit public platforms like LinkedIn. This Privacy Policy explains how we collect, use, and protect your personal information.
             </p>
           </section>
 

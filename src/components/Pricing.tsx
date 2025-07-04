@@ -36,7 +36,7 @@ const Pricing = () => {
               </div>
 
               <div className="text-center mb-10">
-                <h3 className="text-3xl font-bold text-slate-900 mb-4">Saki Concierge Service</h3>
+                <h3 className="text-3xl font-bold text-slate-900 mb-4">ApplyFirst Concierge Service</h3>
                 <div className="flex items-center justify-center gap-2 mb-4">
                   <span className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">$299</span>
                   <div className="text-left">

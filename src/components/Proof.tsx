@@ -73,7 +73,7 @@ const Proof = () => {
                 ))}
               </div>
               <p className="text-slate-200 text-lg italic mb-6 leading-relaxed">
-                "Saki helped me land 3 interviews in my first week. The hiring managers actually responded because I was early in the process. Game changer!"
+                "ApplyFirst helped me land 3 interviews in my first week. The hiring managers actually responded because I was early in the process. Game changer!"
               </p>
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full flex items-center justify-center mr-4">
@@ -93,7 +93,7 @@ const Proof = () => {
                 ))}
               </div>
               <p className="text-slate-200 text-lg italic mb-6 leading-relaxed">
-                "I was tired of applying to 200+ jobs on LinkedIn with no response. Saki's approach actually gets you in front of decision-makers who matter."
+                "I was tired of applying to 200+ jobs on LinkedIn with no response. ApplyFirst's approach actually gets you in front of decision-makers who matter."
               </p>
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-400 rounded-full flex items-center justify-center mr-4">

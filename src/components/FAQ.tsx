@@ -47,7 +47,7 @@ const FAQ = () => {
             </span>
           </h2>
           <p className="text-xl text-slate-600 leading-relaxed">
-            Everything you need to know about how Saki works and what to expect.
+            Everything you need to know about how ApplyFirst works and what to expect.
           </p>
         </div>
 

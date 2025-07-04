@@ -21,7 +21,7 @@ const TermsOfService = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">1. Definitions</h2>
             <ul className="list-disc list-inside text-slate-700 space-y-2">
-              <li><strong>"Saki", "we", "our", "us"</strong> refers to the Saki concierge job search service</li>
+              <li><strong>"ApplyFirst", "we", "our", "us"</strong> refers to the ApplyFirst concierge job search service</li>
               <li><strong>"Service"</strong> means our AI-powered job search and outreach platform</li>
               <li><strong>"User", "you", "your"</strong> refers to any person using our Service</li>
               <li><strong>"Content"</strong> means any information, text, graphics, or other materials</li>
@@ -32,21 +32,21 @@ const TermsOfService = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">2. Acceptance of Terms</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              By accessing or using Saki, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these terms, please do not use our Service.
+              By accessing or using ApplyFirst, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these terms, please do not use our Service.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">3. Eligibility</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              You must be at least 18 years old and legally capable of entering into binding contracts to use our Service. By using Saki, you represent that you meet these eligibility requirements.
+              You must be at least 18 years old and legally capable of entering into binding contracts to use our Service. By using ApplyFirst, you represent that you meet these eligibility requirements.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">4. Service Description</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              Saki provides an AI-powered concierge service that:
+              ApplyFirst provides an AI-powered concierge service that:
             </p>
             <ul className="list-disc list-inside text-slate-700 mb-4 space-y-2">
               <li>Scans job boards and company pages for new opportunities</li>
@@ -94,7 +94,7 @@ const TermsOfService = () => {
               You retain ownership of your resume, professional information, and other content you provide. By using our Service, you grant us a limited license to use this content for the purpose of providing job search services.
             </p>
             <p className="text-slate-700 leading-relaxed mb-4">
-              All AI-generated content, templates, and outreach strategies developed by Saki remain our intellectual property.
+              All AI-generated content, templates, and outreach strategies developed by ApplyFirst remain our intellectual property.
             </p>
           </section>
 
@@ -140,7 +140,7 @@ const TermsOfService = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">12. Limitation of Liability</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              To the maximum extent permitted by law, Saki's liability is limited to the amount paid by you in the 12 months preceding any claim. We are not liable for indirect, incidental, or consequential damages.
+              To the maximum extent permitted by law, ApplyFirst's liability is limited to the amount paid by you in the 12 months preceding any claim. We are not liable for indirect, incidental, or consequential damages.
             </p>
           </section>
 
