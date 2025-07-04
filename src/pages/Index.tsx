@@ -1,6 +1,7 @@
 
 import Hero from "@/components/Hero";
 import Problem from "@/components/Problem";
+import ATSProblem from "@/components/ATSProblem";
 import HowItWorks from "@/components/HowItWorks";
 import Proof from "@/components/Proof";
 import Pricing from "@/components/Pricing";
@@ -12,6 +13,7 @@ const Index = () => {
     <div className="min-h-screen bg-white">
       <Hero />
       <Problem />
+      <ATSProblem />
       <HowItWorks />
       <Proof />
       <Pricing />
