@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Shield, DollarSign, ArrowRight, Sparkles } from "lucide-react";
 const Pricing = () => {
-  const features = ["AI scans 20M+ company pages to find hidden job openings instantly", "Auto-identifies hiring managers and finds verified emails using a waterfall method", "600+ personalized emails/month sent from a warmed Gmail inbox in your name", "Focus on referrals & screening calls — not just cold applications", "6–7 interviews/month on average, targeting $100K+ roles", "Saves 20+ hours/week of manual outreach so you can focus on interview prep"];
+  const features = ["AI scans 20M+ company pages to find hidden job openings instantly", "Auto-identifies hiring managers and finds verified emails using a waterfall method ensuring 100% accuracy", "600+ personalized emails/month sent from a warmed Gmail inbox in your name", "Focus on referrals & screening calls — not just cold applications", "6–7 interviews/month on average, targeting $100K+ roles", "Saves 20+ hours/week of manual outreach so you can focus on interview prep"];
   return <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
