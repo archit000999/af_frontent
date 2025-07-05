@@ -1,7 +1,22 @@
+import { useState, useEffect } from "react";
 import { AlertTriangle, Bot, Shield, Target, CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const ATSProblem = () => {
+  const [showCalendly, setShowCalendly] = useState(false);
+
+  useEffect(() => {
+    if (showCalendly) {
+      if (!document.querySelector("#calendly-widget-script")) {
+        const script = document.createElement("script");
+        script.id = "calendly-widget-script";
+        script.src = "https://assets.calendly.com/assets/external/widget.js";
+        script.async = true;
+        document.body.appendChild(script);
+      }
+    }
+  }, [showCalendly]);
+
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-red-50 to-orange-50">
       <div className="max-w-7xl mx-auto">
@@ -121,11 +136,28 @@ const ATSProblem = () => {
             <Button 
               size="lg" 
               className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold shadow-xl"
+              onClick={() => setShowCalendly(true)}
             >
               Start Your Free Evaluation <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <p className="text-sm mt-2 opacity-90">Get ahead before the filters even kick in</p>
           </div>
+          {showCalendly && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+              <div className="bg-white rounded-xl shadow-2xl p-6 relative w-full max-w-2xl">
+                <button
+                  onClick={() => setShowCalendly(false)}
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-2xl font-bold"
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+                {/* Calendly inline widget begin */}
+                <div className="calendly-inline-widget" data-url="https://calendly.com/archit-trysaki/qualifying-call" style={{ minWidth: 320, height: 700 }}></div>
+                {/* Calendly inline widget end */}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

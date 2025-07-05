@@ -1,9 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
 import ApplicationForm from "./ApplicationForm";
+
 const Hero = () => {
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
+  const [showCalendly, setShowCalendly] = useState(false);
+
+  useEffect(() => {
+    if (showCalendly) {
+      if (!document.querySelector("#calendly-widget-script")) {
+        const script = document.createElement("script");
+        script.id = "calendly-widget-script";
+        script.src = "https://assets.calendly.com/assets/external/widget.js";
+        script.async = true;
+        document.body.appendChild(script);
+      }
+    }
+  }, [showCalendly]);
 
   return <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background effects */}
@@ -22,34 +36,50 @@ const Hero = () => {
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Land Interviews Before Jobs Hit{" "}
+            Reach Hiring Managers the Moment a Job Goes{" "}
             <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-              LinkedIn
+              Live
             </span>
           </h1>
           
           <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-            ApplyFirst reaches out to hiring managers for you — at scale, on autopilot. 
-            Be among the first 10 candidates they see.
+            ApplyFirst finds new job openings in real time and automatically contacts hiring managers on your behalf.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Button 
               size="lg" 
-              onClick={() => setIsApplicationFormOpen(true)}
+              onClick={() => setShowCalendly(true)}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
             >
-              Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
+              Contact Us <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
             <Button 
               variant="outline" 
               size="lg" 
-              onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')}
+              onClick={() => setShowCalendly(true)}
               className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300"
             >
               Book Free Consult
             </Button>
           </div>
+
+          {showCalendly && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+              <div className="bg-white rounded-xl shadow-2xl p-6 relative w-full max-w-2xl">
+                <button
+                  onClick={() => setShowCalendly(false)}
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-2xl font-bold"
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+                {/* Calendly inline widget begin */}
+                <div className="calendly-inline-widget" data-url="https://calendly.com/archit-trysaki/qualifying-call" style={{ minWidth: 320, height: 700 }}></div>
+                {/* Calendly inline widget end */}
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
