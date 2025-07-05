@@ -12,11 +12,17 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
+            {/* Logo */}
+            <div className="flex items-center mr-3">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[#2563eb] shadow-md">
+                <span className="text-white text-3xl font-bold">A</span>
+              </div>
+            </div>
             <div className="text-left">
-              <h1 className="text-xl font-bold text-slate-900">
+              <h1 className="text-xl font-bold text-white">
                 ApplyFirst
               </h1>
-              <p className="text-sm text-blue-600 font-medium">
+              <p className="text-sm text-blue-200 font-medium">
                 powered by Saki AI
               </p>
             </div>
