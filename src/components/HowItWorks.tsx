@@ -6,7 +6,7 @@ const HowItWorks = () => {
     {
       icon: Search,
       title: "We Scan & Find Hidden Jobs",
-      description: "Our AI continuously monitors 500+ job boards, company pages, and insider networks to find opportunities before they hit LinkedIn.",
+      description: "Our AI continuously monitors 500+ job boards including LinkedIn, company pages, and insider networks to find opportunities.",
       step: "01",
       color: "from-blue-500 to-indigo-500"
     },
