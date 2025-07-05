@@ -12,10 +12,10 @@ const ATSProblem = () => {
           </div>
           
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-            The Hidden Reason You're Not Getting{" "}
             <span className="bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
-              Interviews
+              STOP APPLYING FOR JOBS
             </span>
+            {" "}— ESPECIALLY USING AI
           </h2>
           
           <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
@@ -40,6 +40,18 @@ const ATSProblem = () => {
                   <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center mr-3 mt-0.5">
                     <span className="text-red-600 text-sm font-bold">✗</span>
                   </div>
+                  <span className="text-gray-700"><strong>Cursor tracking patterns (detecting bot-like behavior)</strong></span>
+                </div>
+                <div className="flex items-start">
+                  <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center mr-3 mt-0.5">
+                    <span className="text-red-600 text-sm font-bold">✗</span>
+                  </div>
+                  <span className="text-gray-700"><strong>AI applies in 5 seconds (impossible human speed)</strong></span>
+                </div>
+                <div className="flex items-start">
+                  <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center mr-3 mt-0.5">
+                    <span className="text-red-600 text-sm font-bold">✗</span>
+                  </div>
                   <span className="text-gray-700"><strong>Generic or templated resumes</strong></span>
                 </div>
                 <div className="flex items-start">
@@ -48,23 +60,11 @@ const ATSProblem = () => {
                   </div>
                   <span className="text-gray-700"><strong>Mass job applications from the same candidate</strong></span>
                 </div>
-                <div className="flex items-start">
-                  <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center mr-3 mt-0.5">
-                    <span className="text-red-600 text-sm font-bold">✗</span>
-                  </div>
-                  <span className="text-gray-700"><strong>Copy-paste cover letters</strong></span>
-                </div>
-                <div className="flex items-start">
-                  <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center mr-3 mt-0.5">
-                    <span className="text-red-600 text-sm font-bold">✗</span>
-                  </div>
-                  <span className="text-gray-700"><strong>Overuse of AI-written text</strong></span>
-                </div>
               </div>
               
               <div className="bg-red-50 border-l-4 border-red-500 p-4 mt-6 rounded">
                 <p className="text-red-800 font-semibold italic">
-                  "The moment you're flagged, you're done. Your resume is silently discarded — no human ever reviews it."
+                  "Once your resume is blacklisted by ATS, no application will ever work again. You're permanently flagged across their entire system."
                 </p>
               </div>
             </div>
@@ -73,9 +73,9 @@ const ATSProblem = () => {
           <div className="text-center">
             <div className="bg-gradient-to-br from-red-600 to-orange-600 p-8 rounded-2xl text-white mb-8">
               <AlertTriangle className="h-16 w-16 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold mb-4">The Apply Button is a Trap</h3>
+              <h3 className="text-2xl font-bold mb-4">AI Job Applying is a Trap</h3>
               <p className="text-lg leading-relaxed">
-                The traditional job portal is no longer your friend. You're just a number in a pile of automated rejections.
+                Using AI to mass-apply to jobs is the fastest way to get permanently blacklisted. You're just feeding the system that's designed to reject you.
               </p>
             </div>
             
