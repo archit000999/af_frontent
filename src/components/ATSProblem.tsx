@@ -15,7 +15,7 @@ const ATSProblem = () => {
             <span className="bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
               STOP APPLYING FOR JOBS
             </span>
-            {" "}— ESPECIALLY USING AI
+            {" "}— USING AI
           </h2>
           
           <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
