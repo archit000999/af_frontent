@@ -13,24 +13,37 @@ const ATSProblem = () => {
             Why We Built ApplyFirst
           </div>
           
-          <h2 className="text-5xl sm:text-6xl font-bold text-slate-900 mb-8 leading-tight">
-            From <span className="text-red-500">12 Months</span> to <span className="text-blue-500">2 Months</span>
+          <h2 className="text-5xl sm:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+            Cut Job Search Time from <span className="text-red-500">12 Months</span> to <span className="text-blue-500">2 Months</span>
           </h2>
           
-          {/* Inline Timeline */}
-          <div className="max-w-2xl mx-auto mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-medium text-slate-600">Traditional Job Search</span>
-              <span className="text-sm font-medium text-slate-600">ApplyFirst Method</span>
-            </div>
-            <div className="relative">
-              <div className="w-full bg-slate-200 rounded-full h-8 overflow-hidden">
-                <div className="bg-gradient-to-r from-red-400 to-red-500 h-8 rounded-full absolute w-full"></div>
-                <div className="bg-gradient-to-r from-blue-400 to-blue-500 h-8 rounded-full absolute transition-all duration-2000 ease-out" style={{ width: '16.7%' }}></div>
+          <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
+            Stop competing with 500+ applicants. Be among the first 10 every time.
+          </p>
+          
+          {/* Enhanced Timeline Visualization */}
+          <div className="max-w-3xl mx-auto mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <div className="text-center">
+                <div className="text-sm font-semibold text-red-600 mb-2">Traditional Method</div>
+                <div className="text-2xl font-bold text-red-500">12 Months</div>
+                <div className="text-xs text-slate-500">Average job search</div>
               </div>
-              <div className="flex justify-between mt-2">
-                <span className="text-xs text-red-600 font-semibold">500+ Competitors</span>
-                <span className="text-xs text-blue-600 font-semibold">First 10 Applicants</span>
+              <div className="text-center">
+                <div className="text-sm font-semibold text-blue-600 mb-2">ApplyFirst Method</div>
+                <div className="text-2xl font-bold text-blue-500">2 Months</div>
+                <div className="text-xs text-slate-500">With our system</div>
+              </div>
+            </div>
+            
+            <div className="relative mb-4">
+              <div className="w-full bg-slate-200 rounded-full h-6 overflow-hidden shadow-inner">
+                <div className="bg-gradient-to-r from-red-400 to-red-500 h-6 rounded-full absolute w-full opacity-90"></div>
+                <div className="bg-gradient-to-r from-blue-400 to-blue-500 h-6 rounded-full absolute transition-all duration-2000 ease-out opacity-95 shadow-lg" style={{ width: '16.7%' }}></div>
+              </div>
+              <div className="flex justify-between mt-3">
+                <span className="text-xs text-red-600 font-medium">Competing with 500+ applicants</span>
+                <span className="text-xs text-blue-600 font-medium">Among first 10 applicants</span>
               </div>
             </div>
           </div>
@@ -77,7 +90,7 @@ const ATSProblem = () => {
               </div>
               <div className="flex items-center">
                 <Users className="h-5 w-5 text-red-600 mr-3" />
-                <span className="text-slate-700 font-medium">500+ competitors per job</span>
+                <span className="text-slate-700 font-medium">500+ applicants per job</span>
               </div>
               <div className="flex items-center">
                 <Zap className="h-5 w-5 text-red-600 mr-3" />
