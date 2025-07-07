@@ -216,11 +216,11 @@ const ATSProblem = () => {
               </div>
               <div className="flex items-center">
                 <CheckCircle className="h-5 w-5 text-green-600 mr-3" />
-                <span className="text-slate-700 font-medium">Direct hiring manager outreach</span>
+                <span className="text-slate-700 font-medium">First 10 applicants, every time</span>
               </div>
               <div className="flex items-center">
                 <CheckCircle className="h-5 w-5 text-green-600 mr-3" />
-                <span className="text-slate-700 font-medium">First 10 applicants, every time</span>
+                <span className="text-slate-700 font-medium">Direct hiring manager outreach</span>
               </div>
             </div>
             
