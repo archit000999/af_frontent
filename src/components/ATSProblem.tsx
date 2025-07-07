@@ -156,7 +156,7 @@ const ATSProblem = () => {
             </div>
             <div className="w-px h-12 bg-slate-300"></div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">15+</div>
+              <div className="text-3xl font-bold text-blue-600">4+</div>
               <div className="text-sm text-slate-600">Interviews/month</div>
             </div>
             <div className="w-px h-12 bg-slate-300"></div>
