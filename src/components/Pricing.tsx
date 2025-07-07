@@ -18,7 +18,7 @@ const Pricing = () => {
     name: "Student Plan",
     price: "$229",
     period: "/month",
-    features: ["250 personalized emails", "3–4 screening calls/mo", '"No-hire" refund'],
+    features: ["250 personalized emails", "3–4 screening calls/mo", "100% refund if no qualified responses"],
     popular: false
   }, {
     name: "Exec Plan",
