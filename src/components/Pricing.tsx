@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Shield, DollarSign, ArrowRight, Sparkles } from "lucide-react";
+
 const Pricing = () => {
   const [showCalendly, setShowCalendly] = useState(false);
+
   useEffect(() => {
     if (showCalendly) {
       if (!document.querySelector("#calendly-widget-script")) {
@@ -14,19 +16,31 @@ const Pricing = () => {
       }
     }
   }, [showCalendly]);
-  const plans = [{
-    name: "Student Plan",
-    price: "$229",
-    period: "/month",
-    features: ["250 personalized emails", "3–4 screening calls/mo", '"No-hire" refund'],
-    popular: false
-  }, {
-    name: "Exec Plan",
-    price: "$399",
-    period: "/month",
-    features: ["600 personalized emails", "6–7 screening calls/mo", "100% refund if no qualified responses"],
-    popular: true
-  }];
+
+  const plans = [
+    {
+      name: "Student Plan",
+      price: "$229",
+      period: "/month",
+      features: [
+        "250 personalized emails",
+        "3–4 screening calls/mo",
+        '"No-hire" refund'
+      ],
+      popular: false
+    },
+    {
+      name: "Exec Plan", 
+      price: "$399",
+      period: "/month",
+      features: [
+        "600 personalized emails",
+        "6–7 screening calls/mo",
+        "100% refund if no qualified responses"
+      ],
+      popular: true
+    }
+  ];
   return <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
@@ -47,15 +61,25 @@ const Pricing = () => {
         </div>
 
         <div className="max-w-6xl mx-auto">
-          
+          <div className="text-center mb-12">
+            <p className="text-lg text-slate-600 mb-4">
+              <strong>Strategy 1 – Monthly Prepaid Bundle</strong>
+            </p>
+            <p className="text-slate-600">
+              Ideal for customers who want flexibility but will commit at least one month up front.
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {plans.map((plan, index) => <div key={index} className={`relative ${plan.popular ? 'lg:scale-105' : ''}`}>
-                {plan.popular && <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+            {plans.map((plan, index) => (
+              <div key={index} className={`relative ${plan.popular ? 'lg:scale-105' : ''}`}>
+                {plan.popular && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                     <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
                       Most Popular
                     </div>
-                  </div>}
+                  </div>
+                )}
                 
                 <div className={`bg-white rounded-3xl p-8 shadow-xl ${plan.popular ? 'border-2 border-blue-200 shadow-2xl' : 'border border-slate-200'} h-full`}>
                   <div className="text-center mb-8">
@@ -72,17 +96,27 @@ const Pricing = () => {
                   </div>
 
                   <div className="space-y-4 mb-8">
-                    {plan.features.map((feature, featureIndex) => <div key={featureIndex} className="flex items-start">
+                    {plan.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-start">
                         <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
                         <span className="text-slate-700">{feature}</span>
-                      </div>)}
+                      </div>
+                    ))}
                   </div>
 
-                  <Button className={`w-full py-4 text-lg font-semibold transition-all duration-300 ${plan.popular ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105' : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300'}`} onClick={() => setShowCalendly(true)}>
+                  <Button 
+                    className={`w-full py-4 text-lg font-semibold transition-all duration-300 ${
+                      plan.popular 
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105' 
+                        : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300'
+                    }`}
+                    onClick={() => setShowCalendly(true)}
+                  >
                     Get Started <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </div>
-              </div>)}
+              </div>
+            ))}
           </div>
         </div>
 
@@ -97,19 +131,22 @@ const Pricing = () => {
             <div className="text-2xl font-bold text-slate-400">Netflix</div>
           </div>
         </div>
-        {showCalendly && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+        {showCalendly && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
             <div className="bg-white rounded-xl shadow-2xl p-6 relative w-full max-w-2xl">
-              <button onClick={() => setShowCalendly(false)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-2xl font-bold" aria-label="Close">
+              <button
+                onClick={() => setShowCalendly(false)}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-2xl font-bold"
+                aria-label="Close"
+              >
                 ×
               </button>
               {/* Calendly inline widget begin */}
-              <div className="calendly-inline-widget" data-url="https://calendly.com/archit-trysaki/qualifying-call" style={{
-            minWidth: 320,
-            height: 700
-          }}></div>
+              <div className="calendly-inline-widget" data-url="https://calendly.com/archit-trysaki/qualifying-call" style={{ minWidth: 320, height: 700 }}></div>
               {/* Calendly inline widget end */}
             </div>
-          </div>}
+          </div>
+        )}
       </div>
     </section>;
 };
