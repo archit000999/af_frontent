@@ -15,14 +15,14 @@ const ATSProblem = () => {
     month: 1,
     label: "Month 1",
     interviews: 4,
-    offers: 0,
-    description: "First interviews scheduled"
+    offers: 1,
+    description: "First offer received!"
   }, {
     month: 2,
     label: "Month 2",
     interviews: 8,
-    offers: 1,
-    description: "Offer accepted!"
+    offers: 2,
+    description: "Multiple offers + $50K+ salary increase!"
   }];
   useEffect(() => {
     let interval: NodeJS.Timeout;
