@@ -15,14 +15,14 @@ const ATSProblem = () => {
     month: 1,
     label: "Month 1",
     interviews: 4,
-    offers: 1,
-    description: "First offer received!"
+    offers: 0,
+    description: "First interviews scheduled"
   }, {
     month: 2,
     label: "Month 2",
     interviews: 8,
-    offers: 2,
-    description: "Multiple offers + $50K+ salary increase!"
+    offers: 1,
+    description: "Offer accepted!"
   }];
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -127,32 +127,12 @@ const ATSProblem = () => {
                 </div>
               </div>
               
-              {/* Progress Timeline */}
-              <div className="mt-4">
-                <div className="text-xs text-slate-500 mb-2 text-center">Job Search Timeline</div>
-                <div className="flex justify-between items-center">
-                  {milestones.map((milestone, index) => (
-                    <div key={index} className="flex flex-col items-center">
-                      <div className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
-                        index <= currentMonth 
-                          ? 'bg-blue-500 border-blue-500' 
-                          : 'bg-white border-slate-300'
-                      }`}>
-                        {index <= currentMonth && (
-                          <div className="w-full h-full rounded-full bg-blue-500 flex items-center justify-center">
-                            <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                          </div>
-                        )}
-                      </div>
-                      <div className="text-xs text-slate-600 mt-1 font-medium">{milestone.label}</div>
-                      {index < milestones.length - 1 && (
-                        <div className={`absolute h-0.5 w-20 mt-2 transition-colors duration-300 ${
-                          index < currentMonth ? 'bg-blue-500' : 'bg-slate-300'
-                        }`} style={{ left: `${(index * 50) + 25}%` }}></div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+              {/* Progress Steps */}
+              <div className="flex justify-between items-center">
+                {milestones.map((milestone, index) => <div key={index} className="flex items-center">
+                    <div className={`w-3 h-3 rounded-full transition-colors duration-300 ${index <= currentMonth ? 'bg-blue-500' : 'bg-slate-300'}`}></div>
+                    {index < milestones.length - 1 && <div className={`w-16 h-0.5 transition-colors duration-300 ${index < currentMonth ? 'bg-blue-500' : 'bg-slate-300'}`}></div>}
+                  </div>)}
               </div>
             </div>
 
