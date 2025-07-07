@@ -1,36 +1,46 @@
 import { Clock, TrendingDown, Target, CheckCircle, ArrowRight, Users, Zap, BarChart3, ArrowDown, Play, Pause } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-
 const ATSProblem = () => {
   const [currentMonth, setCurrentMonth] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-
-  const milestones = [
-    { month: 0, label: "Start", interviews: 0, offers: 0, description: "Begin job search" },
-    { month: 1, label: "Month 1", interviews: 4, offers: 0, description: "First interviews scheduled" },
-    { month: 2, label: "Month 2", interviews: 8, offers: 1, description: "Offer accepted!" },
-  ];
-
+  const milestones = [{
+    month: 0,
+    label: "Start",
+    interviews: 0,
+    offers: 0,
+    description: "Begin job search"
+  }, {
+    month: 1,
+    label: "Month 1",
+    interviews: 4,
+    offers: 0,
+    description: "First interviews scheduled"
+  }, {
+    month: 2,
+    label: "Month 2",
+    interviews: 8,
+    offers: 1,
+    description: "Offer accepted!"
+  }];
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (isPlaying) {
       interval = setInterval(() => {
-        setProgress((prev) => {
+        setProgress(prev => {
           if (prev >= 100) {
             setIsPlaying(false);
             return 100;
           }
           const newProgress = prev + 2;
-          setCurrentMonth(Math.floor((newProgress / 100) * (milestones.length - 1)));
+          setCurrentMonth(Math.floor(newProgress / 100 * (milestones.length - 1)));
           return newProgress;
         });
       }, 100);
     }
     return () => clearInterval(interval);
   }, [isPlaying, milestones.length]);
-
   const handlePlayPause = () => {
     if (progress >= 100) {
       setProgress(0);
@@ -38,10 +48,8 @@ const ATSProblem = () => {
     }
     setIsPlaying(!isPlaying);
   };
-
   const currentMilestone = milestones[currentMonth] || milestones[0];
-  return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-white to-blue-50">
+  return <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-white to-blue-50">
       <div className="max-w-6xl mx-auto">
         
         {/* Hero Section with Embedded Chart */}
@@ -80,15 +88,13 @@ const ATSProblem = () => {
                 {/* Background (Traditional - 12 months) */}
                 <div className="bg-gradient-to-r from-red-400 to-red-500 h-8 rounded-full absolute w-full opacity-90"></div>
                 {/* Progress (ApplyFirst - 2 months) */}
-                <div 
-                  className="bg-gradient-to-r from-blue-400 to-blue-500 h-8 rounded-full absolute transition-all duration-300 ease-out opacity-95 shadow-lg"
-                  style={{ width: `${Math.max(16.7, (progress / 100) * 16.7)}%` }}
-                ></div>
+                <div className="bg-gradient-to-r from-blue-400 to-blue-500 h-8 rounded-full absolute transition-all duration-300 ease-out opacity-95 shadow-lg" style={{
+                width: `${Math.max(16.7, progress / 100 * 16.7)}%`
+              }}></div>
                 {/* Progress Indicator */}
-                <div 
-                  className="absolute top-0 h-8 w-1 bg-white shadow-lg transition-all duration-300 ease-out"
-                  style={{ left: `${(progress / 100) * 16.7}%` }}
-                ></div>
+                <div className="absolute top-0 h-8 w-1 bg-white shadow-lg transition-all duration-300 ease-out" style={{
+                left: `${progress / 100 * 16.7}%`
+              }}></div>
               </div>
               <div className="flex justify-between mt-3">
                 <span className="text-xs text-red-600 font-medium">Competing with 500+ applicants</span>
@@ -123,34 +129,17 @@ const ATSProblem = () => {
               
               {/* Progress Steps */}
               <div className="flex justify-between items-center">
-                {milestones.map((milestone, index) => (
-                  <div key={index} className="flex items-center">
-                    <div className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                      index <= currentMonth ? 'bg-blue-500' : 'bg-slate-300'
-                    }`}></div>
-                    {index < milestones.length - 1 && (
-                      <div className={`w-16 h-0.5 transition-colors duration-300 ${
-                        index < currentMonth ? 'bg-blue-500' : 'bg-slate-300'
-                      }`}></div>
-                    )}
-                  </div>
-                ))}
+                {milestones.map((milestone, index) => <div key={index} className="flex items-center">
+                    <div className={`w-3 h-3 rounded-full transition-colors duration-300 ${index <= currentMonth ? 'bg-blue-500' : 'bg-slate-300'}`}></div>
+                    {index < milestones.length - 1 && <div className={`w-16 h-0.5 transition-colors duration-300 ${index < currentMonth ? 'bg-blue-500' : 'bg-slate-300'}`}></div>}
+                  </div>)}
               </div>
             </div>
 
             {/* Play Control */}
             <div className="text-center">
-              <Button
-                onClick={handlePlayPause}
-                variant="outline"
-                size="lg"
-                className="px-8 py-4 rounded-full border-2 border-blue-500 text-blue-600 hover:bg-blue-50 transition-all duration-300"
-              >
-                {isPlaying ? (
-                  <><Pause className="h-5 w-5 mr-2" /> Pause Animation</>
-                ) : (
-                  <><Play className="h-5 w-5 mr-2" /> {progress >= 100 ? 'Replay' : 'See Progress'}</>
-                )}
+              <Button onClick={handlePlayPause} variant="outline" size="lg" className="px-8 py-4 rounded-full border-2 border-blue-500 text-blue-600 hover:bg-blue-50 transition-all duration-300">
+                {isPlaying ? <><Pause className="h-5 w-5 mr-2" /> Pause Animation</> : <><Play className="h-5 w-5 mr-2" /> {progress >= 100 ? 'Replay' : 'See Progress'}</>}
               </Button>
             </div>
           </div>
@@ -201,7 +190,7 @@ const ATSProblem = () => {
               </div>
               <div className="flex items-center">
                 <Zap className="h-5 w-5 text-red-600 mr-3" />
-                <span className="text-slate-700 font-medium">AI detection & blacklisting</span>
+                <span className="text-slate-700 font-medium">AI mass apply detected via ATS bots</span>
               </div>
             </div>
             
@@ -287,10 +276,7 @@ const ATSProblem = () => {
               Join 500+ professionals who cut their job search by 83%
             </p>
             
-            <Button 
-              size="lg" 
-              className="bg-white text-slate-900 hover:bg-slate-100 px-12 py-4 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 rounded-full"
-            >
+            <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-100 px-12 py-4 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 rounded-full">
               Get Started Today <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
           </div>
@@ -301,8 +287,6 @@ const ATSProblem = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ATSProblem;
