@@ -8,9 +8,9 @@ const ATSProblem = () => {
   const [progress, setProgress] = useState(0);
 
   const milestones = [
-    { month: 0, label: "Start", interviews: 0, offers: 0, hoursSaved: 0, costSaved: 0, description: "Begin job search" },
-    { month: 1, label: "Month 1", interviews: 8, offers: 0, hoursSaved: 80, costSaved: 10000, description: "8 interviews scheduled, 80+ hours saved" },
-    { month: 2, label: "Month 2", interviews: 15, offers: 1, hoursSaved: 160, costSaved: 20000, description: "Offer accepted! $20K+ opportunity cost saved" },
+    { month: 0, label: "Start", interviews: 0, offers: 0, description: "Begin job search" },
+    { month: 1, label: "Month 1", interviews: 4, offers: 0, description: "First interviews scheduled" },
+    { month: 2, label: "Month 2", interviews: 8, offers: 1, description: "Offer accepted!" },
   ];
 
   useEffect(() => {
@@ -109,7 +109,7 @@ const ATSProblem = () => {
                   </div>
                 </div>
                 
-                <div className="flex space-x-4 text-center">
+                <div className="flex space-x-6 text-center">
                   <div>
                     <div className="text-2xl font-bold text-green-600">{currentMilestone.interviews}</div>
                     <div className="text-xs text-slate-500">Interviews</div>
@@ -117,14 +117,6 @@ const ATSProblem = () => {
                   <div>
                     <div className="text-2xl font-bold text-purple-600">{currentMilestone.offers}</div>
                     <div className="text-xs text-slate-500">Offers</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-orange-600">{currentMilestone.hoursSaved}+</div>
-                    <div className="text-xs text-slate-500">Hours Saved</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-emerald-600">${currentMilestone.costSaved > 0 ? `${currentMilestone.costSaved/1000}K+` : '0'}</div>
-                    <div className="text-xs text-slate-500">Cost Saved</div>
                   </div>
                 </div>
               </div>
