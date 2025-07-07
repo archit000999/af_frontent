@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
 import ApplicationForm from "./ApplicationForm";
-
 const Hero = () => {
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
   const [showCalendly, setShowCalendly] = useState(false);
-
   useEffect(() => {
     if (showCalendly) {
       if (!document.querySelector("#calendly-widget-script")) {
@@ -18,7 +16,6 @@ const Hero = () => {
       }
     }
   }, [showCalendly]);
-
   return <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 opacity-20" style={{
@@ -64,44 +61,32 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button 
-              size="lg" 
-              onClick={() => setShowCalendly(true)}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-            >
+            <Button size="lg" onClick={() => setShowCalendly(true)} className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
               Contact Us <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              onClick={() => setShowCalendly(true)}
-              className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300"
-            >
+            <Button variant="outline" size="lg" onClick={() => setShowCalendly(true)} className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
               Book Free Consult
             </Button>
           </div>
 
-          {showCalendly && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          {showCalendly && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
               <div className="bg-white rounded-xl shadow-2xl p-6 relative w-full max-w-2xl">
-                <button
-                  onClick={() => setShowCalendly(false)}
-                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-2xl font-bold"
-                  aria-label="Close"
-                >
+                <button onClick={() => setShowCalendly(false)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-2xl font-bold" aria-label="Close">
                   ×
                 </button>
                 {/* Calendly inline widget begin */}
-                <div className="calendly-inline-widget" data-url="https://calendly.com/archit-trysaki/qualifying-call" style={{ minWidth: 320, height: 700 }}></div>
+                <div className="calendly-inline-widget" data-url="https://calendly.com/archit-trysaki/qualifying-call" style={{
+              minWidth: 320,
+              height: 700
+            }}></div>
                 {/* Calendly inline widget end */}
               </div>
-            </div>
-          )}
+            </div>}
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
               <CheckCircle className="h-8 w-8 text-green-400 mb-3" />
-              <span className="text-white font-semibold text-lg">15+ interviews</span>
+              <span className="text-white font-semibold text-lg">8+ interviews</span>
               <span className="text-slate-400 text-sm">in 2 months average</span>
             </div>
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
@@ -118,10 +103,7 @@ const Hero = () => {
         </div>
       </div>
       
-      <ApplicationForm 
-        open={isApplicationFormOpen} 
-        onOpenChange={setIsApplicationFormOpen} 
-      />
+      <ApplicationForm open={isApplicationFormOpen} onOpenChange={setIsApplicationFormOpen} />
     </section>;
 };
 export default Hero;
