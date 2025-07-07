@@ -25,7 +25,9 @@ const Pricing = () => {
     "6–7 interviews/month on average, targeting $100K+ roles",
     "Saves 20+ hours/week of manual outreach so you can focus on interview prep"
   ];
-  return <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
+  
+  return (
+    <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
           <div className="inline-flex items-center px-4 py-2 bg-green-100 border border-green-300 rounded-full text-green-800 text-sm font-medium mb-6">
@@ -139,6 +141,8 @@ const Pricing = () => {
           </div>
         )}
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default Pricing;

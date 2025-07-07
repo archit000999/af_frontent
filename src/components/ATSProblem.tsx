@@ -49,7 +49,9 @@ const ATSProblem = () => {
     setIsPlaying(!isPlaying);
   };
   const currentMilestone = milestones[currentMonth] || milestones[0];
-  return <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-white to-blue-50">
+  
+  return (
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-white to-blue-50">
       <div className="max-w-6xl mx-auto">
         
         {/* Hero Section with Embedded Chart */}
@@ -287,6 +289,8 @@ const ATSProblem = () => {
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default ATSProblem;
