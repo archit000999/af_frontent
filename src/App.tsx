@@ -15,6 +15,7 @@ import CopilotFilters from "./components/CopilotFilters";
 import CopilotScreening from "./components/CopilotScreening";
 import CopilotFinalStep from "./components/CopilotFinalStep";
 import CopilotPreview from "./components/CopilotPreview";
+import Payment from "./components/Payment";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/copilot-screening" element={<CopilotScreening />} />
           <Route path="/copilot-final-step" element={<CopilotFinalStep />} />
           <Route path="/copilot-preview" element={<CopilotPreview />} />
+          <Route path="/payment" element={<Payment />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

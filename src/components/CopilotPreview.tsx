@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Settings, Loader2 } from 'lucide-react';
+import { ArrowLeft, Settings, Loader2, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UserButton } from '@clerk/clerk-react';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
@@ -25,6 +25,10 @@ const CopilotPreview = () => {
 
   const handleBack = () => {
     navigate('/copilot-final-step');
+  };
+
+  const handleProceedToPayment = () => {
+    navigate('/payment');
   };
 
   useEffect(() => {
@@ -228,8 +232,8 @@ const CopilotPreview = () => {
             </div>
           )}
 
-          {/* Back Button */}
-          <div className="flex justify-start pt-6 border-t border-gray-200">
+          {/* Action Buttons */}
+          <div className="flex justify-between items-center pt-6 border-t border-gray-200">
             <Button
               variant="outline"
               onClick={handleBack}
@@ -237,6 +241,14 @@ const CopilotPreview = () => {
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Configuration</span>
+            </Button>
+
+            <Button
+              onClick={handleProceedToPayment}
+              className="flex items-center space-x-2 px-6 py-3 text-sm bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+            >
+              <CreditCard className="w-4 h-4" />
+              <span>Proceed with Payment</span>
             </Button>
           </div>
         </div>
