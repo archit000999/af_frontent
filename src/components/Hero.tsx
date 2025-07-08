@@ -4,9 +4,7 @@ import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
 import ApplicationForm from "./ApplicationForm";
 const Hero = () => {
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
-
-  return (
-    <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+  return <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 opacity-20" style={{
       backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
@@ -35,12 +33,7 @@ const Hero = () => {
           </p>
           
           <div className="flex justify-center mb-16">
-            <Button 
-              variant="outline" 
-              size="lg" 
-              onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')}
-              className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300"
-            >
+            <Button variant="outline" size="lg" onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')} className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
               Book Free Consult
             </Button>
           </div>
@@ -48,7 +41,7 @@ const Hero = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
               <CheckCircle className="h-8 w-8 text-green-400 mb-3" />
-              <span className="text-white font-semibold text-lg">15+ interviews</span>
+              <span className="text-white font-semibold text-lg">10+ interviews</span>
               <span className="text-slate-400 text-sm">in 2 months average</span>
             </div>
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
@@ -65,11 +58,7 @@ const Hero = () => {
         </div>
       </div>
       
-      <ApplicationForm 
-        open={isApplicationFormOpen} 
-        onOpenChange={setIsApplicationFormOpen} 
-      />
-    </section>
-  );
+      <ApplicationForm open={isApplicationFormOpen} onOpenChange={setIsApplicationFormOpen} />
+    </section>;
 };
 export default Hero;
