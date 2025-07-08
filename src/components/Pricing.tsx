@@ -50,9 +50,9 @@ const Pricing = () => {
                 </div>
 
                 <div className="flex items-center justify-center gap-2 mb-4">
-                  <span className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">$399</span>
+                  <span className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">$99</span>
                   <div className="text-left">
-                    <div className="text-slate-600 text-lg">/month</div>
+                    <div className="text-slate-600 text-lg">/week</div>
                     <div className="text-sm text-green-600 font-medium">Fully refundable</div>
                   </div>
                 </div>
