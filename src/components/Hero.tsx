@@ -34,14 +34,7 @@ const Hero = () => {
             Be among the first 10 candidates they see.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button 
-              size="lg" 
-              onClick={() => setIsApplicationFormOpen(true)}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-            >
-              Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
-            </Button>
+          <div className="flex justify-center mb-16">
             <Button 
               variant="outline" 
               size="lg" 
