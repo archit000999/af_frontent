@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -6,9 +6,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ArrowLeft, Settings, ChevronRight, ChevronDown, X, HelpCircle, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UserButton } from '@clerk/clerk-react';
+import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 
 const CopilotFilters = () => {
   const navigate = useNavigate();
+  const { config, updateConfig, saveConfig, isLoading: configLoading, isInitialized } = useCopilotConfig();
   const [currentStep, setCurrentStep] = useState(2);
   const [isLoading, setIsLoading] = useState(false);
   
@@ -153,6 +155,15 @@ const CopilotFilters = () => {
     '100 km'
   ];
 
+  // Initialize from saved config
+  useEffect(() => {
+    if (isInitialized && config) {
+      setCurrentStep(Math.max(config.stepCompleted || 1, 2));
+      // Load any saved filter data if exists
+      // You can extend this to load saved filter preferences
+    }
+  }, [isInitialized, config]);
+
   const handleSeniorityToggle = (level: string) => {
     setSeniorityLevels(prev => 
       prev.includes(level) 
@@ -176,19 +187,34 @@ const CopilotFilters = () => {
     
     setIsLoading(true);
     
-    // Simulate API call or processing time
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Save current step progress
+    const nextStep = Math.min(currentStep + 1, 4);
+    const success = await saveConfig({ 
+      stepCompleted: nextStep,
+      // Save any additional filter data here if needed
+    });
     
-    setIsLoading(false);
-    navigate('/copilot-screening');
+    if (success) {
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate('/copilot-screening');
+      }, 1500);
+    } else {
+      setIsLoading(false);
+    }
   };
 
   const handleBack = () => {
     navigate('/copilot-setup');
   };
 
-  const handleSaveAndClose = () => {
-    navigate('/home');
+  const handleSaveAndClose = async () => {
+    const success = await saveConfig({ 
+      stepCompleted: Math.max(currentStep, config.stepCompleted || 1)
+    });
+    if (success) {
+      navigate('/home');
+    }
   };
 
   return (

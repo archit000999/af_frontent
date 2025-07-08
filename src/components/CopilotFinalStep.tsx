@@ -1,31 +1,49 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowLeft, Settings, Check, ChevronRight, HelpCircle, Eye, RotateCcw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UserButton } from '@clerk/clerk-react';
+import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 
 const CopilotFinalStep = () => {
   const navigate = useNavigate();
+  const { config, saveConfig, isLoading: configLoading, isInitialized } = useCopilotConfig();
   const [selectedMode, setSelectedMode] = useState('auto-apply');
   const [sentenceLength, setSentenceLength] = useState('balanced-mix');
   const [tone, setTone] = useState('neutral-casual');
   const [vocabularyComplexity, setVocabularyComplexity] = useState('simple-everyday');
   const [isLoading, setIsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [currentStep, setCurrentStep] = useState(4);
+
+  // Initialize from saved config
+  useEffect(() => {
+    if (isInitialized && config) {
+      setCurrentStep(Math.max(config.stepCompleted || 1, 4));
+    }
+  }, [isInitialized, config]);
 
   const handleBack = () => {
     navigate('/copilot-screening');
   };
 
-  const handleSaveConfiguration = () => {
+  const handleSaveConfiguration = async () => {
     setIsLoading(true);
-    // Simulate processing time
-    setTimeout(() => {
+    
+    // Save final configuration
+    const success = await saveConfig({ 
+      stepCompleted: 4 // Mark as completed
+    });
+    
+    if (success) {
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate('/copilot-preview');
+      }, 2000);
+    } else {
       setIsLoading(false);
-      navigate('/copilot-preview');
-    }, 2000);
+    }
   };
 
   return (

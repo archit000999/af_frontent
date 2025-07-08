@@ -19,7 +19,27 @@ const Home = () => {
   };
 
   const handleEditConfiguration = () => {
-    navigate('/copilot-setup');
+    // Navigate to the appropriate step based on where user left off
+    if (config && config.stepCompleted) {
+      switch (config.stepCompleted) {
+        case 1:
+          navigate('/copilot-setup');
+          break;
+        case 2:
+          navigate('/copilot-filters');
+          break;
+        case 3:
+          navigate('/copilot-screening');
+          break;
+        case 4:
+          navigate('/copilot-final');
+          break;
+        default:
+          navigate('/copilot-setup');
+      }
+    } else {
+      navigate('/copilot-setup');
+    }
   };
 
   // Check if user has a saved configuration

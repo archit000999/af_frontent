@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -27,7 +26,7 @@ import {
 const POPULAR_JOB_TITLES = [
   "Software Engineer",
   "Frontend Developer",
-  "Backend Developer",
+  "Backend Developer", 
   "Full Stack Developer",
   "Product Manager",
   "Data Scientist",
@@ -98,7 +97,8 @@ const CopilotSetup = () => {
   // Initialize form state from config when it loads
   useEffect(() => {
     if (isInitialized && config) {
-      setCurrentStep(config.stepCompleted);
+      // Set current step to the step where user left off or step 1 if starting fresh
+      setCurrentStep(Math.max(config.stepCompleted || 1, 1));
     }
   }, [isInitialized, config]);
 
@@ -178,19 +178,30 @@ const CopilotSetup = () => {
     if (validateForm()) {
       setIsLoading(true);
       
-      // Save current progress
-      const success = await saveConfig({ stepCompleted: Math.max(currentStep + 1, config.stepCompleted) });
+      // Save current progress with updated step
+      const nextStep = Math.min(currentStep + 1, 4);
+      const success = await saveConfig({ 
+        stepCompleted: nextStep,
+        // Ensure all current form data is saved
+        workLocationTypes: config.workLocationTypes,
+        remoteLocations: config.remoteLocations,
+        onsiteLocations: config.onsiteLocations,
+        jobTypes: config.jobTypes,
+        jobTitles: config.jobTitles
+      });
       
       if (success) {
-        // Simulate loading time
+        // Navigate to the appropriate next page
         setTimeout(() => {
           setIsLoading(false);
-          if (currentStep < 4) {
-            setCurrentStep(currentStep + 1);
-            // Navigate to filters page
+          if (nextStep === 2) {
             navigate('/copilot-filters');
+          } else if (nextStep === 3) {
+            navigate('/copilot-screening');
+          } else if (nextStep === 4) {
+            navigate('/copilot-final');
           }
-        }, 2000);
+        }, 1500);
       } else {
         setIsLoading(false);
       }
@@ -198,7 +209,15 @@ const CopilotSetup = () => {
   };
 
   const handleSaveAndClose = async () => {
-    const success = await saveConfig({ stepCompleted: Math.max(currentStep, config.stepCompleted) });
+    // Save current state without advancing step
+    const success = await saveConfig({
+      stepCompleted: Math.max(currentStep, config.stepCompleted || 1),
+      workLocationTypes: config.workLocationTypes,
+      remoteLocations: config.remoteLocations,
+      onsiteLocations: config.onsiteLocations,
+      jobTypes: config.jobTypes,
+      jobTitles: config.jobTitles
+    });
     if (success) {
       navigate('/home');
     }
