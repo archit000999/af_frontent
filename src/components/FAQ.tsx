@@ -78,10 +78,7 @@ const FAQ = () => {
             before jobs even hit the market.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-12 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-              Start Now - It's Risk Free <ArrowRight className="ml-2 h-6 w-6" />
-            </Button>
+          <div className="flex justify-center">
             <Button variant="outline" size="lg" className="px-8 py-6 text-lg border-2 border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold">
               Book Free Consultation
             </Button>
