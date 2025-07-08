@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Settings, Loader2, CreditCard } from 'lucide-react';
+import { ArrowLeft, Settings, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UserButton } from '@clerk/clerk-react';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
@@ -27,7 +27,7 @@ const CopilotPreview = () => {
     navigate('/copilot-final-step');
   };
 
-  const handleProceedToPayment = () => {
+  const handleActivateCopilot = () => {
     navigate('/payment');
   };
 
@@ -70,16 +70,44 @@ const CopilotPreview = () => {
         setJobs([
           {
             id: 1,
-            title: config.jobTitles[0] || 'Software Developer',
-            company: 'TechCorp Solutions',
-            location: 'San Francisco, CA',
+            title: 'Senior Software Engineer - Fullstack Developer',
+            company: 'Ninja Van',
+            location: 'Hyderabad, India',
             type: 'Fulltime'
           },
           {
             id: 2,
-            title: config.jobTitles[0] || 'Software Developer',
-            company: 'Innovation Labs',
-            location: 'Remote',
+            title: 'Senior Full Stack Software Engineer (React.js /.Net)',
+            company: 'Shift',
+            location: 'Kalyani Magnum, Block 2, 5th ...',
+            type: 'Fulltime'
+          },
+          {
+            id: 3,
+            title: 'Software Developer',
+            company: 'Cbts India',
+            location: 'Chennai, India',
+            type: 'Fulltime'
+          },
+          {
+            id: 4,
+            title: 'Jio Tesseract-Software Developer/Engineering Manager/Senior Software Developer',
+            company: 'Nexthire',
+            location: 'Navi Mumbai, IN',
+            type: 'Fulltime'
+          },
+          {
+            id: 5,
+            title: 'Lead Software Developer',
+            company: 'Cbts India',
+            location: 'Chennai, India',
+            type: 'Fulltime'
+          },
+          {
+            id: 6,
+            title: 'Software Developer (React)',
+            company: 'Vagaro',
+            location: 'Ahmedabad, IN',
             type: 'Fulltime'
           }
         ]);
@@ -100,7 +128,7 @@ const CopilotPreview = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 to-purple-50 overflow-hidden">
+    <div className="h-screen flex flex-col bg-white overflow-hidden">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex-shrink-0">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
@@ -156,13 +184,13 @@ const CopilotPreview = () => {
 
       {/* Main Content */}
       <main className="flex-1 overflow-hidden px-6 py-8">
-        <div className="max-w-6xl mx-auto h-full flex flex-col">
+        <div className="max-w-5xl mx-auto h-full flex flex-col">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-base font-semibold text-gray-900 mb-4">
+            <h1 className="text-2xl font-semibold text-gray-900 mb-4">
               Great! You've configured your Copilot
             </h1>
-            <p className="text-sm text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               Based on your configuration, here's a preview of jobs that your Copilot will automatically apply to
             </p>
             {error && (
@@ -184,40 +212,33 @@ const CopilotPreview = () => {
             </div>
           ) : (
             /* Jobs Grid */
-            <div className="flex-1 overflow-y-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-8">
+            <div className="flex-1 overflow-y-auto mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {jobs.map((job) => (
                   <div
                     key={job.id}
-                    className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
+                    className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow"
                   >
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {/* Job Title */}
-                      <h3 className="text-base font-medium text-purple-600 leading-tight">
+                      <h3 className="text-lg font-medium text-purple-600 leading-tight">
                         {job.title}
                       </h3>
                       
                       {/* Company */}
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-base font-medium text-gray-900">
                         {job.company}
                       </p>
                       
-                      {/* Description */}
-                      {job.description && (
-                        <p className="text-sm text-gray-600 line-clamp-2">
-                          {job.description}
-                        </p>
-                      )}
-                      
                       {/* Location and Type */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2 text-gray-600">
+                      <div className="flex items-center justify-between text-gray-600">
+                        <div className="flex items-center space-x-1">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                           <span className="text-sm">{job.type}</span>
                         </div>
-                        <div className="flex items-center space-x-2 text-gray-600">
+                        <div className="flex items-center space-x-1">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -232,24 +253,28 @@ const CopilotPreview = () => {
             </div>
           )}
 
-          {/* Action Buttons */}
-          <div className="flex justify-between items-center pt-6 border-t border-gray-200">
-            <Button
-              variant="outline"
-              onClick={handleBack}
-              className="flex items-center space-x-2 px-6 py-3 text-sm"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back to Configuration</span>
-            </Button>
+          {/* Bottom Text and Buttons */}
+          <div className="text-center space-y-6">
+            <h2 className="text-xl font-medium text-gray-900">
+              Want your Copilot to apply for these jobs?
+            </h2>
+            
+            <div className="flex flex-col space-y-4 max-w-md mx-auto">
+              <Button
+                onClick={handleActivateCopilot}
+                className="w-full py-4 text-base font-medium bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-full"
+              >
+                Yes! Activate Copilot
+              </Button>
 
-            <Button
-              onClick={handleProceedToPayment}
-              className="flex items-center space-x-2 px-6 py-3 text-sm bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-            >
-              <CreditCard className="w-4 h-4" />
-              <span>Proceed with Payment</span>
-            </Button>
+              <Button
+                variant="outline"
+                onClick={handleBack}
+                className="w-full py-4 text-base font-medium border-2 border-gray-300 text-gray-700 hover:bg-gray-50 rounded-full"
+              >
+                No, go back to configuration
+              </Button>
+            </div>
           </div>
         </div>
       </main>
