@@ -30,9 +30,7 @@ const Pricing = () => {
             <div className="relative bg-white rounded-3xl p-12 shadow-2xl border-2 border-blue-100">
               {/* Popular badge */}
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
-                  Most Popular
-                </div>
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">Early Bird Pricing until July 30th</div>
               </div>
 
               <div className="text-center mb-10">
