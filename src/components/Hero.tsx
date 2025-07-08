@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
+import { SignUpButton } from '@clerk/clerk-react';
 import ApplicationForm from "./ApplicationForm";
 import AuthButton from "./AuthButton";
 const Hero = () => {
@@ -49,7 +50,9 @@ const Hero = () => {
           <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">ApplyFirst monitors job boards in real time and instantly contacts hiring managers with your resume. If there's interest, we apply on your behalf.</p>
           
           <div className="flex justify-center mb-16">
-            <Button variant="outline" size="lg" onClick={() => window.location.href = '/auth'} className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">Try it now</Button>
+            <SignUpButton mode="modal" forceRedirectUrl="/home">
+              <Button variant="outline" size="lg" className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">Try it now</Button>
+            </SignUpButton>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
