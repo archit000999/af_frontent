@@ -40,7 +40,15 @@ const Hero = () => {
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            We Find the Job. We Pitch You. We Apply
+            <span className="block animate-fade-in opacity-0 [animation-delay:0.5s] [animation-fill-mode:forwards]">
+              We Find the Job.
+            </span>
+            <span className="block animate-fade-in opacity-0 [animation-delay:1.5s] [animation-fill-mode:forwards]">
+              We Reach Out to Hiring Manager.
+            </span>
+            <span className="block animate-fade-in opacity-0 [animation-delay:2.5s] [animation-fill-mode:forwards]">
+              We Apply.
+            </span>
           </h1>
           
           <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">ApplyFirst monitors job boards in real time and instantly contacts hiring managers with your resume. If there's interest, we apply on your behalf.</p>
