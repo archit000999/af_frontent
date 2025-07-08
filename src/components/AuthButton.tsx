@@ -7,12 +7,12 @@ const AuthButton = () => {
     <div className="flex items-center gap-4">
       <SignedOut>
         <Link to="/auth">
-          <Button variant="outline" className="border-white text-white hover:bg-white hover:text-slate-900">
+          <Button variant="outline" className="border-white text-black hover:bg-white hover:text-slate-900">
             Sign In
           </Button>
         </Link>
         <Link to="/auth">
-          <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-black">
+          <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white">
             Sign Up
           </Button>
         </Link>
