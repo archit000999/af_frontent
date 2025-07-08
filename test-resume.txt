@@ -1,0 +1,22 @@
+John Doe
+Software Developer
+john.doe@email.com
++91 9876543210
+Mumbai, Maharashtra, India 400001
+
+EXPERIENCE
+Senior Software Developer at TechCorp Pvt Ltd
+Frontend Developer at StartupXYZ
+
+SKILLS
+JavaScript, React, Node.js, Python, AWS, Docker
+
+EDUCATION
+Bachelor of Computer Science
+University of Mumbai
+
+SALARY
+Current: 800000 INR per year
+Expected: 1200000 INR per year
+
+LinkedIn: https://linkedin.com/in/johndoe

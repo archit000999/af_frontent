@@ -19,4 +19,20 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: ['pdfjs-dist', 'tesseract.js'],
+  },
+  worker: {
+    format: 'es',
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'pdfjs-dist': ['pdfjs-dist'],
+          'tesseract': ['tesseract.js'],
+        },
+      },
+    },
+  },
 }));
