@@ -53,6 +53,45 @@ export type Database = {
         }
         Relationships: []
       }
+      copilot_configurations: {
+        Row: {
+          created_at: string
+          id: string
+          job_titles: string[] | null
+          job_types: string[] | null
+          onsite_locations: string[] | null
+          remote_locations: string[] | null
+          step_completed: number | null
+          updated_at: string
+          user_id: string
+          work_location_types: string[] | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          job_titles?: string[] | null
+          job_types?: string[] | null
+          onsite_locations?: string[] | null
+          remote_locations?: string[] | null
+          step_completed?: number | null
+          updated_at?: string
+          user_id: string
+          work_location_types?: string[] | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          job_titles?: string[] | null
+          job_types?: string[] | null
+          onsite_locations?: string[] | null
+          remote_locations?: string[] | null
+          step_completed?: number | null
+          updated_at?: string
+          user_id?: string
+          work_location_types?: string[] | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

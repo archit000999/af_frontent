@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserButton } from '@clerk/clerk-react';
 import { LocationSelectionDialog } from './LocationSelectionDialog';
 import LoadingScreen from './LoadingScreen';
+import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 import {
   Command,
   CommandEmpty,
@@ -78,15 +79,11 @@ const POPULAR_JOB_TITLES = [
 
 const CopilotSetup = () => {
   const navigate = useNavigate();
+  const { config, updateConfig, saveConfig, isLoading: configLoading, isInitialized } = useCopilotConfig();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [workLocationTypes, setWorkLocationTypes] = useState<string[]>([]);
-  const [remoteLocations, setRemoteLocations] = useState<string[]>([]);
-  const [onsiteLocations, setOnsiteLocations] = useState<string[]>([]);
   const [currentLocationDialogType, setCurrentLocationDialogType] = useState<'remote' | 'onsite'>('remote');
   const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);
-  const [jobTypes, setJobTypes] = useState<string[]>([]);
-  const [jobTitles, setJobTitles] = useState<string[]>([]);
   const [newJobTitle, setNewJobTitle] = useState('');
   const [isJobTitlePopoverOpen, setIsJobTitlePopoverOpen] = useState(false);
   
@@ -98,19 +95,26 @@ const CopilotSetup = () => {
     locations: false
   });
 
+  // Initialize form state from config when it loads
+  useEffect(() => {
+    if (isInitialized && config) {
+      setCurrentStep(config.stepCompleted);
+    }
+  }, [isInitialized, config]);
+
   const handleJobTypeToggle = (type: string) => {
-    setJobTypes(prev => 
-      prev.includes(type) 
-        ? prev.filter(t => t !== type)
-        : [...prev, type]
-    );
+    const newJobTypes = config.jobTypes.includes(type) 
+      ? config.jobTypes.filter(t => t !== type)
+      : [...config.jobTypes, type];
+    
+    updateConfig({ jobTypes: newJobTypes });
     setErrors(prev => ({ ...prev, jobTypes: false }));
   };
 
   const handleAddJobTitle = (title?: string) => {
     const titleToAdd = title || newJobTitle.trim();
-    if (titleToAdd && jobTitles.length < 5 && !jobTitles.includes(titleToAdd)) {
-      setJobTitles(prev => [...prev, titleToAdd]);
+    if (titleToAdd && config.jobTitles.length < 5 && !config.jobTitles.includes(titleToAdd)) {
+      updateConfig({ jobTitles: [...config.jobTitles, titleToAdd] });
       setNewJobTitle('');
       setIsJobTitlePopoverOpen(false);
       setErrors(prev => ({ ...prev, jobTitles: false }));
@@ -118,7 +122,9 @@ const CopilotSetup = () => {
   };
 
   const handleRemoveJobTitle = (titleToRemove: string) => {
-    setJobTitles(prev => prev.filter(title => title !== titleToRemove));
+    updateConfig({ 
+      jobTitles: config.jobTitles.filter(title => title !== titleToRemove) 
+    });
   };
 
   const handleJobTitleKeyPress = (e: React.KeyboardEvent) => {
@@ -129,65 +135,77 @@ const CopilotSetup = () => {
 
   const handleLocationSave = (locations: string[]) => {
     if (currentLocationDialogType === 'remote') {
-      setRemoteLocations(locations);
+      updateConfig({ remoteLocations: locations });
     } else {
-      setOnsiteLocations(locations);
+      updateConfig({ onsiteLocations: locations });
     }
     setErrors(prev => ({ ...prev, locations: false }));
     setIsLocationDialogOpen(false);
   };
 
   const handleWorkLocationTypeToggle = (type: 'remote' | 'onsite', checked: boolean) => {
+    let newWorkLocationTypes;
     if (checked) {
-      setWorkLocationTypes(prev => [...prev, type]);
+      newWorkLocationTypes = [...config.workLocationTypes, type];
     } else {
-      setWorkLocationTypes(prev => prev.filter(t => t !== type));
+      newWorkLocationTypes = config.workLocationTypes.filter(t => t !== type);
       // Clear specific locations when unchecking a type
       if (type === 'remote') {
-        setRemoteLocations([]);
+        updateConfig({ remoteLocations: [] });
       } else {
-        setOnsiteLocations([]);
+        updateConfig({ onsiteLocations: [] });
       }
     }
+    updateConfig({ workLocationTypes: newWorkLocationTypes });
     setErrors(prev => ({ ...prev, workLocation: false }));
   };
 
   const validateForm = () => {
     const newErrors = {
-      workLocation: workLocationTypes.length === 0,
-      jobTypes: jobTypes.length === 0,
-      jobTitles: jobTitles.length === 0,
-      locations: workLocationTypes.length > 0 && 
-        ((workLocationTypes.includes('remote') && remoteLocations.length === 0) ||
-         (workLocationTypes.includes('onsite') && onsiteLocations.length === 0))
+      workLocation: config.workLocationTypes.length === 0,
+      jobTypes: config.jobTypes.length === 0,
+      jobTitles: config.jobTitles.length === 0,
+      locations: config.workLocationTypes.length > 0 && 
+        ((config.workLocationTypes.includes('remote') && config.remoteLocations.length === 0) ||
+         (config.workLocationTypes.includes('onsite') && config.onsiteLocations.length === 0))
     };
     
     setErrors(newErrors);
     return !Object.values(newErrors).some(error => error);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (validateForm()) {
       setIsLoading(true);
       
-      // Simulate loading time
-      setTimeout(() => {
+      // Save current progress
+      const success = await saveConfig({ stepCompleted: Math.max(currentStep + 1, config.stepCompleted) });
+      
+      if (success) {
+        // Simulate loading time
+        setTimeout(() => {
+          setIsLoading(false);
+          if (currentStep < 4) {
+            setCurrentStep(currentStep + 1);
+            // Navigate to filters page
+            navigate('/copilot-filters');
+          }
+        }, 2000);
+      } else {
         setIsLoading(false);
-        if (currentStep < 4) {
-          setCurrentStep(currentStep + 1);
-          // Navigate to filters page
-          navigate('/copilot-filters');
-        }
-      }, 2000); // 2 second loading screen
+      }
     }
   };
 
-  const handleBack = () => {
-    navigate('/home');
+  const handleSaveAndClose = async () => {
+    const success = await saveConfig({ stepCompleted: Math.max(currentStep, config.stepCompleted) });
+    if (success) {
+      navigate('/home');
+    }
   };
 
-  // Show loading screen when transitioning
-  if (isLoading) {
+  // Show loading screen when transitioning or loading config
+  if (isLoading || configLoading || !isInitialized) {
     return <LoadingScreen message="Processing your preferences..." />;
   }
 
@@ -279,7 +297,7 @@ const CopilotSetup = () => {
                       <input
                         type="checkbox"
                         id="remote"
-                        checked={workLocationTypes.includes('remote')}
+                        checked={config.workLocationTypes.includes('remote')}
                         onChange={(e) => handleWorkLocationTypeToggle('remote', e.target.checked)}
                         className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 focus:ring-2"
                       />
@@ -292,7 +310,7 @@ const CopilotSetup = () => {
                       <input
                         type="checkbox"
                         id="onsite"
-                        checked={workLocationTypes.includes('onsite')}
+                        checked={config.workLocationTypes.includes('onsite')}
                         onChange={(e) => handleWorkLocationTypeToggle('onsite', e.target.checked)}
                         className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 focus:ring-2"
                       />
@@ -307,38 +325,38 @@ const CopilotSetup = () => {
                   )}
                   
                   {/* Location Selection - Show for selected work location types */}
-                  {workLocationTypes.length > 0 && (
+                  {config.workLocationTypes.length > 0 && (
                     <div className="mt-4 space-y-4">
                       {errors.locations && (
                         <p className="text-sm text-red-500">Please select locations for your chosen work types.</p>
                       )}
                       
                       {/* Remote locations section */}
-                      {workLocationTypes.includes('remote') && (
+                      {config.workLocationTypes.includes('remote') && (
                         <div className="border rounded-lg p-4 bg-gray-50">
                           <h4 className="text-base font-medium text-gray-900 mb-3">Remote Job Locations</h4>
                           <div className="flex items-center space-x-3 mb-4">
                             <Button
-                              variant={remoteLocations.includes('Worldwide') ? 'default' : 'outline'}
+                              variant={config.remoteLocations.includes('Worldwide') ? 'default' : 'outline'}
                               onClick={() => {
-                                if (remoteLocations.includes('Worldwide')) {
-                                  setRemoteLocations([]);
+                                if (config.remoteLocations.includes('Worldwide')) {
+                                  updateConfig({ remoteLocations: [] });
                                 } else {
-                                  setRemoteLocations(['Worldwide']);
+                                  updateConfig({ remoteLocations: ['Worldwide'] });
                                   setErrors(prev => ({ ...prev, locations: false }));
                                 }
                               }}
                               className={`text-sm ${
-                                remoteLocations.includes('Worldwide')
+                                config.remoteLocations.includes('Worldwide')
                                   ? 'bg-purple-600 hover:bg-purple-700 text-white'
                                   : 'text-purple-600 border-purple-300 hover:bg-purple-50'
                               }`}
                             >
-                              {remoteLocations.includes('Worldwide') && <Check className="w-4 h-4 mr-2" />}
+                              {config.remoteLocations.includes('Worldwide') && <Check className="w-4 h-4 mr-2" />}
                               Worldwide
                             </Button>
                             
-                            {!remoteLocations.includes('Worldwide') && (
+                            {!config.remoteLocations.includes('Worldwide') && (
                               <>
                                 <span className="text-sm text-gray-500">or</span>
                                 <Button
@@ -357,15 +375,17 @@ const CopilotSetup = () => {
                           </div>
                           
                           {/* Show selected remote locations */}
-                          {remoteLocations.length > 0 && !remoteLocations.includes('Worldwide') && (
+                          {config.remoteLocations.length > 0 && !config.remoteLocations.includes('Worldwide') && (
                             <div className="flex flex-wrap gap-2">
-                              {remoteLocations.map((location, index) => (
+                              {config.remoteLocations.map((location, index) => (
                                 <div key={index} className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm flex items-center space-x-1">
                                   <span>{location}</span>
                                   <X 
                                     className="w-3 h-3 cursor-pointer hover:text-purple-900" 
                                     onClick={() => {
-                                      setRemoteLocations(prev => prev.filter(loc => loc !== location));
+                                      updateConfig({ 
+                                        remoteLocations: config.remoteLocations.filter(loc => loc !== location) 
+                                      });
                                     }}
                                   />
                                 </div>
@@ -376,7 +396,7 @@ const CopilotSetup = () => {
                       )}
                       
                       {/* Onsite locations section */}
-                      {workLocationTypes.includes('onsite') && (
+                      {config.workLocationTypes.includes('onsite') && (
                         <div className="border rounded-lg p-4 bg-gray-50">
                           <h4 className="text-base font-medium text-gray-900 mb-3">On-site / Hybrid Job Locations</h4>
                           <div className="flex items-center space-x-3 mb-3">
@@ -393,15 +413,17 @@ const CopilotSetup = () => {
                             </Button>
                           </div>
                           
-                          {onsiteLocations.length > 0 && (
+                          {config.onsiteLocations.length > 0 && (
                             <div className="flex flex-wrap gap-2">
-                              {onsiteLocations.map((location, index) => (
+                              {config.onsiteLocations.map((location, index) => (
                                 <div key={index} className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm flex items-center space-x-1">
                                   <span>{location}</span>
                                   <X 
                                     className="w-3 h-3 cursor-pointer hover:text-purple-900" 
                                     onClick={() => {
-                                      setOnsiteLocations(prev => prev.filter(loc => loc !== location));
+                                      updateConfig({ 
+                                        onsiteLocations: config.onsiteLocations.filter(loc => loc !== location) 
+                                      });
                                     }}
                                   />
                                 </div>
@@ -432,12 +454,12 @@ const CopilotSetup = () => {
                         key={type.id}
                         onClick={() => handleJobTypeToggle(type.id)}
                         className={`flex items-center space-x-2 px-4 py-2 rounded-full border transition-colors text-sm ${
-                          jobTypes.includes(type.id)
+                          config.jobTypes.includes(type.id)
                             ? 'bg-purple-600 text-white border-purple-600'
                             : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
                         }`}
                       >
-                        {jobTypes.includes(type.id) && (
+                        {config.jobTypes.includes(type.id) && (
                           <Check className="w-4 h-4" />
                         )}
                         <span>{type.label}</span>
@@ -457,9 +479,9 @@ const CopilotSetup = () => {
                     What job titles are you looking for? Type in and select up to 5
                   </p>
                   
-                  {jobTitles.length > 0 && (
+                  {config.jobTitles.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {jobTitles.map((title, index) => (
+                      {config.jobTitles.map((title, index) => (
                         <div key={index} className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm flex items-center space-x-1">
                           <span>{title}</span>
                           <X 
@@ -483,7 +505,7 @@ const CopilotSetup = () => {
                               setIsJobTitlePopoverOpen(e.target.value.length > 0);
                             }}
                             onKeyPress={handleJobTitleKeyPress}
-                            disabled={jobTitles.length >= 5}
+                            disabled={config.jobTitles.length >= 5}
                             className="flex-1 text-sm"
                             onFocus={() => newJobTitle.length > 0 && setIsJobTitlePopoverOpen(true)}
                           />
@@ -503,7 +525,7 @@ const CopilotSetup = () => {
                               {POPULAR_JOB_TITLES
                                 .filter(title => 
                                   title.toLowerCase().includes(newJobTitle.toLowerCase()) &&
-                                  !jobTitles.includes(title)
+                                  !config.jobTitles.includes(title)
                                 )
                                 .slice(0, 8)
                                 .map((title) => (
@@ -523,7 +545,7 @@ const CopilotSetup = () => {
                                !POPULAR_JOB_TITLES.some(title => 
                                  title.toLowerCase() === newJobTitle.toLowerCase()
                                ) &&
-                               !jobTitles.includes(newJobTitle.trim()) && (
+                               !config.jobTitles.includes(newJobTitle.trim()) && (
                                 <CommandItem
                                   value={newJobTitle.trim()}
                                   onSelect={(currentValue) => {
@@ -541,7 +563,7 @@ const CopilotSetup = () => {
                     </Popover>
                     <Button 
                       onClick={() => handleAddJobTitle()}
-                      disabled={!newJobTitle.trim() || jobTitles.length >= 5 || jobTitles.includes(newJobTitle.trim())}
+                      disabled={!newJobTitle.trim() || config.jobTitles.length >= 5 || config.jobTitles.includes(newJobTitle.trim())}
                       className="bg-purple-600 hover:bg-purple-700 text-sm"
                     >
                       Add
@@ -552,7 +574,7 @@ const CopilotSetup = () => {
                     <p className="text-sm text-red-500 mb-4">Please add at least one job title.</p>
                   )}
                   
-                  {jobTitles.length > 0 && (
+                  {config.jobTitles.length > 0 && (
                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
                       <div className="flex">
                         <div className="flex-shrink-0">
@@ -575,8 +597,9 @@ const CopilotSetup = () => {
               <div className="flex justify-between border-t pt-4">
                 <Button
                   variant="outline"
-                  onClick={handleBack}
+                  onClick={handleSaveAndClose}
                   className="px-6 py-2 text-sm"
+                  disabled={configLoading}
                 >
                   Save & Close
                 </Button>
@@ -584,11 +607,12 @@ const CopilotSetup = () => {
                   onClick={handleNext}
                   className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 flex items-center space-x-2 text-sm"
                   disabled={
-                    workLocationTypes.length === 0 || 
-                    jobTypes.length === 0 || 
-                    jobTitles.length === 0 || 
-                    (workLocationTypes.includes('remote') && remoteLocations.length === 0) ||
-                    (workLocationTypes.includes('onsite') && onsiteLocations.length === 0)
+                    config.workLocationTypes.length === 0 || 
+                    config.jobTypes.length === 0 || 
+                    config.jobTitles.length === 0 || 
+                    (config.workLocationTypes.includes('remote') && config.remoteLocations.length === 0) ||
+                    (config.workLocationTypes.includes('onsite') && config.onsiteLocations.length === 0) ||
+                    configLoading
                   }
                 >
                   <span>Next: Optional Filters</span>
@@ -605,7 +629,7 @@ const CopilotSetup = () => {
         isOpen={isLocationDialogOpen}
         onClose={() => setIsLocationDialogOpen(false)}
         onSave={handleLocationSave}
-        selectedLocations={currentLocationDialogType === 'remote' ? remoteLocations : onsiteLocations}
+        selectedLocations={currentLocationDialogType === 'remote' ? config.remoteLocations : config.onsiteLocations}
       />
     </div>
   );
