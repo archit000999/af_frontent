@@ -1,4 +1,3 @@
-
 import { UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,10 +10,20 @@ import { useEffect, useState } from 'react';
 const Home = () => {
   const { user } = useUser();
   const navigate = useNavigate();
-  const { config, isInitialized, isLoading } = useCopilotConfig();
+  const { config, updateConfig, saveConfig, isInitialized, isLoading } = useCopilotConfig();
   const [copilotStatus, setCopilotStatus] = useState(false);
 
-  const handleSetupCopilot = () => {
+  const handleSetupCopilot = async () => {
+    // Reset configuration to start fresh
+    updateConfig({
+      workLocationTypes: [],
+      remoteLocations: [],
+      onsiteLocations: [],
+      jobTypes: [],
+      jobTitles: [],
+      stepCompleted: 1
+    });
+    
     navigate('/copilot-setup');
   };
 
