@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
 import ApplicationForm from "./ApplicationForm";
+import AuthButton from "./AuthButton";
 const Hero = () => {
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
   return <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -13,6 +14,11 @@ const Hero = () => {
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* Auth buttons in top right */}
+        <div className="flex justify-end mb-8">
+          <AuthButton />
+        </div>
+        
         <div className="text-center">
           {/* Badge */}
           <div className="inline-flex items-center px-4 py-2 bg-blue-500/20 backdrop-blur-sm border border-blue-400/30 rounded-full text-blue-300 text-sm font-medium mb-8">
