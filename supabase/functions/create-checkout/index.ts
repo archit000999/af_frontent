@@ -16,14 +16,11 @@ serve(async (req) => {
   try {
     console.log("Create checkout function started");
 
-    // Create Supabase client with service role key for auth operations
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-      { auth: { persistSession: false } }
-    );
+    // Get the request body
+    const { planType } = await req.json();
+    console.log("Plan type requested:", planType);
 
-    // Get user from authorization header (Clerk token)
+    // Get authorization header
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       console.error("No authorization header provided");
@@ -34,49 +31,49 @@ serve(async (req) => {
     }
 
     const token = authHeader.replace("Bearer ", "");
-    console.log("Received Clerk token, attempting to verify...");
+    console.log("Received token, attempting to decode...");
     
-    // For Clerk tokens, we need to verify them using Clerk's API
-    // Since we can't easily verify Clerk tokens server-side without additional setup,
-    // we'll decode the token to get user info and trust it for now
+    // Decode the Clerk JWT token to get user information
     let userEmail: string;
     try {
-      // Decode the JWT token to get user information
       const parts = token.split('.');
       if (parts.length !== 3) {
         throw new Error("Invalid JWT format");
       }
       
+      // Decode the payload
       const payload = JSON.parse(atob(parts[1]));
-      console.log("JWT payload keys:", Object.keys(payload));
+      console.log("JWT payload decoded successfully");
       
-      // Clerk tokens might have email in different fields
-      userEmail = payload.email || payload.email_addresses?.[0]?.email_address || payload.primary_email_address_id;
+      // Extract email from various possible fields in Clerk token
+      userEmail = payload.email || 
+                 payload.email_addresses?.[0]?.email_address ||
+                 payload.primary_email_address ||
+                 payload.emailAddress;
       
-      if (!userEmail) {
-        // Try to get email from email_addresses array if it exists
-        if (payload.email_addresses && Array.isArray(payload.email_addresses)) {
-          const primaryEmail = payload.email_addresses.find(e => e.id === payload.primary_email_address_id);
-          userEmail = primaryEmail?.email_address;
+      // If still no email, try to find it in email_addresses array
+      if (!userEmail && payload.email_addresses && Array.isArray(payload.email_addresses)) {
+        const primaryEmail = payload.email_addresses.find(e => e.id === payload.primary_email_address_id);
+        if (primaryEmail) {
+          userEmail = primaryEmail.email_address;
+        } else if (payload.email_addresses.length > 0) {
+          userEmail = payload.email_addresses[0].email_address;
         }
       }
       
-      console.log("Extracted email from Clerk token:", userEmail);
+      console.log("Extracted email:", userEmail);
       
       if (!userEmail) {
-        console.error("No email found in token payload:", payload);
+        console.error("No email found in token payload");
         throw new Error("No email found in token");
       }
     } catch (error) {
-      console.error("Error decoding Clerk token:", error);
+      console.error("Error decoding token:", error);
       return new Response(JSON.stringify({ error: "Invalid authentication token" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 401,
       });
     }
-
-    const { planType } = await req.json();
-    console.log("Plan type requested:", planType);
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
