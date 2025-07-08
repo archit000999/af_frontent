@@ -5,9 +5,7 @@ const AuthButton = () => {
   return <div className="flex items-center gap-4">
       <SignedOut>
         <Link to="/auth">
-          <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white">
-            Sign Up
-          </Button>
+          
         </Link>
         <Link to="/auth">
           <Button variant="outline" className="border-white hover:bg-white text-blue-600">Login</Button>
