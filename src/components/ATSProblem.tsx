@@ -1,9 +1,7 @@
 import { AlertTriangle, Bot, Shield, Target, CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 const ATSProblem = () => {
-  return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-red-50 to-orange-50">
+  return <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-red-50 to-orange-50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <div className="inline-flex items-center px-4 py-2 bg-red-100 border border-red-200 rounded-full text-red-800 text-sm font-medium mb-6">
@@ -62,11 +60,7 @@ const ATSProblem = () => {
                 </div>
               </div>
               
-              <div className="bg-red-50 border-l-4 border-red-500 p-4 mt-6 rounded">
-                <p className="text-red-800 font-semibold italic">
-                  "Once your resume is blacklisted by ATS, no application will ever work again. You're permanently flagged across their entire system."
-                </p>
-              </div>
+              
             </div>
           </div>
 
@@ -118,18 +112,13 @@ const ATSProblem = () => {
               </p>
             </div>
             
-            <Button 
-              size="lg" 
-              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold shadow-xl"
-            >
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold shadow-xl">
               Start Your Free Evaluation <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <p className="text-sm mt-2 opacity-90">Get ahead before the filters even kick in</p>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ATSProblem;
