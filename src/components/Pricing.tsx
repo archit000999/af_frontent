@@ -43,7 +43,7 @@ const Pricing = () => {
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <span className="text-2xl font-bold text-green-600">First Week Fee Waived Off</span>
                   </div>
-                  <p className="text-slate-700 font-medium mb-2">if you participate in our upcoming webinar "Effective Strategies to find job in the era of AI"</p>
+                  <p className="text-slate-700 font-medium mb-2">If you participate in our upcoming webinar &quot;Effective Strategies to find job in the era of AI&quot;</p>
                   <button className="text-blue-600 hover:text-blue-800 font-medium underline transition-colors">
                     Click here to see the schedule of webinar
                   </button>
