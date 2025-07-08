@@ -40,14 +40,9 @@ const Hero = () => {
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            <span className="block animate-fade-in opacity-0 [animation-delay:0.5s] [animation-fill-mode:forwards]">
-              We Find the Job.
-            </span>
-            <span className="block animate-fade-in opacity-0 [animation-delay:1.5s] [animation-fill-mode:forwards]">
-              We Reach Out to Hiring Manager.
-            </span>
-            <span className="block animate-fade-in opacity-0 [animation-delay:2.5s] [animation-fill-mode:forwards]">
-              We Apply.
+            Land Interviews Before Jobs Hit{" "}
+            <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+              LinkedIn
             </span>
           </h1>
           
