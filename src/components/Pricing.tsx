@@ -67,25 +67,7 @@ const Pricing = () => {
                   </div>)}
               </div>
 
-              <div className="border-t border-slate-200 pt-8 mb-10">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div className="flex items-start gap-4 p-4 bg-green-50 rounded-2xl border border-green-200">
-                    <Shield className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-bold text-slate-900 mb-2">Money-Back Guarantee</h4>
-                      <p className="text-slate-600 text-sm leading-relaxed">If we don't land you interviews within 30 days, get your full $399 back. No questions asked.</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4 p-4 bg-blue-50 rounded-2xl border border-blue-200">
-                    <DollarSign className="h-8 w-8 text-blue-600 mt-1 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-bold text-slate-900 mb-2">Success Fee</h4>
-                      <p className="text-slate-600 text-sm leading-relaxed">Only pay 1% of your yearly compensation if you get hired through our efforts.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              
 
               <div className="space-y-4">
                 <Button onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
