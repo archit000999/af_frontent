@@ -32,7 +32,7 @@ const Home = () => {
           navigate('/copilot-screening');
           break;
         case 4:
-          navigate('/copilot-final');
+          navigate('/copilot-final-step');
           break;
         default:
           navigate('/copilot-setup');

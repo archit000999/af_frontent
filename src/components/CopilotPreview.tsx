@@ -24,7 +24,7 @@ const CopilotPreview = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleBack = () => {
-    navigate('/copilot-final');
+    navigate('/copilot-final-step');
   };
 
   useEffect(() => {
