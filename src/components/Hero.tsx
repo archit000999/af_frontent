@@ -39,9 +39,7 @@ const Hero = () => {
           </p>
           
           <div className="flex justify-center mb-16">
-            <Button variant="outline" size="lg" onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')} className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
-              Book Free Consult
-            </Button>
+            <Button variant="outline" size="lg" onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')} className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">Try it now</Button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
