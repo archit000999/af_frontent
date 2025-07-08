@@ -28,7 +28,7 @@ const Auth = () => {
                 </Button>
               </SignInButton>
               
-              <SignUpButton mode="modal" forceRedirectUrl="/home" className="text-blue-600">
+              <SignUpButton mode="modal" forceRedirectUrl="/home">
                 <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10 py-3 text-lg font-semibold">
                   Sign Up
                 </Button>
