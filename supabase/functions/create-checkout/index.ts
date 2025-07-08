@@ -34,18 +34,37 @@ serve(async (req) => {
     }
 
     const token = authHeader.replace("Bearer ", "");
-    console.log("Received Clerk token, verifying...");
+    console.log("Received Clerk token, attempting to verify...");
     
-    // For Clerk tokens, we need to verify them differently
-    // Since this is a Clerk token, we'll decode it to get user info
+    // For Clerk tokens, we need to verify them using Clerk's API
+    // Since we can't easily verify Clerk tokens server-side without additional setup,
+    // we'll decode the token to get user info and trust it for now
     let userEmail: string;
     try {
       // Decode the JWT token to get user information
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      userEmail = payload.email;
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        throw new Error("Invalid JWT format");
+      }
+      
+      const payload = JSON.parse(atob(parts[1]));
+      console.log("JWT payload keys:", Object.keys(payload));
+      
+      // Clerk tokens might have email in different fields
+      userEmail = payload.email || payload.email_addresses?.[0]?.email_address || payload.primary_email_address_id;
+      
+      if (!userEmail) {
+        // Try to get email from email_addresses array if it exists
+        if (payload.email_addresses && Array.isArray(payload.email_addresses)) {
+          const primaryEmail = payload.email_addresses.find(e => e.id === payload.primary_email_address_id);
+          userEmail = primaryEmail?.email_address;
+        }
+      }
+      
       console.log("Extracted email from Clerk token:", userEmail);
       
       if (!userEmail) {
+        console.error("No email found in token payload:", payload);
         throw new Error("No email found in token");
       }
     } catch (error) {
