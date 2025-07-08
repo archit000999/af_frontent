@@ -15,13 +15,13 @@ const Hero = () => {
       
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header with logo and auth */}
-        <div className="flex justify-between items-center py-6 mb-12">
+        <div className="flex justify-between items-center mb-8">
           {/* ApplyFirst Logo */}
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">A</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-xl">A</span>
             </div>
-            <span className="text-white text-xl font-semibold">ApplyFirst</span>
+            <span className="text-white text-2xl font-bold">ApplyFirst</span>
           </div>
           
           {/* Auth buttons */}
