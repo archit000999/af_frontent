@@ -1,90 +1,99 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Settings } from 'lucide-react';
+import { ArrowLeft, Settings, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UserButton } from '@clerk/clerk-react';
+import { useCopilotConfig } from '@/hooks/useCopilotConfig';
+import { supabase } from '@/integrations/supabase/client';
+
+interface Job {
+  id: number;
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  description?: string;
+}
 
 const CopilotPreview = () => {
   const navigate = useNavigate();
+  const { config, isInitialized } = useCopilotConfig();
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const handleBack = () => {
     navigate('/copilot-final');
   };
 
-  // Mock job data based on the image
-  const jobs = [
-    {
-      id: 1,
-      title: "Senior Software Engineer - Fullstack Developer",
-      company: "Ninja Van",
-      location: "Hyderabad, India",
-      type: "Fulltime"
-    },
-    {
-      id: 2,
-      title: "Senior Full Stack Software Engineer (React.js /.Net)",
-      company: "Shift",
-      location: "Kalyani Magnum, Block 2, 5th ...",
-      type: "Fulltime"
-    },
-    {
-      id: 3,
-      title: "Software Developer",
-      company: "Cbts India",
-      location: "Chennai, India",
-      type: "Fulltime"
-    },
-    {
-      id: 4,
-      title: "Jio Tesseract-Software Developer/Engineering Manager/Senior Software Developer",
-      company: "Nexthire",
-      location: "Navi Mumbai, IN",
-      type: "Fulltime"
-    },
-    {
-      id: 5,
-      title: "Lead Software Developer",
-      company: "Cbts India",
-      location: "Chennai, India",
-      type: "Fulltime"
-    },
-    {
-      id: 6,
-      title: "Software Developer (React)",
-      company: "Vagaro",
-      location: "Ahmedabad, IN",
-      type: "Fulltime"
-    },
-    {
-      id: 7,
-      title: "Senior Embedded Software Developer",
-      company: "Continental",
-      location: "Remote",
-      type: "Fulltime"
-    },
-    {
-      id: 8,
-      title: "Truva-Senior Software Developer",
-      company: "Nexthire",
-      location: "Bangalore, IN",
-      type: "Fulltime"
-    },
-    {
-      id: 9,
-      title: "EVEREST IMS- SOFTWARE DEVELOPER",
-      company: "Nexthire",
-      location: "BANGALORE, IN",
-      type: "Fulltime"
-    },
-    {
-      id: 10,
-      title: "Software Developer - Wifi",
-      company: "Arista Networks",
-      location: "Pune, Maharashtra, India",
-      type: "Fulltime"
-    }
-  ];
+  useEffect(() => {
+    const fetchJobs = async () => {
+      if (!isInitialized || !config || !config.jobTitles || config.jobTitles.length === 0) {
+        return;
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        console.log('Fetching jobs with config:', config);
+        
+        const { data, error: functionError } = await supabase.functions.invoke('fetch-jobs', {
+          body: {
+            jobTitles: config.jobTitles,
+            workLocationTypes: config.workLocationTypes,
+            remoteLocations: config.remoteLocations,
+            onsiteLocations: config.onsiteLocations
+          }
+        });
+
+        if (functionError) {
+          console.error('Edge function error:', functionError);
+          throw new Error(functionError.message || 'Failed to fetch jobs');
+        }
+
+        if (data && data.jobs) {
+          setJobs(data.jobs);
+        } else {
+          throw new Error('No jobs data received');
+        }
+      } catch (err) {
+        console.error('Error fetching jobs:', err);
+        setError(err instanceof Error ? err.message : 'Failed to fetch jobs');
+        
+        // Set fallback jobs on error
+        setJobs([
+          {
+            id: 1,
+            title: config.jobTitles[0] || 'Software Developer',
+            company: 'TechCorp Solutions',
+            location: 'San Francisco, CA',
+            type: 'Fulltime'
+          },
+          {
+            id: 2,
+            title: config.jobTitles[0] || 'Software Developer',
+            company: 'Innovation Labs',
+            location: 'Remote',
+            type: 'Fulltime'
+          }
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, [isInitialized, config]);
+
+  if (!isInitialized) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 to-purple-50 overflow-hidden">
@@ -152,48 +161,72 @@ const CopilotPreview = () => {
             <p className="text-sm text-gray-600 max-w-2xl mx-auto">
               Based on your configuration, here's a preview of jobs that your Copilot will automatically apply to
             </p>
+            {error && (
+              <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                <p className="text-sm text-orange-600">
+                  Note: Using sample data. {error}
+                </p>
+              </div>
+            )}
           </div>
 
-          {/* Jobs Grid */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-8">
-              {jobs.map((job) => (
-                <div
-                  key={job.id}
-                  className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
-                >
-                  <div className="space-y-3">
-                    {/* Job Title */}
-                    <h3 className="text-base font-medium text-purple-600 leading-tight">
-                      {job.title}
-                    </h3>
-                    
-                    {/* Company */}
-                    <p className="text-sm font-medium text-gray-900">
-                      {job.company}
-                    </p>
-                    
-                    {/* Location and Type */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2 text-gray-600">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span className="text-sm">{job.type}</span>
-                      </div>
-                      <div className="flex items-center space-x-2 text-gray-600">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <span className="text-sm">{job.location}</span>
+          {/* Loading State */}
+          {isLoading ? (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center">
+                <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-purple-600" />
+                <p className="text-gray-600">Fetching latest job opportunities...</p>
+              </div>
+            </div>
+          ) : (
+            /* Jobs Grid */
+            <div className="flex-1 overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-8">
+                {jobs.map((job) => (
+                  <div
+                    key={job.id}
+                    className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
+                  >
+                    <div className="space-y-3">
+                      {/* Job Title */}
+                      <h3 className="text-base font-medium text-purple-600 leading-tight">
+                        {job.title}
+                      </h3>
+                      
+                      {/* Company */}
+                      <p className="text-sm font-medium text-gray-900">
+                        {job.company}
+                      </p>
+                      
+                      {/* Description */}
+                      {job.description && (
+                        <p className="text-sm text-gray-600 line-clamp-2">
+                          {job.description}
+                        </p>
+                      )}
+                      
+                      {/* Location and Type */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2 text-gray-600">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span className="text-sm">{job.type}</span>
+                        </div>
+                        <div className="flex items-center space-x-2 text-gray-600">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <span className="text-sm">{job.location}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Back Button */}
           <div className="flex justify-start pt-6 border-t border-gray-200">
