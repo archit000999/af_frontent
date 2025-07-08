@@ -77,11 +77,11 @@ const Proof = () => {
               </p>
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-white font-bold">SC</span>
+                  <span className="text-white font-bold">AT</span>
                 </div>
                 <div>
-                  <div className="font-semibold text-white">Sarah Chen</div>
-                  <div className="text-sm text-slate-400">Product Manager at Meta</div>
+                  <div className="font-semibold text-white">Alex Thompson</div>
+                  <div className="text-sm text-slate-400">Product Manager at TechCorp</div>
                 </div>
               </div>
             </div>
@@ -97,11 +97,11 @@ const Proof = () => {
               </p>
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-400 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-white font-bold">MR</span>
+                  <span className="text-white font-bold">JW</span>
                 </div>
                 <div>
-                  <div className="font-semibold text-white">Michael Rodriguez</div>
-                  <div className="text-sm text-slate-400">Senior Developer at Stripe</div>
+                  <div className="font-semibold text-white">Jordan Williams</div>
+                  <div className="text-sm text-slate-400">Senior Developer at InnovateInc</div>
                 </div>
               </div>
             </div>
