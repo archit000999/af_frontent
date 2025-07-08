@@ -77,11 +77,11 @@ const Proof = () => {
               </p>
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-white font-bold">AT</span>
+                  <span className="text-white font-bold">MD</span>
                 </div>
                 <div>
-                  <div className="font-semibold text-white">Alex Thompson</div>
-                  <div className="text-sm text-slate-400">Product Manager at TechCorp</div>
+                  <div className="font-semibold text-white">Mudit Dawar</div>
+                  <div className="text-sm text-slate-400">GTM Manager at Walmart</div>
                 </div>
               </div>
             </div>
