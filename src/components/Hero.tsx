@@ -40,10 +40,7 @@ const Hero = () => {
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Land Interviews Before Jobs Hit{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-              LinkedIn
-            </span>
+            We Find the Job. We Pitch You. We Apply
           </h1>
           
           <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">ApplyFirst monitors job boards in real time and instantly contacts hiring managers with your resume. If there's interest, we apply on your behalf.</p>
