@@ -1,3 +1,4 @@
+
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +7,7 @@ import { Button } from '@/components/ui/button';
 const Auth = () => {
   const navigate = useNavigate();
 
-  // Redirect authenticated users to home
+  // Redirect authenticated users to home dashboard
   useEffect(() => {
     const checkAuth = () => {
       // This will be handled by Clerk's built-in redirect logic
@@ -25,14 +26,14 @@ const Auth = () => {
             </div>
             
             <div className="space-y-4">
-              <SignInButton mode="modal" forceRedirectUrl="/">
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:text-black text-white py-3 text-lg font-semibold">
+              <SignInButton mode="modal" forceRedirectUrl="/home">
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 text-lg font-semibold">
                   Sign In
                 </Button>
               </SignInButton>
               
-              <SignUpButton mode="modal" forceRedirectUrl="/">
-                <Button variant="outline" className="w-full border-white/20 text-black hover:bg-white/10 py-3 text-lg font-semibold">
+              <SignUpButton mode="modal" forceRedirectUrl="/home">
+                <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10 py-3 text-lg font-semibold">
                   Sign Up
                 </Button>
               </SignUpButton>
@@ -59,7 +60,7 @@ const Auth = () => {
             />
             <div className="mt-6">
               <Button 
-                onClick={() => navigate('/')} 
+                onClick={() => navigate('/home')} 
                 className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white"
               >
                 Go to Dashboard
