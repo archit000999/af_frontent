@@ -32,7 +32,7 @@ const Auth = () => {
               </SignInButton>
               
               <SignUpButton mode="modal" forceRedirectUrl="/">
-                <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10 py-3 text-lg font-semibold">
+                <Button variant="outline" className="w-full border-white/20 text-black hover:bg-white/10 py-3 text-lg font-semibold">
                   Sign Up
                 </Button>
               </SignUpButton>
