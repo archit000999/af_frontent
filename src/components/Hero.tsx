@@ -25,8 +25,8 @@ const Hero = () => {
     <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen">
       {/* Background effects */}
       <div className="absolute inset-0 opacity-20" style={{
-      backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-    }}></div>
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+      }}></div>
       <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
       
@@ -40,16 +40,13 @@ const Hero = () => {
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Land Interviews the Moment Jobs{" "}
+            Land Interviews Before Jobs Hit{" "}
             <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-              Go Live
+              LinkedIn
             </span>
           </h1>
           
-          <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-            ApplyFirst monitors job boards in real time and instantly contacts hiring managers with your resume. 
-            If there's interest, we apply on your behalf — no spam, just targeted outreach that gets results.
-          </p>
+          <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">ApplyFirst monitors job boards in real time and instantly contacts hiring managers with your resume. If there's interest, we apply on your behalf.</p>
           
           <div className="flex justify-center mb-16">
             <Button variant="outline" size="lg" onClick={() => window.location.href = '/auth'} className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">Try it now</Button>
