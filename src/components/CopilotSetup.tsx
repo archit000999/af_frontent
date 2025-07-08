@@ -3,17 +3,18 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Input } from '@/components/ui/input';
-import { Check, X, Edit, ArrowLeft, Settings } from 'lucide-react';
+import { Check, X, Edit, ArrowLeft, Settings, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UserButton } from '@clerk/clerk-react';
+import { LocationSelectionDialog } from './LocationSelectionDialog';
 
 const CopilotSetup = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [workLocation, setWorkLocation] = useState('remote');
-  const [locationDetails, setLocationDetails] = useState('Worldwide');
-  const [isEditingLocation, setIsEditingLocation] = useState(false);
-  const [tempLocation, setTempLocation] = useState('Worldwide');
+  const [locationDetails, setLocationDetails] = useState('');
+  const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [jobTypes, setJobTypes] = useState(['fulltime']);
   const [jobTitles, setJobTitles] = useState(['Software Developer']);
   const [newJobTitle, setNewJobTitle] = useState('');
@@ -24,25 +25,6 @@ const CopilotSetup = () => {
         ? prev.filter(t => t !== type)
         : [...prev, type]
     );
-  };
-
-  const handleLocationEdit = () => {
-    setIsEditingLocation(true);
-    setTempLocation(locationDetails);
-  };
-
-  const handleLocationSave = () => {
-    setLocationDetails(tempLocation);
-    setIsEditingLocation(false);
-  };
-
-  const handleLocationCancel = () => {
-    setTempLocation(locationDetails);
-    setIsEditingLocation(false);
-  };
-
-  const handleRemoveLocation = () => {
-    setLocationDetails('');
   };
 
   const handleAddJobTitle = () => {
@@ -60,6 +42,16 @@ const CopilotSetup = () => {
     if (e.key === 'Enter') {
       handleAddJobTitle();
     }
+  };
+
+  const handleLocationSave = (locations: string[]) => {
+    setSelectedLocations(locations);
+    if (locations.length > 0) {
+      setLocationDetails(locations.join(', '));
+    } else {
+      setLocationDetails('');
+    }
+    setIsLocationDialogOpen(false);
   };
 
   const handleNext = () => {
@@ -149,7 +141,7 @@ const CopilotSetup = () => {
                 Are you looking for jobs that are remote, have a physical location, or both?
               </p>
               
-              <RadioGroup value={workLocation} onValueChange={setWorkLocation} className="space-y-3">
+              <RadioGroup value={workLocation} onValueChange={setWorkLocation} className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <RadioGroupItem value="remote" id="remote" />
                   <label htmlFor="remote" className="flex items-center space-x-2 cursor-pointer">
@@ -161,46 +153,34 @@ const CopilotSetup = () => {
                 </div>
                 
                 {workLocation === 'remote' && (
-                  <div className="ml-9 flex items-center space-x-2">
-                    {!isEditingLocation ? (
-                      <>
-                        {locationDetails && (
-                          <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm flex items-center space-x-1">
-                            <span>{locationDetails}</span>
+                  <div className="ml-9 space-y-2">
+                    {selectedLocations.length === 0 && (
+                      <p className="text-red-500 text-sm">Please select at least one country or worldwide.</p>
+                    )}
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsLocationDialogOpen(true)}
+                      className="flex items-center space-x-2 text-purple-600 border-purple-300 hover:bg-purple-50"
+                    >
+                      <span>Select locations</span>
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    
+                    {selectedLocations.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {selectedLocations.map((location, index) => (
+                          <div key={index} className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm flex items-center space-x-1">
+                            <span>{location}</span>
                             <X 
                               className="w-3 h-3 cursor-pointer hover:text-purple-900" 
-                              onClick={handleRemoveLocation}
+                              onClick={() => {
+                                const updatedLocations = selectedLocations.filter(loc => loc !== location);
+                                setSelectedLocations(updatedLocations);
+                                setLocationDetails(updatedLocations.join(', '));
+                              }}
                             />
                           </div>
-                        )}
-                        <Edit 
-                          className="w-4 h-4 text-gray-400 cursor-pointer hover:text-gray-600" 
-                          onClick={handleLocationEdit}
-                        />
-                      </>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <Input
-                          value={tempLocation}
-                          onChange={(e) => setTempLocation(e.target.value)}
-                          placeholder="Enter location..."
-                          className="w-48"
-                          autoFocus
-                        />
-                        <Button 
-                          size="sm" 
-                          onClick={handleLocationSave}
-                          className="bg-purple-600 hover:bg-purple-700"
-                        >
-                          Save
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          onClick={handleLocationCancel}
-                        >
-                          Cancel
-                        </Button>
+                        ))}
                       </div>
                     )}
                   </div>
@@ -319,6 +299,14 @@ const CopilotSetup = () => {
           </div>
         </div>
       </main>
+
+      {/* Location Selection Dialog */}
+      <LocationSelectionDialog
+        isOpen={isLocationDialogOpen}
+        onClose={() => setIsLocationDialogOpen(false)}
+        onSave={handleLocationSave}
+        selectedLocations={selectedLocations}
+      />
     </div>
   );
 };
