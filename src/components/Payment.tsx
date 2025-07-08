@@ -1,15 +1,16 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, ArrowLeft, Sparkles, Crown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 const Payment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { getToken, isSignedIn } = useAuth();
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
   const plans = [
@@ -55,10 +56,8 @@ const Payment = () => {
   const handleUpgrade = async (planType: string) => {
     setIsLoading(planType);
     try {
-      // Get the current session
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError || !session) {
+      // Check if user is signed in with Clerk
+      if (!isSignedIn) {
         toast({
           title: "Authentication Required",
           description: "Please log in to purchase a subscription.",
@@ -67,12 +66,23 @@ const Payment = () => {
         return;
       }
 
-      console.log("Making request to create-checkout with auth token");
+      // Get Clerk token
+      const token = await getToken();
+      if (!token) {
+        toast({
+          title: "Authentication Error",
+          description: "Unable to authenticate. Please try logging in again.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log("Making request to create-checkout with Clerk token");
       
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: { planType },
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 

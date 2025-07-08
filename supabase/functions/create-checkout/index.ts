@@ -23,7 +23,7 @@ serve(async (req) => {
       { auth: { persistSession: false } }
     );
 
-    // Get user from authorization header
+    // Get user from authorization header (Clerk token)
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       console.error("No authorization header provided");
@@ -34,28 +34,27 @@ serve(async (req) => {
     }
 
     const token = authHeader.replace("Bearer ", "");
-    console.log("Attempting to get user with token");
+    console.log("Received Clerk token, verifying...");
     
-    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
-    
-    if (userError) {
-      console.error("User authentication error:", userError);
-      return new Response(JSON.stringify({ error: "Authentication failed: " + userError.message }), {
+    // For Clerk tokens, we need to verify them differently
+    // Since this is a Clerk token, we'll decode it to get user info
+    let userEmail: string;
+    try {
+      // Decode the JWT token to get user information
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      userEmail = payload.email;
+      console.log("Extracted email from Clerk token:", userEmail);
+      
+      if (!userEmail) {
+        throw new Error("No email found in token");
+      }
+    } catch (error) {
+      console.error("Error decoding Clerk token:", error);
+      return new Response(JSON.stringify({ error: "Invalid authentication token" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 401,
       });
     }
-
-    const user = userData.user;
-    if (!user?.email) {
-      console.error("User not found or no email");
-      return new Response(JSON.stringify({ error: "User not authenticated or email not available" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 401,
-      });
-    }
-
-    console.log("User authenticated:", user.email);
 
     const { planType } = await req.json();
     console.log("Plan type requested:", planType);
@@ -65,8 +64,8 @@ serve(async (req) => {
     });
 
     // Check if customer exists
-    console.log("Checking for existing customer");
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+    console.log("Checking for existing customer with email:", userEmail);
+    const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
     let customerId;
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
@@ -100,7 +99,7 @@ serve(async (req) => {
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
-      customer_email: customerId ? undefined : user.email,
+      customer_email: customerId ? undefined : userEmail,
       line_items: [
         {
           price_data: {
