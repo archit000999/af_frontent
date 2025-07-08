@@ -68,9 +68,7 @@ const ATSProblem = () => {
             <div className="bg-gradient-to-br from-red-600 to-orange-600 p-8 rounded-2xl text-white mb-8">
               <AlertTriangle className="h-16 w-16 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-4">AI Job Applying is a Trap</h3>
-              <p className="text-lg leading-relaxed">
-                Using AI to mass-apply to jobs is the fastest way to get permanently blacklisted. You're just feeding the system that's designed to reject you.
-              </p>
+              <p className="text-lg leading-relaxed">Using AI to mass-apply can backfire—many ATS platforms now flag AI-generated applications, and recruiters are starting to use those warnings to auto-reject candidates.</p>
             </div>
             
             <div className="bg-white p-6 rounded-xl shadow-lg border-2 border-red-200">
