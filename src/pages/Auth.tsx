@@ -33,8 +33,8 @@ const Auth = () => {
               </SignInButton>
               
               <SignUpButton mode="modal" forceRedirectUrl="/home">
-                <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10 py-3 text-lg font-semibold">
-                  Sign Up
+                <Button className="w-full bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30 py-3 text-lg font-semibold">
+                  Create Account
                 </Button>
               </SignUpButton>
             </div>
