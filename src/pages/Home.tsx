@@ -3,12 +3,15 @@ import { UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ChevronDown, Settings } from 'lucide-react';
-import { useState } from 'react';
-import CopilotSetup from '@/components/CopilotSetup';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const { user } = useUser();
-  const [setupOpen, setSetupOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSetupCopilot = () => {
+    navigate('/copilot-setup');
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
@@ -76,7 +79,7 @@ const Home = () => {
           <Card className="mb-8 border-0 shadow-lg bg-white">
             <CardContent className="p-8">
               <Button 
-                onClick={() => setSetupOpen(true)}
+                onClick={handleSetupCopilot}
                 className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 text-lg font-semibold rounded-full flex items-center justify-center sm:justify-start space-x-2"
               >
                 <span>Setup your first copilot</span>
@@ -94,9 +97,6 @@ const Home = () => {
           </div>
         </div>
       </main>
-
-      {/* Copilot Setup Dialog */}
-      <CopilotSetup open={setupOpen} onOpenChange={setSetupOpen} />
     </div>
   );
 };
