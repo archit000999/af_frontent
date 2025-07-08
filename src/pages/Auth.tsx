@@ -26,7 +26,7 @@ const Auth = () => {
             
             <div className="space-y-4">
               <SignInButton mode="modal" forceRedirectUrl="/">
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 text-lg font-semibold">
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:text-black text-white py-3 text-lg font-semibold">
                   Sign In
                 </Button>
               </SignInButton>
