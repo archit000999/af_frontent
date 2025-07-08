@@ -21,7 +21,7 @@ const ATSProblem = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch mb-16">
           <div>
             <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
               <div className="flex items-center mb-6">
