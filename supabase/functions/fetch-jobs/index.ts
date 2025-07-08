@@ -48,7 +48,8 @@ serve(async (req) => {
     // Create search query for Perplexity
     const searchQuery = `Find current job openings for ${jobTitles.join(' or ')} positions as ${locationContext}. Include company names, job titles, locations, and brief descriptions. Focus on legitimate companies that are actively hiring in 2024.`;
 
-    console.log('Searching for jobs:', searchQuery);
+    console.log('Searching for jobs with API key present:', !!perplexityApiKey);
+    console.log('Search query:', searchQuery);
 
     const response = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
