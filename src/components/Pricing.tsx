@@ -60,7 +60,7 @@ const Pricing = () => {
                     <Shield className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-bold text-slate-900 mb-2">Money-Back Guarantee</h4>
-                      <p className="text-slate-600 text-sm leading-relaxed">If we don't land you interviews within 30 days, get your full $299 back. No questions asked.</p>
+                      <p className="text-slate-600 text-sm leading-relaxed">If we don't land you interviews within 30 days, get your full $399 back. No questions asked.</p>
                     </div>
                   </div>
                   
