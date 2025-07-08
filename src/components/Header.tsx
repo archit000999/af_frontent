@@ -50,7 +50,7 @@ const Header = () => {
               onClick={() => setIsApplicationFormOpen(true)}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-2 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
-              Get Started <ArrowRight className="ml-2 h-4 w-4" />
+              Talk to Us <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>

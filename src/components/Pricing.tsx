@@ -103,7 +103,7 @@ const Pricing = () => {
                   className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
                   onClick={() => setShowCalendly(true)}
                 >
-                  See If You Qualify <ArrowRight className="ml-2 h-6 w-6" />
+                  Talk to Us <ArrowRight className="ml-2 h-6 w-6" />
                 </Button>
                 <p className="text-center text-sm text-slate-500">
                   Free consultation • No commitment • Setup in 24 hours
