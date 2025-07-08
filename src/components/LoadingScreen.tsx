@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 interface LoadingScreenProps {
@@ -17,11 +18,11 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
           </div>
           
           {/* Loading text */}
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+          <h2 className="text-base font-semibold text-gray-900 mb-2">
             {message}
           </h2>
           
-          <p className="text-gray-600">
+          <p className="text-sm text-gray-600">
             Please wait while we set up your copilot...
           </p>
         </div>

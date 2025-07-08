@@ -154,7 +154,7 @@ export const LocationSelectionDialog: React.FC<LocationSelectionDialogProps> = (
       <DialogContent className="max-w-4xl max-h-[93vh] overflow-hidden">
         <DialogHeader>
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-lg font-semibold">
+            <DialogTitle className="text-base font-semibold">
               Filter locations where you want to apply for jobs
             </DialogTitle>
           </div>
@@ -167,11 +167,11 @@ export const LocationSelectionDialog: React.FC<LocationSelectionDialogProps> = (
               <label className="text-sm font-medium text-gray-700">Select Country</label>
               <Select value={selectedCountry} onValueChange={handleCountryChange}>
                 <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Select a country" />
+                  <SelectValue placeholder="Select a country" className="text-sm" />
                 </SelectTrigger>
                 <SelectContent>
                   {countries.map((country) => (
-                    <SelectItem key={country.isoCode} value={country.isoCode}>
+                    <SelectItem key={country.isoCode} value={country.isoCode} className="text-sm">
                       {country.name}
                     </SelectItem>
                   ))}
@@ -280,7 +280,7 @@ export const LocationSelectionDialog: React.FC<LocationSelectionDialogProps> = (
         <div className="flex justify-center pt-4 border-t">
           <Button 
             onClick={handleSave}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-2"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-2 text-sm"
             disabled={tempSelectedLocations.length === 0}
           >
             Save

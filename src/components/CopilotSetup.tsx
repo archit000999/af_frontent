@@ -206,25 +206,25 @@ const CopilotSetup = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center space-x-2 text-purple-600 font-medium">
+            <div className="flex items-center space-x-2 text-purple-600 font-medium text-sm">
               <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
                 <span className="text-purple-600 text-xs">◯</span>
               </div>
               <span>Copilot</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
               <div className="w-6 h-6 flex items-center justify-center">
                 <span className="text-gray-600 text-xs">📋</span>
               </div>
               <span>Applications</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
               <div className="w-6 h-6 flex items-center justify-center">
                 <span className="text-gray-600 text-xs">🔧</span>
               </div>
               <span>Tools</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
               <div className="w-6 h-6 flex items-center justify-center">
                 <span className="text-gray-600 text-xs">❓</span>
               </div>
@@ -253,11 +253,11 @@ const CopilotSetup = () => {
             {/* Header - Fixed */}
             <div className="flex-shrink-0 p-8 pb-4">
               <div className="text-center">
-                <h1 className="text-lg font-semibold text-gray-900">
+                <h1 className="text-base font-semibold text-gray-900">
                   Copilot Configuration
                 </h1>
-                <p className="text-gray-600 mt-2">Step {currentStep} of 4</p>
-                <p className="text-gray-700 mt-4">
+                <p className="text-sm text-gray-600 mt-2">Step {currentStep} of 4</p>
+                <p className="text-sm text-gray-700 mt-4">
                   First, select the Work Location and Jobs you are looking for
                 </p>
               </div>
@@ -268,8 +268,8 @@ const CopilotSetup = () => {
               <div className="space-y-8 pb-4">
                 {/* Work Location Section */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Work Location</h3>
-                  <p className="text-gray-600 text-sm mb-4">
+                  <h3 className="text-base font-medium text-gray-900 mb-3">Work Location</h3>
+                  <p className="text-sm text-gray-600 mb-4">
                     Are you looking for jobs that are remote, have a physical location, or both?
                   </p>
                   
@@ -303,20 +303,20 @@ const CopilotSetup = () => {
                   </div>
                   
                   {errors.workLocation && (
-                    <p className="text-red-500 text-sm mt-2">Please select at least one work location type.</p>
+                    <p className="text-sm text-red-500 mt-2">Please select at least one work location type.</p>
                   )}
                   
                   {/* Location Selection - Show for selected work location types */}
                   {workLocationTypes.length > 0 && (
                     <div className="mt-4 space-y-4">
                       {errors.locations && (
-                        <p className="text-red-500 text-sm">Please select locations for your chosen work types.</p>
+                        <p className="text-sm text-red-500">Please select locations for your chosen work types.</p>
                       )}
                       
                       {/* Remote locations section */}
                       {workLocationTypes.includes('remote') && (
                         <div className="border rounded-lg p-4 bg-gray-50">
-                          <h4 className="font-medium text-gray-900 mb-3">Remote Job Locations</h4>
+                          <h4 className="text-base font-medium text-gray-900 mb-3">Remote Job Locations</h4>
                           <div className="flex items-center space-x-3 mb-4">
                             <Button
                               variant={remoteLocations.includes('Worldwide') ? 'default' : 'outline'}
@@ -328,7 +328,7 @@ const CopilotSetup = () => {
                                   setErrors(prev => ({ ...prev, locations: false }));
                                 }
                               }}
-                              className={`${
+                              className={`text-sm ${
                                 remoteLocations.includes('Worldwide')
                                   ? 'bg-purple-600 hover:bg-purple-700 text-white'
                                   : 'text-purple-600 border-purple-300 hover:bg-purple-50'
@@ -340,14 +340,14 @@ const CopilotSetup = () => {
                             
                             {!remoteLocations.includes('Worldwide') && (
                               <>
-                                <span className="text-gray-500 text-sm">or</span>
+                                <span className="text-sm text-gray-500">or</span>
                                 <Button
                                   variant="outline"
                                   onClick={() => {
                                     setCurrentLocationDialogType('remote');
                                     setIsLocationDialogOpen(true);
                                   }}
-                                  className="flex items-center space-x-2 text-purple-600 border-purple-300 hover:bg-purple-50"
+                                  className="flex items-center space-x-2 text-sm text-purple-600 border-purple-300 hover:bg-purple-50"
                                 >
                                   <span>Select specific locations</span>
                                   <Edit className="w-4 h-4" />
@@ -378,7 +378,7 @@ const CopilotSetup = () => {
                       {/* Onsite locations section */}
                       {workLocationTypes.includes('onsite') && (
                         <div className="border rounded-lg p-4 bg-gray-50">
-                          <h4 className="font-medium text-gray-900 mb-3">On-site / Hybrid Job Locations</h4>
+                          <h4 className="text-base font-medium text-gray-900 mb-3">On-site / Hybrid Job Locations</h4>
                           <div className="flex items-center space-x-3 mb-3">
                             <Button
                               variant="outline"
@@ -386,7 +386,7 @@ const CopilotSetup = () => {
                                 setCurrentLocationDialogType('onsite');
                                 setIsLocationDialogOpen(true);
                               }}
-                              className="flex items-center space-x-2 text-purple-600 border-purple-300 hover:bg-purple-50"
+                              className="flex items-center space-x-2 text-sm text-purple-600 border-purple-300 hover:bg-purple-50"
                             >
                               <span>Select locations</span>
                               <Edit className="w-4 h-4" />
@@ -416,8 +416,8 @@ const CopilotSetup = () => {
 
                 {/* Job Types Section */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Job Types</h3>
-                  <p className="text-gray-600 text-sm mb-4">
+                  <h3 className="text-base font-medium text-gray-900 mb-3">Job Types</h3>
+                  <p className="text-sm text-gray-600 mb-4">
                     What job types are you looking for? Select at least one.
                   </p>
                   
@@ -431,7 +431,7 @@ const CopilotSetup = () => {
                       <button
                         key={type.id}
                         onClick={() => handleJobTypeToggle(type.id)}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-full border transition-colors ${
+                        className={`flex items-center space-x-2 px-4 py-2 rounded-full border transition-colors text-sm ${
                           jobTypes.includes(type.id)
                             ? 'bg-purple-600 text-white border-purple-600'
                             : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
@@ -446,14 +446,14 @@ const CopilotSetup = () => {
                   </div>
                   
                   {errors.jobTypes && (
-                    <p className="text-red-500 text-sm mt-2">Please select at least one job type.</p>
+                    <p className="text-sm text-red-500 mt-2">Please select at least one job type.</p>
                   )}
                 </div>
 
                 {/* Job Titles Section */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Job Titles</h3>
-                  <p className="text-gray-600 text-sm mb-4">
+                  <h3 className="text-base font-medium text-gray-900 mb-3">Job Titles</h3>
+                  <p className="text-sm text-gray-600 mb-4">
                     What job titles are you looking for? Type in and select up to 5
                   </p>
                   
@@ -484,7 +484,7 @@ const CopilotSetup = () => {
                             }}
                             onKeyPress={handleJobTitleKeyPress}
                             disabled={jobTitles.length >= 5}
-                            className="flex-1"
+                            className="flex-1 text-sm"
                             onFocus={() => newJobTitle.length > 0 && setIsJobTitlePopoverOpen(true)}
                           />
                         </div>
@@ -495,9 +495,10 @@ const CopilotSetup = () => {
                             placeholder="Search job titles..." 
                             value={newJobTitle}
                             onValueChange={setNewJobTitle}
+                            className="text-sm"
                           />
                           <CommandList>
-                            <CommandEmpty>No job titles found.</CommandEmpty>
+                            <CommandEmpty className="text-sm">No job titles found.</CommandEmpty>
                             <CommandGroup>
                               {POPULAR_JOB_TITLES
                                 .filter(title => 
@@ -512,6 +513,7 @@ const CopilotSetup = () => {
                                     onSelect={(currentValue) => {
                                       handleAddJobTitle(currentValue);
                                     }}
+                                    className="text-sm"
                                   >
                                     {title}
                                   </CommandItem>
@@ -527,6 +529,7 @@ const CopilotSetup = () => {
                                   onSelect={(currentValue) => {
                                     handleAddJobTitle(currentValue);
                                   }}
+                                  className="text-sm"
                                 >
                                   Add "{newJobTitle.trim()}"
                                 </CommandItem>
@@ -539,14 +542,14 @@ const CopilotSetup = () => {
                     <Button 
                       onClick={() => handleAddJobTitle()}
                       disabled={!newJobTitle.trim() || jobTitles.length >= 5 || jobTitles.includes(newJobTitle.trim())}
-                      className="bg-purple-600 hover:bg-purple-700"
+                      className="bg-purple-600 hover:bg-purple-700 text-sm"
                     >
                       Add
                     </Button>
                   </div>
                   
                   {errors.jobTitles && (
-                    <p className="text-red-500 text-sm mb-4">Please add at least one job title.</p>
+                    <p className="text-sm text-red-500 mb-4">Please add at least one job title.</p>
                   )}
                   
                   {jobTitles.length > 0 && (
@@ -573,13 +576,13 @@ const CopilotSetup = () => {
                 <Button
                   variant="outline"
                   onClick={handleBack}
-                  className="px-6 py-2"
+                  className="px-6 py-2 text-sm"
                 >
                   Save & Close
                 </Button>
                 <Button
                   onClick={handleNext}
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 flex items-center space-x-2"
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 flex items-center space-x-2 text-sm"
                   disabled={
                     workLocationTypes.length === 0 || 
                     jobTypes.length === 0 || 

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -42,25 +43,25 @@ const CopilotFinalStep = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center space-x-2 text-purple-600 font-medium">
+            <div className="flex items-center space-x-2 text-purple-600 font-medium text-sm">
               <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
                 <span className="text-purple-600 text-xs">◯</span>
               </div>
               <span>Copilot</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
               <div className="w-6 h-6 flex items-center justify-center">
                 <span className="text-gray-600 text-xs">📋</span>
               </div>
               <span>Applications</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
               <div className="w-6 h-6 flex items-center justify-center">
                 <span className="text-gray-600 text-xs">🔧</span>
               </div>
               <span>Tools</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
               <div className="w-6 h-6 flex items-center justify-center">
                 <span className="text-gray-600 text-xs">❓</span>
               </div>
@@ -193,12 +194,12 @@ const CopilotFinalStep = () => {
                           <label className="text-sm text-gray-700 font-medium">Sentence Length:</label>
                           <Select value={sentenceLength} onValueChange={setSentenceLength}>
                             <SelectTrigger className="w-64">
-                              <SelectValue />
+                              <SelectValue className="text-sm" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="short">Short</SelectItem>
-                              <SelectItem value="balanced-mix">Balanced mix</SelectItem>
-                              <SelectItem value="long">Long</SelectItem>
+                              <SelectItem value="short" className="text-sm">Short</SelectItem>
+                              <SelectItem value="balanced-mix" className="text-sm">Balanced mix</SelectItem>
+                              <SelectItem value="long" className="text-sm">Long</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -209,12 +210,12 @@ const CopilotFinalStep = () => {
                           <div className="flex items-center space-x-2">
                             <Select value={tone} onValueChange={setTone}>
                               <SelectTrigger className="w-64">
-                                <SelectValue />
+                                <SelectValue className="text-sm" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="formal">Formal</SelectItem>
-                                <SelectItem value="neutral-casual">Neutral-casual</SelectItem>
-                                <SelectItem value="casual">Casual</SelectItem>
+                                <SelectItem value="formal" className="text-sm">Formal</SelectItem>
+                                <SelectItem value="neutral-casual" className="text-sm">Neutral-casual</SelectItem>
+                                <SelectItem value="casual" className="text-sm">Casual</SelectItem>
                               </SelectContent>
                             </Select>
                             <HelpCircle className="w-5 h-5 text-purple-500 cursor-pointer" />
@@ -227,12 +228,12 @@ const CopilotFinalStep = () => {
                           <div className="flex items-center space-x-2">
                             <Select value={vocabularyComplexity} onValueChange={setVocabularyComplexity}>
                               <SelectTrigger className="w-64">
-                                <SelectValue />
+                                <SelectValue className="text-sm" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="simple-everyday">Simple, everyday words</SelectItem>
-                                <SelectItem value="balanced">Balanced</SelectItem>
-                                <SelectItem value="advanced">Advanced</SelectItem>
+                                <SelectItem value="simple-everyday" className="text-sm">Simple, everyday words</SelectItem>
+                                <SelectItem value="balanced" className="text-sm">Balanced</SelectItem>
+                                <SelectItem value="advanced" className="text-sm">Advanced</SelectItem>
                               </SelectContent>
                             </Select>
                             <HelpCircle className="w-5 h-5 text-purple-500 cursor-pointer" />
@@ -288,25 +289,25 @@ const CopilotFinalStep = () => {
                 <Button
                   variant="outline"
                   onClick={handleBack}
-                  className="flex items-center space-x-2 px-6 py-3"
+                  className="flex items-center space-x-2 px-6 py-3 text-sm"
                   disabled={isLoading}
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  <span className="text-sm">Back</span>
+                  <span>Back</span>
                 </Button>
                 
                 <Button
                   onClick={handleSaveConfiguration}
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3"
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 text-sm"
                   disabled={isLoading}
                 >
                   {isLoading ? (
                     <div className="flex items-center space-x-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span className="text-sm">Launching Copilot...</span>
+                      <span>Launching Copilot...</span>
                     </div>
                   ) : (
-                    <span className="text-sm">Launch Copilot</span>
+                    <span>Launch Copilot</span>
                   )}
                 </Button>
               </div>

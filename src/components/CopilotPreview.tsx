@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Settings } from 'lucide-react';
@@ -100,25 +101,25 @@ const CopilotPreview = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center space-x-2 text-purple-600 font-medium">
+            <div className="flex items-center space-x-2 text-purple-600 font-medium text-sm">
               <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
                 <span className="text-purple-600 text-xs">◯</span>
               </div>
               <span>Copilot</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
               <div className="w-6 h-6 flex items-center justify-center">
                 <span className="text-gray-600 text-xs">📋</span>
               </div>
               <span>Applications</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
               <div className="w-6 h-6 flex items-center justify-center">
                 <span className="text-gray-600 text-xs">🔧</span>
               </div>
               <span>Tools</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
               <div className="w-6 h-6 flex items-center justify-center">
                 <span className="text-gray-600 text-xs">❓</span>
               </div>
@@ -145,7 +146,7 @@ const CopilotPreview = () => {
         <div className="max-w-6xl mx-auto h-full flex flex-col">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-lg font-semibold text-gray-900 mb-4">
+            <h1 className="text-base font-semibold text-gray-900 mb-4">
               Great! You've configured your Copilot
             </h1>
             <p className="text-sm text-gray-600 max-w-2xl mx-auto">
@@ -199,10 +200,10 @@ const CopilotPreview = () => {
             <Button
               variant="outline"
               onClick={handleBack}
-              className="flex items-center space-x-2 px-6 py-3"
+              className="flex items-center space-x-2 px-6 py-3 text-sm"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm">Back to Configuration</span>
+              <span>Back to Configuration</span>
             </Button>
           </div>
         </div>
