@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Input } from '@/components/ui/input';
-import { Check, X, Edit, ArrowLeft } from 'lucide-react';
+import { Check, X, Edit, ArrowLeft, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { UserButton } from '@clerk/clerk-react';
 
 const CopilotSetup = () => {
   const navigate = useNavigate();
@@ -73,22 +74,55 @@ const CopilotSetup = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
-      {/* Header */}
+      {/* Header - Same as Home page */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between max-w-4xl mx-auto">
-          <button 
-            onClick={handleBack}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Back to Dashboard</span>
-          </button>
-          
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          {/* Logo */}
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">CJ</span>
             </div>
             <span className="text-xl font-semibold text-gray-900">JobCopilot</span>
+          </div>
+
+          {/* Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <div className="flex items-center space-x-2 text-purple-600 font-medium">
+              <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                <span className="text-purple-600 text-xs">◯</span>
+              </div>
+              <span>Copilot</span>
+            </div>
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+              <div className="w-6 h-6 flex items-center justify-center">
+                <span className="text-gray-600 text-xs">📋</span>
+              </div>
+              <span>Applications</span>
+            </div>
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+              <div className="w-6 h-6 flex items-center justify-center">
+                <span className="text-gray-600 text-xs">🔧</span>
+              </div>
+              <span>Tools</span>
+            </div>
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+              <div className="w-6 h-6 flex items-center justify-center">
+                <span className="text-gray-600 text-xs">❓</span>
+              </div>
+              <span>Support</span>
+            </div>
+          </nav>
+
+          {/* User Section */}
+          <div className="flex items-center space-x-4">
+            <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900" />
+            <UserButton 
+              appearance={{
+                elements: {
+                  avatarBox: "w-8 h-8",
+                }
+              }}
+            />
           </div>
         </div>
       </header>
