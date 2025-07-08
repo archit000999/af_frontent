@@ -62,7 +62,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: 'You are a job search assistant. Provide current, real job listings with accurate company information. Return the response as a JSON array of job objects with properties: title, company, location, type (always "Fulltime"), and description. Limit to 10 jobs maximum.'
+            content: 'You are a job search assistant. Provide current, real job listings with accurate company information. Return the response as a JSON array of job objects with properties: title, company, location, type (always "Fulltime"), and description. Limit to 30 jobs maximum.'
           },
           {
             role: 'user',
