@@ -41,10 +41,9 @@ const Pricing = () => {
                 {/* Promotional Banner */}
                 <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-2xl p-4 mb-6">
                   <div className="flex items-center justify-center gap-2 mb-2">
-                    <span className="text-2xl font-bold text-green-600">$100 OFF</span>
-                    <span className="text-lg text-slate-700">if you participate in our upcoming webinar</span>
+                    <span className="text-2xl font-bold text-green-600">First Month Fee Waived Off</span>
                   </div>
-                  <p className="text-slate-700 font-medium mb-2">"Effective Strategies to find job in the era of AI"</p>
+                  <p className="text-slate-700 font-medium mb-2">if you participate in our upcoming webinar "Effective Strategies to find job in the era of AI"</p>
                   <button className="text-blue-600 hover:text-blue-800 font-medium underline transition-colors">
                     Click here to see the schedule of webinar
                   </button>
