@@ -1,47 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
 import ApplicationForm from "./ApplicationForm";
 const Hero = () => {
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
-  const [showCalendly, setShowCalendly] = useState(false);
-  useEffect(() => {
-    if (showCalendly) {
-      if (!document.querySelector("#calendly-widget-script")) {
-        const script = document.createElement("script");
-        script.id = "calendly-widget-script";
-        script.src = "https://assets.calendly.com/assets/external/widget.js";
-        script.async = true;
-        document.body.appendChild(script);
-      }
-    }
-  }, [showCalendly]);
-  
-  return (
-    <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+
+  return <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 opacity-20" style={{
       backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
     }}></div>
       <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
-      
-      {/* Logo at top left */}
-      <div className="absolute top-8 left-8 z-20">
-        <div className="flex items-center">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg mr-3">
-            <span className="text-white text-3xl font-bold">A</span>
-          </div>
-          <div className="text-left">
-            <h1 className="text-xl font-bold text-white">
-              ApplyFirst
-            </h1>
-            <p className="text-sm text-blue-200 font-medium">
-              powered by Saki AI
-            </p>
-          </div>
-        </div>
-      </div>
       
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center">
@@ -52,43 +22,39 @@ const Hero = () => {
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Reach Hiring Managers the Moment a Job Goes{" "}
+            Land Interviews Before Jobs Hit{" "}
             <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-              Live
+              LinkedIn
             </span>
           </h1>
           
           <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-            ApplyFirst finds new job openings in real time and automatically contacts hiring managers on your behalf.
+            ApplyFirst reaches out to hiring managers for you — at scale, on autopilot. 
+            Be among the first 10 candidates they see.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button size="lg" onClick={() => setShowCalendly(true)} className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-              Talk to Us <ArrowRight className="ml-2 h-6 w-6" />
+            <Button 
+              size="lg" 
+              onClick={() => setIsApplicationFormOpen(true)}
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+            >
+              Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
-            <Button variant="outline" size="lg" onClick={() => setShowCalendly(true)} className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
-              Try it now
+            <Button 
+              variant="outline" 
+              size="lg" 
+              onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')}
+              className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300"
+            >
+              Book Free Consult
             </Button>
           </div>
-
-          {showCalendly && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-              <div className="bg-white rounded-xl shadow-2xl p-6 relative w-full max-w-2xl">
-                <button onClick={() => setShowCalendly(false)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-2xl font-bold" aria-label="Close">
-                  ×
-                </button>
-                {/* Calendly inline widget begin */}
-                <div className="calendly-inline-widget" data-url="https://calendly.com/archit-trysaki/qualifying-call" style={{
-              minWidth: 320,
-              height: 700
-            }}></div>
-                {/* Calendly inline widget end */}
-              </div>
-            </div>}
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
               <CheckCircle className="h-8 w-8 text-green-400 mb-3" />
-              <span className="text-white font-semibold text-lg">8+ interviews</span>
+              <span className="text-white font-semibold text-lg">15+ interviews</span>
               <span className="text-slate-400 text-sm">in 2 months average</span>
             </div>
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
@@ -105,9 +71,10 @@ const Hero = () => {
         </div>
       </div>
       
-      <ApplicationForm open={isApplicationFormOpen} onOpenChange={setIsApplicationFormOpen} />
-    </section>
-  );
+      <ApplicationForm 
+        open={isApplicationFormOpen} 
+        onOpenChange={setIsApplicationFormOpen} 
+      />
+    </section>;
 };
-
 export default Hero;

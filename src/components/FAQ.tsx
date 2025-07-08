@@ -1,5 +1,4 @@
 
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import {
@@ -10,20 +9,6 @@ import {
 } from "@/components/ui/accordion";
 
 const FAQ = () => {
-  const [showCalendly, setShowCalendly] = useState(false);
-
-  useEffect(() => {
-    if (showCalendly) {
-      if (!document.querySelector("#calendly-widget-script")) {
-        const script = document.createElement("script");
-        script.id = "calendly-widget-script";
-        script.src = "https://assets.calendly.com/assets/external/widget.js";
-        script.async = true;
-        document.body.appendChild(script);
-      }
-    }
-  }, [showCalendly]);
-
   const faqs = [
     {
       question: "How do you protect my privacy during outreach?",
@@ -94,10 +79,10 @@ const FAQ = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-12 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105" onClick={() => setShowCalendly(true)}>
+            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-12 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
               Start Now - It's Risk Free <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
-            <Button variant="outline" size="lg" className="px-8 py-6 text-lg border-2 border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold" onClick={() => setShowCalendly(true)}>
+            <Button variant="outline" size="lg" className="px-8 py-6 text-lg border-2 border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold">
               Book Free Consultation
             </Button>
           </div>
@@ -106,22 +91,6 @@ const FAQ = () => {
             30-day money-back guarantee • No long-term contracts • Setup in 24 hours
           </p>
         </div>
-        {showCalendly && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div className="bg-white rounded-xl shadow-2xl p-6 relative w-full max-w-2xl">
-              <button
-                onClick={() => setShowCalendly(false)}
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-2xl font-bold"
-                aria-label="Close"
-              >
-                ×
-              </button>
-              {/* Calendly inline widget begin */}
-              <div className="calendly-inline-widget" data-url="https://calendly.com/archit-trysaki/qualifying-call" style={{ minWidth: 320, height: 700 }}></div>
-              {/* Calendly inline widget end */}
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );

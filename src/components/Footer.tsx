@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 const Footer = () => {
-  return (
-    <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+  return <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <h3 className="text-2xl font-bold mb-4">ApplyFirst</h3>
             <p className="text-gray-300 mb-4 max-w-md">
-              The concierge job-seeking service that monitor job boards and gets you in front of hiring managers as soon a job posting goes live.Land interviews faster, skip the application queue.
+              The concierge job-seeking service that gets you in front of hiring managers 
+              before jobs hit LinkedIn. Land interviews faster, skip the application queue.
             </p>
           </div>
           
@@ -33,11 +33,9 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>© 2025 Saki Labs, Inc. All rights reserved. Land interviews before they hit LinkedIn.</p>
+          <p>© 2025 ApplyFirst Labs, Inc. All rights reserved. Land interviews before they hit LinkedIn.</p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
