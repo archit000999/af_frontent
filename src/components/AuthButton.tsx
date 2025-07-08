@@ -3,14 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 const AuthButton = () => {
   return <div className="flex items-center gap-4">
-      <SignedOut>
-        <Link to="/auth">
-          
-        </Link>
-        <Link to="/auth">
-          <Button variant="outline" className="border-white hover:bg-white text-blue-600">Login</Button>
-        </Link>
-      </SignedOut>
+    <SignedOut>
+      <SignInButton mode="modal" forceRedirectUrl="/home">
+        <Button variant="outline" className="border-white hover:bg-white text-blue-600">Login</Button>
+      </SignInButton>
+    </SignedOut>
       <SignedIn>
         <UserButton appearance={{
         elements: {
