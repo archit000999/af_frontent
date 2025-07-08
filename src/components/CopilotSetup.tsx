@@ -79,7 +79,6 @@ const POPULAR_JOB_TITLES = [
 const CopilotSetup = () => {
   const navigate = useNavigate();
   const { config, updateConfig, saveConfig, isLoading: configLoading, isInitialized } = useCopilotConfig();
-  const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [currentLocationDialogType, setCurrentLocationDialogType] = useState<'remote' | 'onsite'>('remote');
   const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);
@@ -94,13 +93,8 @@ const CopilotSetup = () => {
     locations: false
   });
 
-  // Initialize form state from config when it loads
-  useEffect(() => {
-    if (isInitialized && config) {
-      // Set current step to the step where user left off or step 1 if starting fresh
-      setCurrentStep(Math.max(config.stepCompleted || 1, 1));
-    }
-  }, [isInitialized, config]);
+  // Always show step 1 for fresh setup - don't use saved stepCompleted
+  const currentStep = 1;
 
   const handleJobTypeToggle = (type: string) => {
     const newJobTypes = config.jobTypes.includes(type) 
@@ -178,10 +172,9 @@ const CopilotSetup = () => {
     if (validateForm()) {
       setIsLoading(true);
       
-      // Save current progress with updated step
-      const nextStep = Math.min(currentStep + 1, 4);
+      // Save current progress with step 2 (next step)
       const success = await saveConfig({ 
-        stepCompleted: nextStep,
+        stepCompleted: 2,
         // Ensure all current form data is saved
         workLocationTypes: config.workLocationTypes,
         remoteLocations: config.remoteLocations,
@@ -191,16 +184,10 @@ const CopilotSetup = () => {
       });
       
       if (success) {
-        // Navigate to the appropriate next page
+        // Navigate to the next page
         setTimeout(() => {
           setIsLoading(false);
-          if (nextStep === 2) {
-            navigate('/copilot-filters');
-          } else if (nextStep === 3) {
-            navigate('/copilot-screening');
-          } else if (nextStep === 4) {
-            navigate('/copilot-final');
-          }
+          navigate('/copilot-filters');
         }, 1500);
       } else {
         setIsLoading(false);
@@ -209,9 +196,9 @@ const CopilotSetup = () => {
   };
 
   const handleSaveAndClose = async () => {
-    // Save current state without advancing step
+    // Save current state with step 1 (current step)
     const success = await saveConfig({
-      stepCompleted: Math.max(currentStep, config.stepCompleted || 1),
+      stepCompleted: 1,
       workLocationTypes: config.workLocationTypes,
       remoteLocations: config.remoteLocations,
       onsiteLocations: config.onsiteLocations,
