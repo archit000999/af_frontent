@@ -57,7 +57,7 @@ const Pricing = () => {
                   </div>
                   </div>
                 </div>
-                <p className="text-slate-600 text-lg">Monthly fee to cover our outreach cost</p>
+                
               </div>
 
               <div className="space-y-4 mb-10">
