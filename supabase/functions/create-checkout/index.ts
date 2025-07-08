@@ -41,15 +41,23 @@ serve(async (req) => {
         throw new Error("Invalid JWT format");
       }
       
-      // Decode the payload
-      const payload = JSON.parse(atob(parts[1]));
+      // Decode the payload (add padding if needed)
+      let payload64 = parts[1];
+      // Add padding if needed
+      while (payload64.length % 4) {
+        payload64 += '=';
+      }
+      
+      const payload = JSON.parse(atob(payload64));
       console.log("JWT payload decoded successfully");
+      console.log("Available payload keys:", Object.keys(payload));
       
       // Extract email from various possible fields in Clerk token
       userEmail = payload.email || 
                  payload.email_addresses?.[0]?.email_address ||
                  payload.primary_email_address ||
-                 payload.emailAddress;
+                 payload.emailAddress ||
+                 payload.sub; // sometimes email is in sub field
       
       // If still no email, try to find it in email_addresses array
       if (!userEmail && payload.email_addresses && Array.isArray(payload.email_addresses)) {
@@ -61,10 +69,16 @@ serve(async (req) => {
         }
       }
       
+      // If still no email, try other common JWT fields
+      if (!userEmail) {
+        userEmail = payload.email_address || payload.user_email || payload.user?.email;
+      }
+      
       console.log("Extracted email:", userEmail);
       
       if (!userEmail) {
         console.error("No email found in token payload");
+        console.error("Full payload:", JSON.stringify(payload, null, 2));
         throw new Error("No email found in token");
       }
     } catch (error) {
