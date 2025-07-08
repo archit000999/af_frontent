@@ -14,8 +14,17 @@ const Hero = () => {
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Auth buttons in top right */}
-        <div className="flex justify-end mb-8">
+        {/* Header with logo and auth */}
+        <div className="flex justify-between items-center mb-8">
+          {/* ApplyFirst Logo */}
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-xl">A</span>
+            </div>
+            <span className="text-white text-2xl font-bold">ApplyFirst</span>
+          </div>
+          
+          {/* Auth buttons */}
           <AuthButton />
         </div>
         
