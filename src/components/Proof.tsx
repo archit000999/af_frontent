@@ -108,7 +108,7 @@ const Proof = () => {
           </div>
           
           <div className="text-center mt-12">
-            <Button size="lg" className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-12 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+            <Button size="lg" onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')} className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-12 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
               Start Landing Interviews <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
           </div>

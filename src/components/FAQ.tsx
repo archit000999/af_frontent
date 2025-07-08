@@ -79,7 +79,7 @@ const FAQ = () => {
           </p>
           
           <div className="flex justify-center">
-            <Button variant="outline" size="lg" className="px-8 py-6 text-lg border-2 border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold">
+            <Button variant="outline" size="lg" onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')} className="px-8 py-6 text-lg border-2 border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold">
               Book Free Consultation
             </Button>
           </div>
