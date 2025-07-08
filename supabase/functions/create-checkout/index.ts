@@ -13,29 +13,65 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-  );
-
   try {
-    const authHeader = req.headers.get("Authorization")!;
+    console.log("Create checkout function started");
+
+    // Create Supabase client with anon key for authentication
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
+
+    // Get user from authorization header
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      console.error("No authorization header provided");
+      return new Response(JSON.stringify({ error: "No authorization header provided" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401,
+      });
+    }
+
     const token = authHeader.replace("Bearer ", "");
-    const { data } = await supabaseClient.auth.getUser(token);
-    const user = data.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
+    console.log("Attempting to get user with token");
+    
+    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
+    
+    if (userError) {
+      console.error("User authentication error:", userError);
+      return new Response(JSON.stringify({ error: "Authentication failed: " + userError.message }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401,
+      });
+    }
+
+    const user = userData.user;
+    if (!user?.email) {
+      console.error("User not found or no email");
+      return new Response(JSON.stringify({ error: "User not authenticated or email not available" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401,
+      });
+    }
+
+    console.log("User authenticated:", user.email);
 
     const { planType } = await req.json();
+    console.log("Plan type requested:", planType);
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
     });
 
     // Check if customer exists
+    console.log("Checking for existing customer");
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     let customerId;
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
+      console.log("Found existing customer:", customerId);
+    } else {
+      console.log("No existing customer found");
     }
 
     // Define pricing based on plan
@@ -52,8 +88,14 @@ serve(async (req) => {
 
     const selectedPlan = planPricing[planType as keyof typeof planPricing];
     if (!selectedPlan) {
-      throw new Error("Invalid plan type");
+      console.error("Invalid plan type:", planType);
+      return new Response(JSON.stringify({ error: "Invalid plan type" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
     }
+
+    console.log("Creating checkout session for plan:", selectedPlan.name);
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -76,6 +118,8 @@ serve(async (req) => {
       success_url: `${req.headers.get("origin")}/copilot-preview?success=true`,
       cancel_url: `${req.headers.get("origin")}/payment?canceled=true`,
     });
+
+    console.log("Checkout session created:", session.id);
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
