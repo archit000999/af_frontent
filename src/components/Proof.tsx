@@ -6,7 +6,7 @@ const Proof = () => {
   const stats = [
     {
       icon: TrendingUp,
-      number: "15+",
+      number: "10+",
       label: "Average interviews landed per user in 2 months",
       color: "from-green-400 to-emerald-500"
     },
