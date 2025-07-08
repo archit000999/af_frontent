@@ -44,7 +44,7 @@ const Pricing = () => {
                     <div className="text-sm text-green-600 font-medium">Fully refundable</div>
                   </div>
                 </div>
-                <p className="text-slate-600 text-lg">Security deposit - get it back if no interviews</p>
+                <p className="text-slate-600 text-lg">Monthly fee to cover our outreach cost</p>
               </div>
 
               <div className="space-y-4 mb-10">
