@@ -55,16 +55,37 @@ const Payment = () => {
   const handleUpgrade = async (planType: string) => {
     setIsLoading(planType);
     try {
+      // Get the current session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        toast({
+          title: "Authentication Required",
+          description: "Please log in to purchase a subscription.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log("Making request to create-checkout with auth token");
+      
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { planType }
+        body: { planType },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
       });
 
       if (error) {
+        console.error("Function invoke error:", error);
         throw error;
       }
 
       if (data?.url) {
+        console.log("Redirecting to Stripe checkout:", data.url);
         window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL received");
       }
     } catch (error) {
       console.error('Checkout error:', error);

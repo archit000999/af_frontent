@@ -16,10 +16,11 @@ serve(async (req) => {
   try {
     console.log("Create checkout function started");
 
-    // Create Supabase client with anon key for authentication
+    // Create Supabase client with service role key for auth operations
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
     );
 
     // Get user from authorization header
