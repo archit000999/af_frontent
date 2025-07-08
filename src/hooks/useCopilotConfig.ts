@@ -40,10 +40,13 @@ export const useCopilotConfig = () => {
     
     setIsLoading(true);
     try {
+      // Load the most recent configuration (for display purposes)
       const { data, error } = await supabase
         .from('copilot_configurations')
         .select('*')
         .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
         .maybeSingle();
 
       if (error) {
@@ -114,7 +117,7 @@ export const useCopilotConfig = () => {
           .select()
           .single();
       } else {
-        // Create new configuration
+        // Create new configuration (always creates a new record for new copilots)
         result = await supabase
           .from('copilot_configurations')
           .insert([configData])
@@ -145,7 +148,7 @@ export const useCopilotConfig = () => {
 
       toast({
         title: "Success",
-        description: "Your configuration has been saved"
+        description: "Your copilot configuration has been saved"
       });
       return true;
     } catch (error) {

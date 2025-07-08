@@ -1,3 +1,4 @@
+
 import { UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,9 +14,11 @@ const Home = () => {
   const { config, updateConfig, saveConfig, isInitialized, isLoading } = useCopilotConfig();
   const [copilotStatus, setCopilotStatus] = useState(false);
 
-  const handleSetupCopilot = async () => {
-    // Reset configuration to start fresh
+  const handleSetupCopilot = () => {
+    // Clear any existing configuration from memory and localStorage
+    // This ensures we start completely fresh for a new copilot
     updateConfig({
+      id: undefined, // Remove any existing ID to force creation of new record
       workLocationTypes: [],
       remoteLocations: [],
       onsiteLocations: [],
@@ -23,6 +26,9 @@ const Home = () => {
       jobTitles: [],
       stepCompleted: 1
     });
+    
+    // Clear any cached configuration data
+    localStorage.removeItem('copilot-config-draft');
     
     navigate('/copilot-setup');
   };
