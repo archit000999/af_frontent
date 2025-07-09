@@ -195,18 +195,22 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     }
   };
 
-  const saveConfig = async (updatedConfig?: Partial<CopilotConfig>) => {
+  const saveConfig = async (updatedConfig?: Partial<CopilotConfig>, silent: boolean = false) => {
     if (!user) {
-      toast({
-        title: "Authentication Required",
-        description: "Please log in to save your configuration",
-        variant: "destructive"
-      });
+      if (!silent) {
+        toast({
+          title: "Authentication Required",
+          description: "Please log in to save your configuration",
+          variant: "destructive"
+        });
+      }
       return false;
     }
 
     const configToSave = updatedConfig ? { ...config, ...updatedConfig } : config;
-    setIsLoading(true);
+    if (!silent) {
+      setIsLoading(true);
+    }
 
     try {
       // Only save the basic fields that we know exist in the database
@@ -233,11 +237,13 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         // Allow creating at least one copilot even without subscription
         if (!canCreateNewCopilot() && maxCopilots > 0) {
           const planName = maxCopilots === 1 ? 'Premium' : maxCopilots === 2 ? 'Elite' : 'Free';
-          toast({
-            title: "Limit Reached",
-            description: `You can only create up to ${Math.max(maxCopilots, 1)} copilot configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
-            variant: "destructive"
-          });
+          if (!silent) {
+            toast({
+              title: "Limit Reached",
+              description: `You can only create up to ${Math.max(maxCopilots, 1)} copilot configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
+              variant: "destructive"
+            });
+          }
           return false;
         }
 
@@ -251,11 +257,13 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
 
       if (result.error) {
         console.error('Error saving config:', result.error);
-        toast({
-          title: "Error",
-          description: "Failed to save your configuration",
-          variant: "destructive"
-        });
+        if (!silent) {
+          toast({
+            title: "Error",
+            description: "Failed to save your configuration",
+            variant: "destructive"
+          });
+        }
         return false;
       }
 
@@ -281,21 +289,27 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
       // Refresh all configs to keep them in sync
       await loadAllConfigs();
 
-      toast({
-        title: "Success",
-        description: "Your copilot configuration has been saved"
-      });
+      if (!silent) {
+        toast({
+          title: "Success",
+          description: "Your copilot configuration has been saved"
+        });
+      }
       return true;
     } catch (error) {
       console.error('Error saving config:', error);
-      toast({
-        title: "Error",
-        description: "Failed to save your configuration",
-        variant: "destructive"
-      });
+      if (!silent) {
+        toast({
+          title: "Error",
+          description: "Failed to save your configuration",
+          variant: "destructive"
+        });
+      }
       return false;
     } finally {
-      setIsLoading(false);
+      if (!silent) {
+        setIsLoading(false);
+      }
     }
   };
 

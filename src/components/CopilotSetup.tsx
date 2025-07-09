@@ -100,7 +100,7 @@ const CopilotSetup = () => {
   // Check if we're creating a new copilot or editing existing one
   const isNewCopilot = !config.id;
 
-  // Auto-save functionality - save data whenever form changes
+  // Auto-save functionality - save data whenever form changes (SILENTLY)
   useEffect(() => {
     const saveTimeout = setTimeout(() => {
       if (config.id && (
@@ -108,7 +108,7 @@ const CopilotSetup = () => {
         config.jobTypes.length > 0 || 
         config.jobTitles.length > 0
       )) {
-        // Auto-save current progress silently
+        // Auto-save current progress silently (no loading, no toast)
         saveConfig({
           workLocationTypes: config.workLocationTypes,
           remoteLocations: config.remoteLocations,
@@ -116,7 +116,7 @@ const CopilotSetup = () => {
           jobTypes: config.jobTypes,
           jobTitles: config.jobTitles,
           stepCompleted: 1 // Keep at step 1 until user clicks Next
-        });
+        }, true); // Pass true for silent save
       }
     }, 2000); // Auto-save after 2 seconds of inactivity
 
@@ -199,7 +199,7 @@ const CopilotSetup = () => {
     if (validateForm()) {
       setIsLoading(true);
       
-      // Save current progress with step 2 (next step)
+      // Save current progress with step 2 (next step) - WITH loading and toast
       const success = await saveConfig({ 
         stepCompleted: 2,
         // Ensure all current form data is saved
@@ -208,7 +208,7 @@ const CopilotSetup = () => {
         onsiteLocations: config.onsiteLocations,
         jobTypes: config.jobTypes,
         jobTitles: config.jobTitles
-      });
+      }, false); // Pass false for normal save (with toast)
       
       if (success) {
         // Navigate to the next page
@@ -223,7 +223,7 @@ const CopilotSetup = () => {
   };
 
   const handleSaveAndClose = async () => {
-    // Save current state with step 1 (current step)
+    // Save current state with step 1 (current step) - WITH toast
     const success = await saveConfig({
       stepCompleted: 1,
       workLocationTypes: config.workLocationTypes,
@@ -231,7 +231,8 @@ const CopilotSetup = () => {
       onsiteLocations: config.onsiteLocations,
       jobTypes: config.jobTypes,
       jobTitles: config.jobTitles
-    });
+    }, false); // Pass false for normal save (with toast)
+    
     if (success) {
       navigate('/home');
     }
