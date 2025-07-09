@@ -1,39 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-
-interface CopilotConfig {
-  id?: string;
-  workLocationTypes: string[];
-  remoteLocations: string[];
-  onsiteLocations: string[];
-  jobTypes: string[];
-  jobTitles: string[];
-  stepCompleted: number;
-  filtersData?: any;
-  screeningData?: any;
-  finalConfigData?: any;
-  resumeFileName?: string;
-  resumeFileUrl?: string;
-  personalInfo?: any;
-}
+import { CopilotConfig } from '@/types/copilot';
+import { 
+  createEmptyConfig, 
+  canCreateNewCopilot as canCreateNewCopilotUtil, 
+  getPlanName 
+} from '@/utils/copilotUtils';
+import { 
+  loadAllConfigs as loadAllConfigsService,
+  saveConfigToDatabase,
+  deleteConfigFromDatabase,
+  uploadResumeFile
+} from '@/services/copilotService';
 
 export const useCopilotConfig = (maxCopilots: number = 1) => {
   const { user } = useUser();
   const { toast } = useToast();
-  const [config, setConfig] = useState<CopilotConfig>({
-    workLocationTypes: [],
-    remoteLocations: [],
-    onsiteLocations: [],
-    jobTypes: [],
-    jobTitles: [],
-    stepCompleted: 1,
-    filtersData: {},
-    screeningData: {},
-    finalConfigData: {},
-    personalInfo: {}
-  });
+  const [config, setConfig] = useState<CopilotConfig>(createEmptyConfig());
   const [allConfigs, setAllConfigs] = useState<CopilotConfig[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -50,39 +34,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     
     setIsLoading(true);
     try {
-      // Load all configurations for the user - only select columns that definitely exist
-      const { data, error } = await supabase
-        .from('copilot_configurations')
-        .select('id, user_id, work_location_types, remote_locations, onsite_locations, job_types, job_titles, step_completed, created_at, updated_at')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error loading configs:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load your configurations",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      const configs = data?.map(item => ({
-        id: item.id,
-        workLocationTypes: item.work_location_types || [],
-        remoteLocations: item.remote_locations || [],
-        onsiteLocations: item.onsite_locations || [],
-        jobTypes: item.job_types || [],
-        jobTitles: item.job_titles || [],
-        stepCompleted: item.step_completed || 1,
-        filtersData: {},
-        screeningData: {},
-        finalConfigData: {},
-        resumeFileName: undefined,
-        resumeFileUrl: undefined,
-        personalInfo: {}
-      })) || [];
-
+      const configs = await loadAllConfigsService(user.id);
       setAllConfigs(configs);
 
       // Set the most recent config as current
@@ -108,13 +60,12 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
   };
 
   const canCreateNewCopilot = () => {
-    // Always allow creating at least one copilot for configuration
-    return allConfigs.length < Math.max(maxCopilots, 1);
+    return canCreateNewCopilotUtil(allConfigs, maxCopilots);
   };
 
   const createNewCopilot = () => {
     if (!canCreateNewCopilot()) {
-      const planName = maxCopilots === 1 ? 'Premium' : maxCopilots === 2 ? 'Elite' : 'Free';
+      const planName = getPlanName(maxCopilots);
       toast({
         title: "Limit Reached",
         description: `You can only create up to ${Math.max(maxCopilots, 1)} copilot configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
@@ -124,18 +75,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     }
 
     // Reset to fresh state for new copilot
-    setConfig({
-      workLocationTypes: [],
-      remoteLocations: [],
-      onsiteLocations: [],
-      jobTypes: [],
-      jobTitles: [],
-      stepCompleted: 1,
-      filtersData: {},
-      screeningData: {},
-      finalConfigData: {},
-      personalInfo: {}
-    });
+    setConfig(createEmptyConfig());
     return true;
   };
 
@@ -151,37 +91,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
 
     try {
       setIsLoading(true);
-      
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-      
-      const { data, error } = await supabase.storage
-        .from('resumes')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (error) {
-        console.error('Error uploading resume:', error);
-        toast({
-          title: "Upload Error",
-          description: "Failed to upload resume",
-          variant: "destructive"
-        });
-        return null;
-      }
-
-      // Get the public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('resumes')
-        .getPublicUrl(fileName);
-
-      return {
-        fileName: file.name,
-        filePath: fileName,
-        fileUrl: publicUrl
-      };
+      return await uploadResumeFile(file, user.id);
     } catch (error) {
       console.error('Error uploading resume:', error);
       toast({
@@ -213,77 +123,20 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     }
 
     try {
-      // Only save the basic fields that we know exist in the database
-      const configData = {
-        user_id: user.id,
-        work_location_types: configToSave.workLocationTypes,
-        remote_locations: configToSave.remoteLocations,
-        onsite_locations: configToSave.onsiteLocations,
-        job_types: configToSave.jobTypes,
-        job_titles: configToSave.jobTitles,
-        step_completed: configToSave.stepCompleted
-      };
-
-      let result;
-      if (configToSave.id) {
-        // Update existing configuration
-        result = await supabase
-          .from('copilot_configurations')
-          .update(configData)
-          .eq('id', configToSave.id)
-          .select()
-          .single();
-      } else {
-        // Allow creating at least one copilot even without subscription
-        if (!canCreateNewCopilot() && maxCopilots > 0) {
-          const planName = maxCopilots === 1 ? 'Premium' : maxCopilots === 2 ? 'Elite' : 'Free';
-          if (!silent) {
-            toast({
-              title: "Limit Reached",
-              description: `You can only create up to ${Math.max(maxCopilots, 1)} copilot configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
-              variant: "destructive"
-            });
-          }
-          return false;
-        }
-
-        // Create new configuration
-        result = await supabase
-          .from('copilot_configurations')
-          .insert([configData])
-          .select()
-          .single();
-      }
-
-      if (result.error) {
-        console.error('Error saving config:', result.error);
+      // Check limits for new configurations
+      if (!configToSave.id && !canCreateNewCopilot() && maxCopilots > 0) {
+        const planName = getPlanName(maxCopilots);
         if (!silent) {
           toast({
-            title: "Error",
-            description: "Failed to save your configuration",
+            title: "Limit Reached",
+            description: `You can only create up to ${Math.max(maxCopilots, 1)} copilot configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
             variant: "destructive"
           });
         }
         return false;
       }
 
-      // Update local state with saved data
-      const savedConfig = {
-        id: result.data.id,
-        workLocationTypes: result.data.work_location_types || [],
-        remoteLocations: result.data.remote_locations || [],
-        onsiteLocations: result.data.onsite_locations || [],
-        jobTypes: result.data.job_types || [],
-        jobTitles: result.data.job_titles || [],
-        stepCompleted: result.data.step_completed || 1,
-        filtersData: {},
-        screeningData: {},
-        finalConfigData: {},
-        resumeFileName: undefined,
-        resumeFileUrl: undefined,
-        personalInfo: {}
-      };
-
+      const savedConfig = await saveConfigToDatabase(configToSave, user.id);
       setConfig(savedConfig);
 
       // Refresh all configs to keep them in sync
@@ -329,24 +182,8 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
 
     try {
       setIsLoading(true);
+      await deleteConfigFromDatabase(configId, user.id);
       
-      // Delete from database
-      const { error } = await supabase
-        .from('copilot_configurations')
-        .delete()
-        .eq('id', configId)
-        .eq('user_id', user.id);
-
-      if (error) {
-        console.error('Error deleting config:', error);
-        toast({
-          title: "Error",
-          description: "Failed to delete configuration",
-          variant: "destructive"
-        });
-        return false;
-      }
-
       // Refresh configs
       await loadAllConfigs();
       
