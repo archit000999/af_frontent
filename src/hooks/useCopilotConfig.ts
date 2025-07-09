@@ -11,6 +11,12 @@ interface CopilotConfig {
   jobTypes: string[];
   jobTitles: string[];
   stepCompleted: number;
+  filtersData?: any;
+  screeningData?: any;
+  finalConfigData?: any;
+  resumeFileName?: string;
+  resumeFileUrl?: string;
+  personalInfo?: any;
 }
 
 export const useCopilotConfig = (maxCopilots: number = 1) => {
@@ -22,7 +28,11 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     onsiteLocations: [],
     jobTypes: [],
     jobTitles: [],
-    stepCompleted: 1
+    stepCompleted: 1,
+    filtersData: {},
+    screeningData: {},
+    finalConfigData: {},
+    personalInfo: {}
   });
   const [allConfigs, setAllConfigs] = useState<CopilotConfig[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,7 +74,13 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         onsiteLocations: item.onsite_locations || [],
         jobTypes: item.job_types || [],
         jobTitles: item.job_titles || [],
-        stepCompleted: item.step_completed || 1
+        stepCompleted: item.step_completed || 1,
+        filtersData: item.filters_data || {},
+        screeningData: item.screening_data || {},
+        finalConfigData: item.final_config_data || {},
+        resumeFileName: item.resume_file_name,
+        resumeFileUrl: item.resume_file_url,
+        personalInfo: item.personal_info || {}
       })) || [];
 
       setAllConfigs(configs);
@@ -114,9 +130,69 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
       onsiteLocations: [],
       jobTypes: [],
       jobTitles: [],
-      stepCompleted: 1
+      stepCompleted: 1,
+      filtersData: {},
+      screeningData: {},
+      finalConfigData: {},
+      personalInfo: {}
     });
     return true;
+  };
+
+  const uploadResume = async (file: File) => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to upload your resume",
+        variant: "destructive"
+      });
+      return null;
+    }
+
+    try {
+      setIsLoading(true);
+      
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      
+      const { data, error } = await supabase.storage
+        .from('resumes')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) {
+        console.error('Error uploading resume:', error);
+        toast({
+          title: "Upload Error",
+          description: "Failed to upload resume",
+          variant: "destructive"
+        });
+        return null;
+      }
+
+      // Get the public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('resumes')
+        .getPublicUrl(fileName);
+
+      return {
+        fileName: file.name,
+        filePath: fileName,
+        fileUrl: publicUrl
+      };
+    } catch (error) {
+      console.error('Error uploading resume:', error);
+      toast({
+        title: "Upload Error",
+        description: "Failed to upload resume",
+        variant: "destructive"
+      });
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const saveConfig = async (updatedConfig?: Partial<CopilotConfig>) => {
@@ -140,7 +216,13 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         onsite_locations: configToSave.onsiteLocations,
         job_types: configToSave.jobTypes,
         job_titles: configToSave.jobTitles,
-        step_completed: configToSave.stepCompleted
+        step_completed: configToSave.stepCompleted,
+        filters_data: configToSave.filtersData || {},
+        screening_data: configToSave.screeningData || {},
+        final_config_data: configToSave.finalConfigData || {},
+        resume_file_name: configToSave.resumeFileName,
+        resume_file_url: configToSave.resumeFileUrl,
+        personal_info: configToSave.personalInfo || {}
       };
 
       let result;
@@ -190,7 +272,13 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         onsiteLocations: result.data.onsite_locations || [],
         jobTypes: result.data.job_types || [],
         jobTitles: result.data.job_titles || [],
-        stepCompleted: result.data.step_completed || 1
+        stepCompleted: result.data.step_completed || 1,
+        filtersData: result.data.filters_data || {},
+        screeningData: result.data.screening_data || {},
+        finalConfigData: result.data.final_config_data || {},
+        resumeFileName: result.data.resume_file_name,
+        resumeFileUrl: result.data.resume_file_url,
+        personalInfo: result.data.personal_info || {}
       };
 
       setConfig(savedConfig);
@@ -227,6 +315,50 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     }
   };
 
+  const deleteConfig = async (configId: string) => {
+    if (!user) return false;
+
+    try {
+      setIsLoading(true);
+      
+      // Delete from database
+      const { error } = await supabase
+        .from('copilot_configurations')
+        .delete()
+        .eq('id', configId)
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error deleting config:', error);
+        toast({
+          title: "Error",
+          description: "Failed to delete configuration",
+          variant: "destructive"
+        });
+        return false;
+      }
+
+      // Refresh configs
+      await loadAllConfigs();
+      
+      toast({
+        title: "Success",
+        description: "Configuration deleted successfully"
+      });
+      return true;
+    } catch (error) {
+      console.error('Error deleting config:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete configuration",
+        variant: "destructive"
+      });
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     config,
     allConfigs,
@@ -237,6 +369,8 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     createNewCopilot,
     canCreateNewCopilot,
     switchToConfig,
+    deleteConfig,
+    uploadResume,
     isLoading,
     isInitialized,
     maxCopilots

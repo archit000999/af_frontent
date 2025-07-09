@@ -100,6 +100,29 @@ const CopilotSetup = () => {
   // Check if we're creating a new copilot or editing existing one
   const isNewCopilot = !config.id;
 
+  // Auto-save functionality - save data whenever form changes
+  useEffect(() => {
+    const saveTimeout = setTimeout(() => {
+      if (config.id && (
+        config.workLocationTypes.length > 0 || 
+        config.jobTypes.length > 0 || 
+        config.jobTitles.length > 0
+      )) {
+        // Auto-save current progress silently
+        saveConfig({
+          workLocationTypes: config.workLocationTypes,
+          remoteLocations: config.remoteLocations,
+          onsiteLocations: config.onsiteLocations,
+          jobTypes: config.jobTypes,
+          jobTitles: config.jobTitles,
+          stepCompleted: 1 // Keep at step 1 until user clicks Next
+        });
+      }
+    }, 2000); // Auto-save after 2 seconds of inactivity
+
+    return () => clearTimeout(saveTimeout);
+  }, [config.workLocationTypes, config.remoteLocations, config.onsiteLocations, config.jobTypes, config.jobTitles]);
+
   const handleJobTypeToggle = (type: string) => {
     const newJobTypes = config.jobTypes.includes(type) 
       ? config.jobTypes.filter(t => t !== type)
@@ -275,6 +298,11 @@ const CopilotSetup = () => {
                 <p className="text-sm text-gray-700 mt-4">
                   First, select the Work Location and Jobs you are looking for
                 </p>
+                {config.id && (
+                  <p className="text-xs text-green-600 mt-2">
+                    ✓ Auto-saving your progress
+                  </p>
+                )}
               </div>
             </div>
 
@@ -599,18 +627,19 @@ const CopilotSetup = () => {
                   disabled={configLoading}
                 >
                   Save & Close
-                </Button>                  <Button
-                    onClick={handleNext}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 flex items-center space-x-2 text-sm"
-                    disabled={
-                      config.workLocationTypes.length === 0 || 
-                      config.jobTypes.length === 0 || 
-                      config.jobTitles.length === 0 || 
-                      (config.workLocationTypes.includes('remote') && config.remoteLocations.length === 0) ||
-                      (config.workLocationTypes.includes('onsite') && config.onsiteLocations.length === 0) ||
-                      configLoading
-                    }
-                  >
+                </Button>
+                <Button
+                  onClick={handleNext}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 flex items-center space-x-2 text-sm"
+                  disabled={
+                    config.workLocationTypes.length === 0 || 
+                    config.jobTypes.length === 0 || 
+                    config.jobTitles.length === 0 || 
+                    (config.workLocationTypes.includes('remote') && config.remoteLocations.length === 0) ||
+                    (config.workLocationTypes.includes('onsite') && config.onsiteLocations.length === 0) ||
+                    configLoading
+                  }
+                >
                   <span>Next: Optional Filters</span>
                   <ChevronRight className="w-4 h-4" />
                 </Button>
