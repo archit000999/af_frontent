@@ -233,29 +233,18 @@ const CopilotFilters = () => {
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-2 text-purple-600 font-medium">
-              <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-purple-600 text-xs">◯</span>
-              </div>
+             
               <span>Copilot</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div 
+              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer"
+              onClick={() => navigate('/applications')}
+            >
               <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">📋</span>
               </div>
               <span>Applications</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">🔧</span>
-              </div>
-              <span>Tools</span>
-            </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">❓</span>
-              </div>
-              <span>Support</span>
-            </div>
+           
           </nav>
 
           {/* User Section */}

@@ -15,7 +15,7 @@ export const useSubscription = () => {
   const [subscriptionStatus, setSubscriptionStatus] = useState<SubscriptionStatus>({
     isSubscribed: false,
     planType: null,
-    maxCopilots: 0,
+    maxCopilots: 1, // Allow 1 copilot for free users
     isLoading: true
   });
 
@@ -62,7 +62,7 @@ export const useSubscription = () => {
         setSubscriptionStatus({
           isSubscribed: false,
           planType: null,
-          maxCopilots: 0,
+          maxCopilots: 1, // Allow 1 copilot for free users
           isLoading: false
         });
       }
@@ -71,7 +71,7 @@ export const useSubscription = () => {
       setSubscriptionStatus({
         isSubscribed: false,
         planType: null,
-        maxCopilots: 0,
+        maxCopilots: 1, // Allow 1 copilot for free users
         isLoading: false
       });
     }

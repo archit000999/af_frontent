@@ -1,13 +1,13 @@
 
 import { UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { ChevronDown, Settings, MapPin, Clock, Briefcase, Edit, Crown } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { useNavigate } from 'react-router-dom';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useEffect, useState } from 'react';
+import UpgradeDialog from '@/components/UpgradeDialog';
 
 const Home = () => {
   const { user } = useUser();
@@ -21,15 +21,19 @@ const Home = () => {
     switchToConfig, 
     isInitialized, 
     isLoading 
-  } = useCopilotConfig(maxCopilots);
+  } = useCopilotConfig(isSubscribed ? maxCopilots : 1);
   const [copilotStatuses, setCopilotStatuses] = useState<{[key: string]: boolean}>({});
+  const [isUpgradeDialogOpen, setIsUpgradeDialogOpen] = useState(false);
+  const [upgradeDialogType, setUpgradeDialogType] = useState<'subscription' | 'elite'>('subscription');
 
   const handleSetupCopilot = () => {
-    if (!isSubscribed) {
-      navigate('/payment');
+    // Check if user is trying to create a second copilot without Elite plan
+    if (allConfigs.length >= 1 && planType !== 'elite') {
+      setUpgradeDialogType('elite');
+      setIsUpgradeDialogOpen(true);
       return;
     }
-
+    
     if (createNewCopilot()) {
       // Clear any cached configuration data from localStorage
       localStorage.removeItem('copilot-config-draft');
@@ -71,6 +75,13 @@ const Home = () => {
   };
 
   const handleCopilotStatusToggle = (configId: string, status: boolean) => {
+    // If user is not subscribed, show upgrade dialog
+    if (!isSubscribed) {
+      setUpgradeDialogType('subscription');
+      setIsUpgradeDialogOpen(true);
+      return;
+    }
+    
     setCopilotStatuses(prev => ({
       ...prev,
       [configId]: status
@@ -106,29 +117,17 @@ const Home = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center space-x-2 text-purple-600 font-medium">
-              <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-purple-600 text-xs">◯</span>
-              </div>
+            <div className="flex items-center space-x-2 text-purple-600 font-medium text-base">
+
               <span>Copilot</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div 
+              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base"
+              onClick={() => navigate('/applications')}
+            >
               <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">📋</span>
               </div>
               <span>Applications</span>
-            </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">🔧</span>
-              </div>
-              <span>Tools</span>
-            </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">❓</span>
-              </div>
-              <span>Support</span>
             </div>
           </nav>
 
@@ -154,196 +153,161 @@ const Home = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-12">
-        <div className="max-w-2xl">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">
-            Automate Job Applications
-          </h1>
-
-          {/* Loading State */}
-          {(isLoading || subscriptionLoading) ? (
-            <Card className="mb-8 border-0 shadow-lg bg-white">
-              <CardContent className="p-8">
+        <div className="max-w-6xl">
+          <div className="mb-12">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Copilots</h1>
+            
+            {/* Copilot Configuration Section */}
+            {(isLoading || subscriptionLoading) ? (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
                 <div className="text-center text-gray-500">Loading configurations...</div>
-              </CardContent>
-            </Card>
-          ) : hasConfigurations ? (
-            // Show all copilot configurations
-            <div className="space-y-4 mb-8">
-              {allConfigs.map((copilotConfig, index) => (
-                <div key={copilotConfig.id} className="flex gap-4">
-                  {/* Configuration Card */}
-                  <Card className="flex-1 border-2 border-purple-200 shadow-lg bg-white">
-                    <CardContent className="p-6">
-                      <div className="space-y-4">
-                        {/* Copilot Number and Job Title */}
+              </div>
+            ) : hasConfigurations ? (
+              // Show existing copilot configurations
+              <div className="space-y-6">
+                {allConfigs.map((copilotConfig, index) => (
+                  <div key={copilotConfig.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+                          <span className="text-white font-bold text-lg">
+                            {copilotConfig.jobTitles?.[0]?.charAt(0) || 'C'}
+                          </span>
+                        </div>
                         <div>
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm text-gray-500 font-medium">
-                              Copilot #{index + 1}
-                            </span>
-                            <span className={`text-xs px-2 py-1 rounded-full ${
-                              copilotConfig.stepCompleted === 4 
-                                ? 'bg-green-100 text-green-700' 
-                                : 'bg-yellow-100 text-yellow-700'
-                            }`}>
-                              {copilotConfig.stepCompleted === 4 ? 'Complete' : `Step ${copilotConfig.stepCompleted} of 4`}
-                            </span>
-                          </div>
                           <h3 className="text-lg font-semibold text-gray-900">
-                            {copilotConfig.jobTitles && copilotConfig.jobTitles.length > 0 ? (
-                              <>
-                                {copilotConfig.jobTitles[0]}
-                                {copilotConfig.jobTitles.length > 1 && (
-                                  <span className="text-sm text-gray-500 font-normal">
-                                    {" "}+ {copilotConfig.jobTitles.length - 1} more
-                                  </span>
-                                )}
-                              </>
-                            ) : (
-                              <span className="text-gray-500">Job titles not set</span>
-                            )}
+                            {copilotConfig.jobTitles?.[0] || 'Software Developer'}
                           </h3>
-                        </div>
-
-                        {/* Location */}
-                        <div className="flex items-center space-x-2 text-gray-600">
-                          <MapPin className="w-4 h-4" />
-                          <span className="text-sm">
-                            {copilotConfig.workLocationTypes.includes('remote') && copilotConfig.remoteLocations.includes('Worldwide') 
-                              ? 'Anywhere in the World'
-                              : copilotConfig.workLocationTypes.includes('remote') && copilotConfig.remoteLocations.length > 0
-                              ? `Remote: ${copilotConfig.remoteLocations.join(', ')}`
-                              : copilotConfig.workLocationTypes.includes('onsite') && copilotConfig.onsiteLocations.length > 0
-                              ? `On-site: ${copilotConfig.onsiteLocations.join(', ')}`
-                              : 'Location not specified'
-                            }
-                          </span>
-                        </div>
-
-                        {/* Job Types */}
-                        <div className="flex items-center space-x-2 text-gray-600">
-                          <Briefcase className="w-4 h-4" />
-                          <span className="text-sm">
-                            {copilotConfig.jobTypes && copilotConfig.jobTypes.length > 0 
-                              ? copilotConfig.jobTypes.includes('fulltime') ? 'Auto-Apply Jobs' : 
-                                copilotConfig.jobTypes.join(', ').replace(/fulltime/g, 'Full-time').replace(/parttime/g, 'Part-time').replace(/contractor/g, 'Contract').replace(/internship/g, 'Internship')
-                              : 'Job types not specified'
-                            }
-                          </span>
-                        </div>
-
-                        {/* Time Zone */}
-                        <div className="flex items-center space-x-2 text-gray-600">
-                          <Clock className="w-4 h-4" />
-                          <span className="text-sm">Time Zone</span>
-                        </div>
-
-                        {/* Status and Controls */}
-                        <div className="pt-4 border-t border-gray-100">
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-sm font-medium text-gray-900">Copilot Status:</span>
-                            <span className={`text-sm font-medium ${
-                              copilotStatuses[copilotConfig.id || ''] ? 'text-green-600' : 'text-gray-400'
-                            }`}>
-                              {copilotStatuses[copilotConfig.id || ''] ? 'ON' : 'OFF'}
-                            </span>
-                          </div>
-                          
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <Switch
-                                checked={copilotStatuses[copilotConfig.id || ''] || false}
-                                onCheckedChange={(checked) => handleCopilotStatusToggle(copilotConfig.id || '', checked)}
-                                className="data-[state=checked]:bg-purple-600"
-                              />
-                              <span className="text-xs text-gray-400">OFF</span>
+                          <div className="flex items-center space-x-4 text-sm text-gray-500">
+                            <div className="flex items-center space-x-1">
+                              <MapPin className="w-4 h-4" />
+                              <span>
+                                {copilotConfig.workLocationTypes.includes('remote') && copilotConfig.remoteLocations.includes('Worldwide') 
+                                  ? 'Anywhere in World'
+                                  : copilotConfig.workLocationTypes.includes('remote') && copilotConfig.remoteLocations.length > 0
+                                  ? `${copilotConfig.remoteLocations.join(', ')}`
+                                  : copilotConfig.workLocationTypes.includes('onsite') && copilotConfig.onsiteLocations.length > 0
+                                  ? `${copilotConfig.onsiteLocations.join(', ')}`
+                                  : 'Anywhere in India'
+                                }
+                              </span>
                             </div>
-                            
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => handleEditConfiguration(copilotConfig.id)}
-                              className="flex items-center space-x-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
-                            >
-                              <Edit className="w-4 h-4" />
-                              <span className="text-sm">Edit Configuration</span>
-                            </Button>
+                            <div className="flex items-center space-x-1">
+                              <Briefcase className="w-4 h-4" />
+                              <span>
+                                {copilotConfig.jobTypes.includes('fulltime') ? 'Auto-Apply Jobs' : 'Manual Apply'}
+                              </span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Clock className="w-4 h-4" />
+                              <span>Time Zone</span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => handleEditConfiguration(copilotConfig.id)}
+                        className="flex items-center space-x-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                      >
+                        <Edit className="w-4 h-4" />
+                        <span>Edit Configuration</span>
+                      </Button>
+                    </div>
 
-              {/* New Copilot Button or Upgrade Message */}
-              {canCreateNewCopilot() && isSubscribed ? (
-                <div className="flex justify-center pt-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-sm font-medium text-gray-700">Copilot Status:</span>
+                        <span className={`text-sm font-medium ${
+                          copilotStatuses[copilotConfig.id || ''] ? 'text-green-600' : 'text-gray-500'
+                        }`}>
+                          {copilotStatuses[copilotConfig.id || ''] ? 'ON' : 'OFF'}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <span className="text-sm text-gray-500">OFF</span>
+                        <Switch
+                          checked={copilotStatuses[copilotConfig.id || ''] || false}
+                          onCheckedChange={(checked) => handleCopilotStatusToggle(copilotConfig.id || '', checked)}
+                          className="data-[state=checked]:bg-purple-600"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* New Copilot Button */}
+                <div className="flex justify-center pt-6">
                   <Button 
                     variant="outline"
                     onClick={handleSetupCopilot}
-                    className="px-6 py-3 border-2 border-purple-300 text-purple-600 hover:bg-purple-50 font-medium"
+                    className="px-8 py-4 border-2 border-purple-300 text-purple-600 hover:bg-purple-50 font-medium rounded-lg"
                   >
-                    + New Copilot ({allConfigs.length}/{maxCopilots})
+                    + New Copilot
                   </Button>
                 </div>
-              ) : !isSubscribed ? (
-                <div className="flex flex-col items-center pt-4 space-y-2">
-                  <p className="text-sm text-gray-500 text-center">
-                    Upgrade to Premium or Elite to create more copilots
-                  </p>
-                  <Button 
-                    onClick={() => navigate('/payment')}
-                    className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-6 py-2"
-                  >
-                    Upgrade Now
-                  </Button>
+              </div>
+            ) : (
+              // Show setup prompt if no configurations
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center mx-auto mb-6">
+                  <span className="text-white font-bold text-2xl">+</span>
                 </div>
-              ) : (
-                <div className="flex justify-center pt-4">
-                  <div className="text-sm text-gray-500">
-                    Maximum {maxCopilots} copilot{maxCopilots > 1 ? 's' : ''} reached with your {getPlanDisplayName()} plan.
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            // Show setup card if no configurations
-            <Card className="mb-8 border-0 shadow-lg bg-white">
-              <CardContent className="p-8">
-                {!isSubscribed ? (
-                  <div className="text-center space-y-4">
-                    <p className="text-gray-600 mb-4">Subscribe to start creating your copilots</p>
-                    <Button 
-                      onClick={() => navigate('/payment')}
-                      className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 text-lg font-semibold rounded-full flex items-center justify-center sm:justify-start space-x-2"
-                    >
-                      <span>Choose Your Plan</span>
-                      <span className="ml-2">→</span>
-                    </Button>
-                  </div>
-                ) : (
-                  <Button 
-                    onClick={handleSetupCopilot}
-                    className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 text-lg font-semibold rounded-full flex items-center justify-center sm:justify-start space-x-2"
-                  >
-                    <span>Setup your first copilot</span>
-                    <span className="ml-2">→</span>
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          )}
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Create Your First Copilot</h3>
+                <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                  Set up your job search preferences and let our AI copilot help you find the perfect opportunities.
+                </p>
+                <Button 
+                  onClick={handleSetupCopilot}
+                  className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 text-lg font-semibold rounded-lg"
+                >
+                  Setup Your First Copilot
+                </Button>
+              </div>
+            )}
+          </div>
 
-          {/* How Copilot Works Section */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <button className="flex items-center justify-between w-full text-left">
-              <h2 className="text-xl font-semibold text-gray-900">How Copilot Works</h2>
-              <ChevronDown className="w-5 h-5 text-gray-500" />
-            </button>
+          {/* Guides Section */}
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Guides</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                <h3 className="font-semibold text-gray-900 mb-2">How copilot works</h3>
+                <p className="text-sm text-gray-600">Learn the basics of how your AI copilot finds and applies to jobs</p>
+              </div>
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                <h3 className="font-semibold text-gray-900 mb-2">How to train your copilot</h3>
+                <p className="text-sm text-gray-600">Optimize your copilot's performance with better training</p>
+              </div>
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                <h3 className="font-semibold text-gray-900 mb-2">How to apply to external jobs</h3>
+                <p className="text-sm text-gray-600">Apply to jobs outside of our platform with your copilot</p>
+              </div>
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                <h3 className="font-semibold text-gray-900 mb-2">FAQ</h3>
+                <p className="text-sm text-gray-600">Find answers to commonly asked questions</p>
+              </div>
+            </div>
           </div>
         </div>
       </main>
+
+      {/* Upgrade Dialog */}
+      <UpgradeDialog 
+        isOpen={isUpgradeDialogOpen} 
+        onClose={() => setIsUpgradeDialogOpen(false)}
+        message={
+          upgradeDialogType === 'elite' 
+            ? "You need an Elite plan to create multiple copilots."
+            : "You need a Premium or Elite plan to activate Copilot"
+        }
+        buttonText={
+          upgradeDialogType === 'elite' 
+            ? "Upgrade to Elite"
+            : "View Plans ↗"
+        }
+      />
     </div>
   );
 };

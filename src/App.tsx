@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
+import Applications from "./pages/Applications";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/home" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/applications" element={<Applications />} />
           <Route path="/copilot-setup" element={<CopilotSetup />} />
           <Route path="/copilot-filters" element={<CopilotFilters />} />
           <Route path="/copilot-screening" element={<CopilotScreening />} />

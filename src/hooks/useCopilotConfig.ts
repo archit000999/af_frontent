@@ -13,7 +13,7 @@ interface CopilotConfig {
   stepCompleted: number;
 }
 
-export const useCopilotConfig = (maxCopilots: number = 0) => {
+export const useCopilotConfig = (maxCopilots: number = 1) => {
   const { user } = useUser();
   const { toast } = useToast();
   const [config, setConfig] = useState<CopilotConfig>({
@@ -92,7 +92,8 @@ export const useCopilotConfig = (maxCopilots: number = 0) => {
   };
 
   const canCreateNewCopilot = () => {
-    return allConfigs.length < maxCopilots;
+    // Always allow creating at least one copilot for configuration
+    return allConfigs.length < Math.max(maxCopilots, 1);
   };
 
   const createNewCopilot = () => {
@@ -100,7 +101,7 @@ export const useCopilotConfig = (maxCopilots: number = 0) => {
       const planName = maxCopilots === 1 ? 'Premium' : maxCopilots === 2 ? 'Elite' : 'Free';
       toast({
         title: "Limit Reached",
-        description: `You can only create up to ${maxCopilots} copilot configuration${maxCopilots > 1 ? 's' : ''} with your ${planName} plan`,
+        description: `You can only create up to ${Math.max(maxCopilots, 1)} copilot configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
         variant: "destructive"
       });
       return false;
@@ -152,12 +153,12 @@ export const useCopilotConfig = (maxCopilots: number = 0) => {
           .select()
           .single();
       } else {
-        // Check limit before creating new
-        if (!canCreateNewCopilot()) {
+        // Allow creating at least one copilot even without subscription
+        if (!canCreateNewCopilot() && maxCopilots > 0) {
           const planName = maxCopilots === 1 ? 'Premium' : maxCopilots === 2 ? 'Elite' : 'Free';
           toast({
             title: "Limit Reached",
-            description: `You can only create up to ${maxCopilots} copilot configuration${maxCopilots > 1 ? 's' : ''} with your ${planName} plan`,
+            description: `You can only create up to ${Math.max(maxCopilots, 1)} copilot configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
             variant: "destructive"
           });
           return false;

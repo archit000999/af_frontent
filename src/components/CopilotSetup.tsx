@@ -174,11 +174,6 @@ const CopilotSetup = () => {
 
   const handleNext = async () => {
     if (validateForm()) {
-      // Check if creating new copilot and we've reached the limit
-      if (isNewCopilot && !canCreateNewCopilot()) {
-        return;
-      }
-
       setIsLoading(true);
       
       // Save current progress with step 2 (next step)
@@ -205,11 +200,6 @@ const CopilotSetup = () => {
   };
 
   const handleSaveAndClose = async () => {
-    // Check if creating new copilot and we've reached the limit
-    if (isNewCopilot && !canCreateNewCopilot()) {
-      return;
-    }
-
     // Save current state with step 1 (current step)
     const success = await saveConfig({
       stepCompleted: 1,
@@ -245,28 +235,15 @@ const CopilotSetup = () => {
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-2 text-purple-600 font-medium text-sm">
-              <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-purple-600 text-xs">◯</span>
-              </div>
               <span>Copilot</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
+            <div 
+              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm"
+              onClick={() => navigate('/applications')}
+            >
               <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">📋</span>
               </div>
               <span>Applications</span>
-            </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
-              <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">🔧</span>
-              </div>
-              <span>Tools</span>
-            </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
-              <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">❓</span>
-              </div>
-              <span>Support</span>
             </div>
           </nav>
 
@@ -622,20 +599,18 @@ const CopilotSetup = () => {
                   disabled={configLoading}
                 >
                   Save & Close
-                </Button>
-                <Button
-                  onClick={handleNext}
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 flex items-center space-x-2 text-sm"
-                  disabled={
-                    config.workLocationTypes.length === 0 || 
-                    config.jobTypes.length === 0 || 
-                    config.jobTitles.length === 0 || 
-                    (config.workLocationTypes.includes('remote') && config.remoteLocations.length === 0) ||
-                    (config.workLocationTypes.includes('onsite') && config.onsiteLocations.length === 0) ||
-                    configLoading ||
-                    (isNewCopilot && !canCreateNewCopilot())
-                  }
-                >
+                </Button>                  <Button
+                    onClick={handleNext}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 flex items-center space-x-2 text-sm"
+                    disabled={
+                      config.workLocationTypes.length === 0 || 
+                      config.jobTypes.length === 0 || 
+                      config.jobTitles.length === 0 || 
+                      (config.workLocationTypes.includes('remote') && config.remoteLocations.length === 0) ||
+                      (config.workLocationTypes.includes('onsite') && config.onsiteLocations.length === 0) ||
+                      configLoading
+                    }
+                  >
                   <span>Next: Optional Filters</span>
                   <ChevronRight className="w-4 h-4" />
                 </Button>
