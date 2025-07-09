@@ -33,16 +33,20 @@ export const useSubscription = () => {
     if (!user?.emailAddresses[0]?.emailAddress) return;
 
     try {
+      console.log('🔍 Checking subscription for email:', user.emailAddresses[0].emailAddress);
+      
       const { data, error } = await supabase
         .from('payments')
-        .select('plan_type, status, stripe_subscription_id, created_at')
+        .select('plan_type, status, stripe_subscription_id, created_at, amount')
         .eq('user_email', user.emailAddresses[0].emailAddress)
-        .eq('status', 'completed')
+        .in('status', ['completed', 'paid']) // Check for both completed and paid status
         .order('created_at', { ascending: false })
         .limit(1);
 
+      console.log('📊 Payment query result:', { data, error });
+
       if (error) {
-        console.error('Error checking subscription:', error);
+        console.error('❌ Error checking subscription:', error);
         setSubscriptionStatus({
           isSubscribed: false,
           planType: null,
@@ -56,6 +60,8 @@ export const useSubscription = () => {
 
       if (data && data.length > 0) {
         const latestPayment = data[0];
+        console.log('✅ Latest payment found:', latestPayment);
+        
         const planType = latestPayment.plan_type as 'premium' | 'elite';
         
         // Determine max copilots based on plan
@@ -66,10 +72,12 @@ export const useSubscription = () => {
           maxCopilots = 2;
         }
         
-        console.log('Subscription found:', {
+        console.log('🚀 Subscription found:', {
           planType,
           maxCopilots,
-          subscriptionId: latestPayment.stripe_subscription_id
+          subscriptionId: latestPayment.stripe_subscription_id,
+          amount: latestPayment.amount,
+          status: latestPayment.status
         });
         
         setSubscriptionStatus({
@@ -81,7 +89,7 @@ export const useSubscription = () => {
           currentPeriodEnd: null // We could fetch this from Stripe if needed
         });
       } else {
-        console.log('No completed payments found, setting as free user');
+        console.log('❌ No completed/paid payments found, setting as free user');
         setSubscriptionStatus({
           isSubscribed: false,
           planType: null,
@@ -92,7 +100,7 @@ export const useSubscription = () => {
         });
       }
     } catch (error) {
-      console.error('Error checking subscription:', error);
+      console.error('❌ Error checking subscription:', error);
       setSubscriptionStatus({
         isSubscribed: false,
         planType: null,
@@ -105,7 +113,7 @@ export const useSubscription = () => {
   };
 
   const refreshSubscription = async () => {
-    console.log('Refreshing subscription status...');
+    console.log('🔄 Refreshing subscription status...');
     await checkSubscriptionStatus();
   };
 
