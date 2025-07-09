@@ -18,12 +18,13 @@ serve(async (req) => {
   }
 
   try {
-    const { planType } = await req.json();
+    const { planType, userEmail } = await req.json();
     console.log("Creating checkout for plan:", planType);
+    console.log("User email:", userEmail);
 
-    if (!planType) {
-      console.error("❌ No plan type provided");
-      return new Response(JSON.stringify({ error: "Plan type is required" }), {
+    if (!planType || !userEmail) {
+      console.error("❌ Plan type or user email not provided");
+      return new Response(JSON.stringify({ error: "Plan type and user email are required" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 400,
       });
@@ -45,28 +46,7 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Get user email from auth header
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      console.error("❌ No authorization header");
-      return new Response(JSON.stringify({ error: "Not authenticated" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 401,
-      });
-    }
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: userData, error: userError } = await supabase.auth.getUser(token);
-    if (userError || !userData.user?.email) {
-      console.error("❌ User authentication failed:", userError);
-      return new Response(JSON.stringify({ error: "Authentication failed" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 401,
-      });
-    }
-
-    const userEmail = userData.user.email;
-    console.log("✅ User authenticated:", userEmail);
+    console.log("✅ Using user email from request:", userEmail);
 
     // Initialize Stripe
     const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
