@@ -54,15 +54,23 @@ serve(async (req) => {
     console.log("Session payment status:", session.payment_status);
     console.log("Session customer email:", session.customer_details?.email);
 
-    // First, let's check if the payment record exists
+    // Check if the payment record exists
     const { data: existingPayment, error: checkError } = await supabase
       .from('payments')
       .select('*')
       .eq('stripe_session_id', sessionId)
-      .single();
+      .maybeSingle();
 
     console.log("🔍 Existing payment record:", existingPayment);
     console.log("🔍 Check error:", checkError);
+
+    if (!existingPayment) {
+      console.error("❌ No payment record found for session:", sessionId);
+      return new Response(JSON.stringify({ error: "Payment record not found" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 404,
+      });
+    }
 
     if (session.payment_status === 'paid') {
       // Get subscription details if it's a subscription
@@ -99,12 +107,12 @@ serve(async (req) => {
 
       console.log("✅ Payment status updated to completed for session:", sessionId);
       
-      // Let's also verify the update worked by querying again
+      // Verify the update worked by querying again
       const { data: verifyData, error: verifyError } = await supabase
         .from('payments')
         .select('*')
         .eq('stripe_session_id', sessionId)
-        .single();
+        .maybeSingle();
 
       console.log("🔍 Payment record after update:", verifyData);
       console.log("🔍 Verify error:", verifyError);

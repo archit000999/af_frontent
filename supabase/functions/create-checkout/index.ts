@@ -18,12 +18,12 @@ serve(async (req) => {
   }
 
   try {
-    const { planType, userEmail } = await req.json();
-    console.log("Creating checkout for:", { planType, userEmail });
+    const { planType } = await req.json();
+    console.log("Creating checkout for plan:", planType);
 
-    if (!planType || !userEmail) {
-      console.error("❌ Missing required fields");
-      return new Response(JSON.stringify({ error: "Plan type and user email are required" }), {
+    if (!planType) {
+      console.error("❌ No plan type provided");
+      return new Response(JSON.stringify({ error: "Plan type is required" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 400,
       });
@@ -39,32 +39,57 @@ serve(async (req) => {
       });
     }
 
-    // Initialize Stripe and Supabase
-    const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
+    // Initialize Supabase with service role key to bypass RLS
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
+    // Get user email from auth header
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      console.error("❌ No authorization header");
+      return new Response(JSON.stringify({ error: "Not authenticated" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401,
+      });
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    if (userError || !userData.user?.email) {
+      console.error("❌ User authentication failed:", userError);
+      return new Response(JSON.stringify({ error: "Authentication failed" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401,
+      });
+    }
+
+    const userEmail = userData.user.email;
+    console.log("✅ User authenticated:", userEmail);
+
+    // Initialize Stripe
+    const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
+
     // Check if customer exists
     const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
-    let customerId;
+    let customerId = null;
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
       console.log("✅ Found existing customer:", customerId);
+    } else {
+      console.log("ℹ️ No existing customer found, will create one during checkout");
     }
 
     // Define plan details
     const planDetails = {
       premium: {
         name: "Premium Plan",
-        amount: 560, // $5.60 in cents
-        currency: "usd"
+        amount: 2900, // $29 in cents
       },
       elite: {
         name: "Elite Plan", 
-        amount: 800, // $8.00 in cents
-        currency: "usd"
+        amount: 4900, // $49 in cents
       }
     };
 
@@ -77,6 +102,8 @@ serve(async (req) => {
       });
     }
 
+    console.log("💰 Creating checkout session for:", selectedPlan);
+
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -84,10 +111,14 @@ serve(async (req) => {
       line_items: [
         {
           price_data: {
-            currency: selectedPlan.currency,
-            product_data: { name: selectedPlan.name },
+            currency: "usd",
+            product_data: {
+              name: selectedPlan.name,
+            },
             unit_amount: selectedPlan.amount,
-            recurring: { interval: "week" },
+            recurring: {
+              interval: "month",
+            },
           },
           quantity: 1,
         },
@@ -97,10 +128,10 @@ serve(async (req) => {
       cancel_url: `${req.headers.get("origin")}/payment`,
     });
 
-    console.log("✅ Checkout session created:", session.id);
+    console.log("✅ Stripe checkout session created:", session.id);
 
-    // Store payment record in database
-    const { error: paymentError } = await supabase
+    // Create payment record in database
+    const { data: paymentData, error: paymentError } = await supabase
       .from('payments')
       .insert({
         user_email: userEmail,
@@ -109,18 +140,28 @@ serve(async (req) => {
         plan_type: planType,
         plan_name: selectedPlan.name,
         amount: selectedPlan.amount,
-        currency: selectedPlan.currency,
-        status: 'pending'
-      });
+        currency: 'usd',
+        status: 'pending',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .select()
+      .single();
 
     if (paymentError) {
-      console.error("❌ Error storing payment record:", paymentError);
-      // Don't fail the checkout creation, just log the error
-    } else {
-      console.log("✅ Payment record stored in database");
+      console.error("❌ Error creating payment record:", paymentError);
+      return new Response(JSON.stringify({ error: "Failed to create payment record" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+      });
     }
 
-    return new Response(JSON.stringify({ url: session.url }), {
+    console.log("✅ Payment record created:", paymentData);
+
+    return new Response(JSON.stringify({ 
+      url: session.url,
+      sessionId: session.id 
+    }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
