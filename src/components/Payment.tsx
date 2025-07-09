@@ -5,10 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, ArrowLeft, Sparkles, Crown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useUser } from '@clerk/clerk-react';
 
 const Payment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useUser();
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
   const plans = [
@@ -54,24 +57,44 @@ const Payment = () => {
   const handleUpgrade = async (planType: string) => {
     console.log("Plan type selected:", planType);
     
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to continue with payment",
+        variant: "destructive"
+      });
+      navigate('/auth');
+      return;
+    }
+    
     setIsLoading(planType);
     
     try {
-      // Placeholder for future payment integration
-      console.log("Payment integration will be implemented here");
+      console.log("Creating checkout session for user:", user.emailAddresses[0]?.emailAddress);
       
-      // Show a temporary message
-      toast({
-        title: "Coming Soon",
-        description: "Payment integration will be available soon!",
-        variant: "default"
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { planType }
       });
+
+      if (error) {
+        console.error('Checkout error:', error);
+        throw new Error(error.message || 'Failed to create checkout session');
+      }
+
+      if (!data?.url) {
+        throw new Error('No checkout URL received');
+      }
+
+      console.log("Checkout session created, redirecting to:", data.url);
+      
+      // Redirect to Stripe Checkout
+      window.location.href = data.url;
       
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error creating checkout:', error);
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Payment Error",
+        description: error instanceof Error ? error.message : "Failed to process payment. Please try again.",
         variant: "destructive"
       });
     } finally {

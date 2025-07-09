@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
+import PaymentSuccess from "./pages/PaymentSuccess";
 import CopilotSetup from "./components/CopilotSetup";
 import CopilotFilters from "./components/CopilotFilters";
 import CopilotScreening from "./components/CopilotScreening";
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/copilot-final-step" element={<CopilotFinalStep />} />
           <Route path="/copilot-preview" element={<CopilotPreview />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
