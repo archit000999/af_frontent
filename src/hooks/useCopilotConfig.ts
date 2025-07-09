@@ -40,9 +40,6 @@ export const useCopilotConfig = (maxCopilots: number = 0) => {
     
     setIsLoading(true);
     try {
-      console.log('Loading configs for user:', user.id);
-      console.log('Max copilots allowed:', maxCopilots);
-      
       // Load all configurations for the user
       const { data, error } = await supabase
         .from('copilot_configurations')
@@ -70,17 +67,7 @@ export const useCopilotConfig = (maxCopilots: number = 0) => {
         stepCompleted: item.step_completed || 1
       })) || [];
 
-      console.log('Loaded configs:', configs.length);
       setAllConfigs(configs);
-
-      // If user has more configs than allowed, show warning
-      if (configs.length > maxCopilots && maxCopilots > 0) {
-        toast({
-          title: "Configuration Limit Exceeded",
-          description: `You have ${configs.length} configurations but your plan only allows ${maxCopilots}. Consider upgrading or removing some configurations.`,
-          variant: "destructive"
-        });
-      }
 
       // Set the most recent config as current
       if (configs.length > 0) {
@@ -105,9 +92,7 @@ export const useCopilotConfig = (maxCopilots: number = 0) => {
   };
 
   const canCreateNewCopilot = () => {
-    const canCreate = allConfigs.length < maxCopilots;
-    console.log('Can create new copilot?', canCreate, 'Current:', allConfigs.length, 'Max:', maxCopilots);
-    return canCreate;
+    return allConfigs.length < maxCopilots;
   };
 
   const createNewCopilot = () => {
@@ -131,55 +116,6 @@ export const useCopilotConfig = (maxCopilots: number = 0) => {
       stepCompleted: 1
     });
     return true;
-  };
-
-  const deleteConfig = async (configId: string) => {
-    if (!user || !configId) {
-      toast({
-        title: "Error",
-        description: "Cannot delete configuration",
-        variant: "destructive"
-      });
-      return false;
-    }
-
-    setIsLoading(true);
-    try {
-      const { error } = await supabase
-        .from('copilot_configurations')
-        .delete()
-        .eq('id', configId)
-        .eq('user_id', user.id); // Extra security check
-
-      if (error) {
-        console.error('Error deleting config:', error);
-        toast({
-          title: "Error",
-          description: "Failed to delete configuration",
-          variant: "destructive"
-        });
-        return false;
-      }
-
-      // Refresh configs after deletion
-      await loadAllConfigs();
-      
-      toast({
-        title: "Success",
-        description: "Configuration deleted successfully"
-      });
-      return true;
-    } catch (error) {
-      console.error('Error deleting config:', error);
-      toast({
-        title: "Error",
-        description: "Failed to delete configuration",
-        variant: "destructive"
-      });
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const saveConfig = async (updatedConfig?: Partial<CopilotConfig>) => {
@@ -300,7 +236,6 @@ export const useCopilotConfig = (maxCopilots: number = 0) => {
     createNewCopilot,
     canCreateNewCopilot,
     switchToConfig,
-    deleteConfig,
     isLoading,
     isInitialized,
     maxCopilots
