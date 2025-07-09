@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -51,10 +50,10 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     
     setIsLoading(true);
     try {
-      // Load all configurations for the user
+      // Load all configurations for the user - only select columns that definitely exist
       const { data, error } = await supabase
         .from('copilot_configurations')
-        .select('*')
+        .select('id, user_id, work_location_types, remote_locations, onsite_locations, job_types, job_titles, step_completed, created_at, updated_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
@@ -76,12 +75,12 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         jobTypes: item.job_types || [],
         jobTitles: item.job_titles || [],
         stepCompleted: item.step_completed || 1,
-        filtersData: (item as any).filters_data || {},
-        screeningData: (item as any).screening_data || {},
-        finalConfigData: (item as any).final_config_data || {},
-        resumeFileName: (item as any).resume_file_name,
-        resumeFileUrl: (item as any).resume_file_url,
-        personalInfo: (item as any).personal_info || {}
+        filtersData: {},
+        screeningData: {},
+        finalConfigData: {},
+        resumeFileName: undefined,
+        resumeFileUrl: undefined,
+        personalInfo: {}
       })) || [];
 
       setAllConfigs(configs);
@@ -210,6 +209,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     setIsLoading(true);
 
     try {
+      // Only save the basic fields that we know exist in the database
       const configData = {
         user_id: user.id,
         work_location_types: configToSave.workLocationTypes,
@@ -217,13 +217,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         onsite_locations: configToSave.onsiteLocations,
         job_types: configToSave.jobTypes,
         job_titles: configToSave.jobTitles,
-        step_completed: configToSave.stepCompleted,
-        filters_data: configToSave.filtersData || {},
-        screening_data: configToSave.screeningData || {},
-        final_config_data: configToSave.finalConfigData || {},
-        resume_file_name: configToSave.resumeFileName,
-        resume_file_url: configToSave.resumeFileUrl,
-        personal_info: configToSave.personalInfo || {}
+        step_completed: configToSave.stepCompleted
       };
 
       let result;
@@ -274,12 +268,12 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         jobTypes: result.data.job_types || [],
         jobTitles: result.data.job_titles || [],
         stepCompleted: result.data.step_completed || 1,
-        filtersData: (result.data as any).filters_data || {},
-        screeningData: (result.data as any).screening_data || {},
-        finalConfigData: (result.data as any).final_config_data || {},
-        resumeFileName: (result.data as any).resume_file_name,
-        resumeFileUrl: (result.data as any).resume_file_url,
-        personalInfo: (result.data as any).personal_info || {}
+        filtersData: {},
+        screeningData: {},
+        finalConfigData: {},
+        resumeFileName: undefined,
+        resumeFileUrl: undefined,
+        personalInfo: {}
       };
 
       setConfig(savedConfig);
