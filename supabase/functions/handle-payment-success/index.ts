@@ -51,25 +51,43 @@ serve(async (req) => {
       expand: ['subscription']
     });
     console.log("✅ Retrieved session:", session.id);
+    console.log("Session payment status:", session.payment_status);
+    console.log("Session customer email:", session.customer_details?.email);
+
+    // First, let's check if the payment record exists
+    const { data: existingPayment, error: checkError } = await supabase
+      .from('payments')
+      .select('*')
+      .eq('stripe_session_id', sessionId)
+      .single();
+
+    console.log("🔍 Existing payment record:", existingPayment);
+    console.log("🔍 Check error:", checkError);
 
     if (session.payment_status === 'paid') {
       // Get subscription details if it's a subscription
       let stripeSubscriptionId = null;
       if (session.subscription && typeof session.subscription === 'object') {
         stripeSubscriptionId = session.subscription.id;
+        console.log("✅ Subscription ID from object:", stripeSubscriptionId);
       } else if (typeof session.subscription === 'string') {
         stripeSubscriptionId = session.subscription;
+        console.log("✅ Subscription ID from string:", stripeSubscriptionId);
       }
 
       // Update payment status in database
-      const { error } = await supabase
+      const { data: updateData, error } = await supabase
         .from('payments')
         .update({ 
           status: 'completed',
           stripe_subscription_id: stripeSubscriptionId,
           updated_at: new Date().toISOString()
         })
-        .eq('stripe_session_id', sessionId);
+        .eq('stripe_session_id', sessionId)
+        .select();
+
+      console.log("📝 Update result data:", updateData);
+      console.log("📝 Update result error:", error);
 
       if (error) {
         console.error("❌ Error updating payment status:", error);
@@ -79,7 +97,19 @@ serve(async (req) => {
         });
       }
 
-      console.log("✅ Payment status updated to completed");
+      console.log("✅ Payment status updated to completed for session:", sessionId);
+      
+      // Let's also verify the update worked by querying again
+      const { data: verifyData, error: verifyError } = await supabase
+        .from('payments')
+        .select('*')
+        .eq('stripe_session_id', sessionId)
+        .single();
+
+      console.log("🔍 Payment record after update:", verifyData);
+      console.log("🔍 Verify error:", verifyError);
+    } else {
+      console.log("⚠️ Payment status is not 'paid', current status:", session.payment_status);
     }
 
     return new Response(JSON.stringify({ 

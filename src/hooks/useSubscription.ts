@@ -35,6 +35,16 @@ export const useSubscription = () => {
     try {
       console.log('🔍 Checking subscription for email:', user.emailAddresses[0].emailAddress);
       
+      // First, let's check ALL payments for this user to see what's in the database
+      const { data: allPayments, error: allError } = await supabase
+        .from('payments')
+        .select('*')
+        .eq('user_email', user.emailAddresses[0].emailAddress)
+        .order('created_at', { ascending: false });
+
+      console.log('🗂️ ALL payments for user:', allPayments);
+      console.log('🗂️ ALL payments error:', allError);
+      
       const { data, error } = await supabase
         .from('payments')
         .select('plan_type, status, stripe_subscription_id, created_at, amount')
