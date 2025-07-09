@@ -19,10 +19,22 @@ const Home = () => {
     createNewCopilot, 
     canCreateNewCopilot, 
     switchToConfig, 
+    deleteConfig,
     isInitialized, 
     isLoading 
   } = useCopilotConfig(maxCopilots);
   const [copilotStatuses, setCopilotStatuses] = useState<{[key: string]: boolean}>({});
+
+  // Debug logging
+  useEffect(() => {
+    console.log('=== HOME PAGE DEBUG ===');
+    console.log('User:', user?.id);
+    console.log('Is subscribed:', isSubscribed);
+    console.log('Plan type:', planType);
+    console.log('Max copilots:', maxCopilots);
+    console.log('All configs count:', allConfigs.length);
+    console.log('All configs:', allConfigs);
+  }, [user, isSubscribed, planType, maxCopilots, allConfigs]);
 
   const handleSetupCopilot = () => {
     if (!isSubscribed) {
@@ -70,6 +82,12 @@ const Home = () => {
     }
   };
 
+  const handleDeleteConfiguration = async (configId: string) => {
+    if (window.confirm('Are you sure you want to delete this copilot configuration? This action cannot be undone.')) {
+      await deleteConfig(configId);
+    }
+  };
+
   const handleCopilotStatusToggle = (configId: string, status: boolean) => {
     setCopilotStatuses(prev => ({
       ...prev,
@@ -79,6 +97,7 @@ const Home = () => {
 
   // Check if user has any saved configurations
   const hasConfigurations = allConfigs.length > 0;
+  const exceedsLimit = allConfigs.length > maxCopilots && maxCopilots > 0;
 
   const getPlanDisplayName = () => {
     switch (planType) {
@@ -159,6 +178,26 @@ const Home = () => {
             Automate Job Applications
           </h1>
 
+          {/* Debug Info (only show in development) */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-sm text-yellow-800">
+                <strong>Debug:</strong> Configs: {allConfigs.length}, Max: {maxCopilots}, Plan: {planType || 'none'}
+              </p>
+            </div>
+          )}
+
+          {/* Warning if exceeding limits */}
+          {exceedsLimit && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <h3 className="font-semibold text-red-800 mb-2">Configuration Limit Exceeded</h3>
+              <p className="text-red-700 text-sm mb-3">
+                You have {allConfigs.length} configurations but your {getPlanDisplayName()} plan only allows {maxCopilots}.
+                Please delete some configurations or upgrade your plan.
+              </p>
+            </div>
+          )}
+
           {/* Loading State */}
           {(isLoading || subscriptionLoading) ? (
             <Card className="mb-8 border-0 shadow-lg bg-white">
@@ -172,7 +211,9 @@ const Home = () => {
               {allConfigs.map((copilotConfig, index) => (
                 <div key={copilotConfig.id} className="flex gap-4">
                   {/* Configuration Card */}
-                  <Card className="flex-1 border-2 border-purple-200 shadow-lg bg-white">
+                  <Card className={`flex-1 border-2 shadow-lg bg-white ${
+                    exceedsLimit && index >= maxCopilots ? 'border-red-300 bg-red-50' : 'border-purple-200'
+                  }`}>
                     <CardContent className="p-6">
                       <div className="space-y-4">
                         {/* Copilot Number and Job Title */}
@@ -180,6 +221,11 @@ const Home = () => {
                           <div className="flex items-center justify-between mb-2">
                             <span className="text-sm text-gray-500 font-medium">
                               Copilot #{index + 1}
+                              {exceedsLimit && index >= maxCopilots && (
+                                <span className="ml-2 text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">
+                                  Exceeds Limit
+                                </span>
+                              )}
                             </span>
                             <span className={`text-xs px-2 py-1 rounded-full ${
                               copilotConfig.stepCompleted === 4 
@@ -249,25 +295,39 @@ const Home = () => {
                             </span>
                           </div>
                           
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between gap-2">
                             <div className="flex items-center space-x-3">
                               <Switch
                                 checked={copilotStatuses[copilotConfig.id || ''] || false}
                                 onCheckedChange={(checked) => handleCopilotStatusToggle(copilotConfig.id || '', checked)}
                                 className="data-[state=checked]:bg-purple-600"
+                                disabled={exceedsLimit && index >= maxCopilots}
                               />
                               <span className="text-xs text-gray-400">OFF</span>
                             </div>
                             
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => handleEditConfiguration(copilotConfig.id)}
-                              className="flex items-center space-x-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
-                            >
-                              <Edit className="w-4 h-4" />
-                              <span className="text-sm">Edit Configuration</span>
-                            </Button>
+                            <div className="flex gap-2">
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => handleEditConfiguration(copilotConfig.id)}
+                                className="flex items-center space-x-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                              >
+                                <Edit className="w-4 h-4" />
+                                <span className="text-sm">Edit</span>
+                              </Button>
+                              
+                              {exceedsLimit && (
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => handleDeleteConfiguration(copilotConfig.id || '')}
+                                  className="flex items-center space-x-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                                >
+                                  <span className="text-sm">Delete</span>
+                                </Button>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
