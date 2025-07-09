@@ -96,6 +96,22 @@ const CopilotSetup = () => {
   // Always show step 1 for fresh setup - don't use saved stepCompleted
   const currentStep = 1;
 
+  // Clear any existing form state when component mounts for fresh setup
+  useEffect(() => {
+    if (isInitialized && (!config.id || config.stepCompleted === 1)) {
+      // If we're starting fresh or on step 1, ensure completely clean state
+      updateConfig({
+        id: undefined,
+        workLocationTypes: [],
+        remoteLocations: [],
+        onsiteLocations: [],
+        jobTypes: [],
+        jobTitles: [],
+        stepCompleted: 1
+      });
+    }
+  }, [isInitialized]);
+
   const handleJobTypeToggle = (type: string) => {
     const newJobTypes = config.jobTypes.includes(type) 
       ? config.jobTypes.filter(t => t !== type)

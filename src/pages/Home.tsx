@@ -15,8 +15,7 @@ const Home = () => {
   const [copilotStatus, setCopilotStatus] = useState(false);
 
   const handleSetupCopilot = () => {
-    // Clear any existing configuration from memory and localStorage
-    // This ensures we start completely fresh for a new copilot
+    // Completely clear all configuration data for a fresh start
     updateConfig({
       id: undefined, // Remove any existing ID to force creation of new record
       workLocationTypes: [],
@@ -27,9 +26,11 @@ const Home = () => {
       stepCompleted: 1
     });
     
-    // Clear any cached configuration data
+    // Clear any cached configuration data from localStorage
     localStorage.removeItem('copilot-config-draft');
+    localStorage.removeItem('copilot-config');
     
+    // Navigate to setup with fresh state
     navigate('/copilot-setup');
   };
 

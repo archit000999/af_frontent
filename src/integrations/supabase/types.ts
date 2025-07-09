@@ -92,6 +92,51 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string | null
+          id: string
+          plan_name: string
+          plan_type: string
+          status: string | null
+          stripe_customer_id: string | null
+          stripe_session_id: string
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_email: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string | null
+          id?: string
+          plan_name: string
+          plan_type: string
+          status?: string | null
+          stripe_customer_id?: string | null
+          stripe_session_id: string
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_email: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string | null
+          id?: string
+          plan_name?: string
+          plan_type?: string
+          status?: string | null
+          stripe_customer_id?: string | null
+          stripe_session_id?: string
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_email?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -127,7 +172,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_payment_by_session_id: {
+        Args: { session_id: string }
+        Returns: {
+          id: string
+          user_email: string
+          stripe_customer_id: string
+          stripe_session_id: string
+          stripe_subscription_id: string
+          plan_type: string
+          plan_name: string
+          amount: number
+          currency: string
+          status: string
+          created_at: string
+          updated_at: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
