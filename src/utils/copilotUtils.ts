@@ -11,6 +11,8 @@ export const createEmptyConfig = (): CopilotConfig => ({
   filtersData: {},
   screeningData: {},
   finalConfigData: {},
+  resumeFileName: undefined,
+  resumeFileUrl: undefined,
   personalInfo: {}
 });
 
@@ -30,12 +32,12 @@ export const mapDatabaseToConfig = (item: any): CopilotConfig => ({
   jobTypes: item.job_types || [],
   jobTitles: item.job_titles || [],
   stepCompleted: item.step_completed || 1,
-  filtersData: {},
-  screeningData: {},
-  finalConfigData: {},
-  resumeFileName: undefined,
-  resumeFileUrl: undefined,
-  personalInfo: {}
+  filtersData: item.filters_data || {},
+  screeningData: item.screening_data || {},
+  finalConfigData: item.final_config_data || {},
+  resumeFileName: item.resume_file_name,
+  resumeFileUrl: item.resume_file_url,
+  personalInfo: item.personal_info || {}
 });
 
 export const mapConfigToDatabase = (config: CopilotConfig, userId: string) => ({
@@ -45,5 +47,11 @@ export const mapConfigToDatabase = (config: CopilotConfig, userId: string) => ({
   onsite_locations: config.onsiteLocations,
   job_types: config.jobTypes,
   job_titles: config.jobTitles,
-  step_completed: config.stepCompleted
+  step_completed: config.stepCompleted,
+  filters_data: config.filtersData || {},
+  screening_data: config.screeningData || {},
+  final_config_data: config.finalConfigData || {},
+  resume_file_name: config.resumeFileName,
+  resume_file_url: config.resumeFileUrl,
+  personal_info: config.personalInfo || {}
 });

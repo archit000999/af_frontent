@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -26,8 +25,8 @@ import {
 // Famous job titles for suggestions
 const POPULAR_JOB_TITLES = [
   "Software Engineer",
-  "Frontend Developer",
-  "Backend Developer", 
+  "Frontend Developer", 
+  "Backend Developer",
   "Full Stack Developer",
   "Product Manager",
   "Data Scientist",
@@ -99,29 +98,6 @@ const CopilotSetup = () => {
 
   // Check if we're creating a new copilot or editing existing one
   const isNewCopilot = !config.id;
-
-  // Auto-save functionality - save data whenever form changes (SILENTLY)
-  useEffect(() => {
-    const saveTimeout = setTimeout(() => {
-      if (config.id && (
-        config.workLocationTypes.length > 0 || 
-        config.jobTypes.length > 0 || 
-        config.jobTitles.length > 0
-      )) {
-        // Auto-save current progress silently (no loading, no toast)
-        saveConfig({
-          workLocationTypes: config.workLocationTypes,
-          remoteLocations: config.remoteLocations,
-          onsiteLocations: config.onsiteLocations,
-          jobTypes: config.jobTypes,
-          jobTitles: config.jobTitles,
-          stepCompleted: 1 // Keep at step 1 until user clicks Next
-        }, true); // Pass true for silent save
-      }
-    }, 2000); // Auto-save after 2 seconds of inactivity
-
-    return () => clearTimeout(saveTimeout);
-  }, [config.workLocationTypes, config.remoteLocations, config.onsiteLocations, config.jobTypes, config.jobTitles]);
 
   const handleJobTypeToggle = (type: string) => {
     const newJobTypes = config.jobTypes.includes(type) 
@@ -299,11 +275,6 @@ const CopilotSetup = () => {
                 <p className="text-sm text-gray-700 mt-4">
                   First, select the Work Location and Jobs you are looking for
                 </p>
-                {config.id && (
-                  <p className="text-xs text-green-600 mt-2">
-                    ✓ Auto-saving your progress
-                  </p>
-                )}
               </div>
             </div>
 

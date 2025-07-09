@@ -159,8 +159,21 @@ const CopilotFilters = () => {
   useEffect(() => {
     if (isInitialized && config) {
       setCurrentStep(Math.max(config.stepCompleted || 1, 2));
-      // Load any saved filter data if exists
-      // You can extend this to load saved filter preferences
+      // Load saved filter data if exists
+      if (config.filtersData) {
+        setIncreaseJobMatch(config.filtersData.increaseJobMatch ?? true);
+        setJobMatchLevel(config.filtersData.jobMatchLevel ?? 'High');
+        setSeniorityLevels(config.filtersData.seniorityLevels ?? ['Entry Level']);
+        setTimeZone(config.filtersData.timeZone ?? 'Flexible');
+        setIndustry(config.filtersData.industry ?? 'Information Technology (IT)');
+        setIncludeUnknownIndustry(config.filtersData.includeUnknownIndustry ?? true);
+        setShowAdvancedFilters(config.filtersData.showAdvancedFilters ?? false);
+        setJobDescriptionLanguage(config.filtersData.jobDescriptionLanguage ?? '');
+        setLocationRadius(config.filtersData.locationRadius ?? '');
+        setIncludeKeywords(config.filtersData.includeKeywords ?? '');
+        setExcludeKeywords(config.filtersData.excludeKeywords ?? '');
+        setExcludeCompanies(config.filtersData.excludeCompanies ?? '');
+      }
     }
   }, [isInitialized, config]);
 
@@ -187,11 +200,27 @@ const CopilotFilters = () => {
     
     setIsLoading(true);
     
-    // Save current step progress
+    // Prepare filter data to save
+    const filtersData = {
+      increaseJobMatch,
+      jobMatchLevel,
+      seniorityLevels,
+      timeZone,
+      industry,
+      includeUnknownIndustry,
+      showAdvancedFilters,
+      jobDescriptionLanguage,
+      locationRadius,
+      includeKeywords,
+      excludeKeywords,
+      excludeCompanies
+    };
+    
+    // Save current step progress with filter data
     const nextStep = Math.min(currentStep + 1, 4);
     const success = await saveConfig({ 
       stepCompleted: nextStep,
-      // Save any additional filter data here if needed
+      filtersData
     });
     
     if (success) {
@@ -209,8 +238,25 @@ const CopilotFilters = () => {
   };
 
   const handleSaveAndClose = async () => {
+    // Prepare filter data to save
+    const filtersData = {
+      increaseJobMatch,
+      jobMatchLevel,
+      seniorityLevels,
+      timeZone,
+      industry,
+      includeUnknownIndustry,
+      showAdvancedFilters,
+      jobDescriptionLanguage,
+      locationRadius,
+      includeKeywords,
+      excludeKeywords,
+      excludeCompanies
+    };
+
     const success = await saveConfig({ 
-      stepCompleted: Math.max(currentStep, config.stepCompleted || 1)
+      stepCompleted: Math.max(currentStep, config.stepCompleted || 1),
+      filtersData
     });
     if (success) {
       navigate('/home');

@@ -21,6 +21,14 @@ const CopilotFinalStep = () => {
   useEffect(() => {
     if (isInitialized && config) {
       setCurrentStep(Math.max(config.stepCompleted || 1, 4));
+      // Load saved final config data if exists
+      if (config.finalConfigData) {
+        setSelectedMode(config.finalConfigData.selectedMode ?? 'auto-apply');
+        setSentenceLength(config.finalConfigData.sentenceLength ?? 'balanced-mix');
+        setTone(config.finalConfigData.tone ?? 'neutral-casual');
+        setVocabularyComplexity(config.finalConfigData.vocabularyComplexity ?? 'simple-everyday');
+        setIsExpanded(config.finalConfigData.isExpanded ?? false);
+      }
     }
   }, [isInitialized, config]);
 
@@ -31,9 +39,19 @@ const CopilotFinalStep = () => {
   const handleSaveConfiguration = async () => {
     setIsLoading(true);
     
+    // Prepare final configuration data to save
+    const finalConfigData = {
+      selectedMode,
+      sentenceLength,
+      tone,
+      vocabularyComplexity,
+      isExpanded
+    };
+    
     // Save final configuration
     const success = await saveConfig({ 
-      stepCompleted: 4 // Mark as completed
+      stepCompleted: 4, // Mark as completed
+      finalConfigData
     });
     
     if (success) {

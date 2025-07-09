@@ -6,7 +6,7 @@ import { mapDatabaseToConfig, mapConfigToDatabase } from '@/utils/copilotUtils';
 export const loadAllConfigs = async (userId: string): Promise<CopilotConfig[]> => {
   const { data, error } = await supabase
     .from('copilot_configurations')
-    .select('id, user_id, work_location_types, remote_locations, onsite_locations, job_types, job_titles, step_completed, created_at, updated_at')
+    .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 

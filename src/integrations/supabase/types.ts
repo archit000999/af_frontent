@@ -56,11 +56,17 @@ export type Database = {
       copilot_configurations: {
         Row: {
           created_at: string
+          filters_data: Json | null
+          final_config_data: Json | null
           id: string
           job_titles: string[] | null
           job_types: string[] | null
           onsite_locations: string[] | null
+          personal_info: Json | null
           remote_locations: string[] | null
+          resume_file_name: string | null
+          resume_file_url: string | null
+          screening_data: Json | null
           step_completed: number | null
           updated_at: string
           user_id: string
@@ -68,11 +74,17 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          filters_data?: Json | null
+          final_config_data?: Json | null
           id?: string
           job_titles?: string[] | null
           job_types?: string[] | null
           onsite_locations?: string[] | null
+          personal_info?: Json | null
           remote_locations?: string[] | null
+          resume_file_name?: string | null
+          resume_file_url?: string | null
+          screening_data?: Json | null
           step_completed?: number | null
           updated_at?: string
           user_id: string
@@ -80,11 +92,17 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          filters_data?: Json | null
+          final_config_data?: Json | null
           id?: string
           job_titles?: string[] | null
           job_types?: string[] | null
           onsite_locations?: string[] | null
+          personal_info?: Json | null
           remote_locations?: string[] | null
+          resume_file_name?: string | null
+          resume_file_url?: string | null
+          screening_data?: Json | null
           step_completed?: number | null
           updated_at?: string
           user_id?: string
