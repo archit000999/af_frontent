@@ -1,7 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -34,23 +33,17 @@ serve(async (req) => {
       });
     }
 
-    const { planType } = requestBody;
+    const { planType, userEmail } = requestBody;
     console.log("Plan type requested:", planType);
+    console.log("User email:", userEmail);
 
-    // Get authorization header
-    const authHeader = req.headers.get("Authorization");
-    console.log("=== AUTHORIZATION CHECK ===");
-    console.log("Authorization header present:", !!authHeader);
-    
-    if (!authHeader) {
-      console.error("❌ No authorization header provided");
-      return new Response(JSON.stringify({ error: "No authorization header provided" }), {
+    if (!userEmail) {
+      console.error("❌ No user email provided");
+      return new Response(JSON.stringify({ error: "User email is required" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 401,
+        status: 400,
       });
     }
-
-    console.log("Authorization header format:", authHeader.startsWith("Bearer ") ? "✅ Correct Bearer format" : "❌ Invalid format");
 
     // Get Stripe secret key
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
@@ -62,25 +55,7 @@ serve(async (req) => {
       });
     }
 
-    // Create Supabase client
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-    );
-
-    // Get user from auth token
-    const token = authHeader.replace("Bearer ", "");
-    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
-    if (userError || !userData.user?.email) {
-      console.error("❌ User authentication failed:", userError);
-      return new Response(JSON.stringify({ error: "Authentication failed" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 401,
-      });
-    }
-
-    const user = userData.user;
-    console.log("✅ User authenticated:", user.email);
+    console.log("✅ Stripe key configured");
 
     // Initialize Stripe
     const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
@@ -111,7 +86,7 @@ serve(async (req) => {
     console.log("✅ Plan selected:", selectedPlan);
 
     // Check if customer exists
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+    const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
     let customerId;
     
     if (customers.data.length > 0) {
@@ -119,9 +94,9 @@ serve(async (req) => {
       console.log("✅ Existing customer found:", customerId);
     } else {
       const customer = await stripe.customers.create({
-        email: user.email,
+        email: userEmail,
         metadata: {
-          user_id: user.id
+          user_email: userEmail
         }
       });
       customerId = customer.id;
@@ -151,8 +126,7 @@ serve(async (req) => {
       success_url: `${req.headers.get("origin")}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/payment`,
       metadata: {
-        user_id: user.id,
-        user_email: user.email,
+        user_email: userEmail,
         plan_type: planType,
         plan_name: selectedPlan.name,
       },
@@ -166,8 +140,7 @@ serve(async (req) => {
         event_type: "checkout_session_created",
         session_id: session.id,
         customer_id: customerId,
-        user_id: user.id,
-        user_email: user.email,
+        user_email: userEmail,
         plan_type: planType,
         plan_name: selectedPlan.name,
         amount: selectedPlan.price,

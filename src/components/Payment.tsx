@@ -73,7 +73,10 @@ const Payment = () => {
       console.log("Creating checkout session for user:", user.emailAddresses[0]?.emailAddress);
       
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { planType }
+        body: { 
+          planType,
+          userEmail: user.emailAddresses[0]?.emailAddress
+        }
       });
 
       if (error) {
