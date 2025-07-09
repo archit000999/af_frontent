@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -25,62 +24,97 @@ export const useCopilotConfig = () => {
     jobTitles: [],
     stepCompleted: 1
   });
+  const [allConfigs, setAllConfigs] = useState<CopilotConfig[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load existing configuration on mount
+  // Load all existing configurations on mount
   useEffect(() => {
     if (user && !isInitialized) {
-      loadConfig();
+      loadAllConfigs();
     }
   }, [user, isInitialized]);
 
-  const loadConfig = async () => {
+  const loadAllConfigs = async () => {
     if (!user) return;
     
     setIsLoading(true);
     try {
-      // Load the most recent configuration (for display purposes)
+      // Load all configurations for the user
       const { data, error } = await supabase
         .from('copilot_configurations')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error loading config:', error);
+        console.error('Error loading configs:', error);
         toast({
           title: "Error",
-          description: "Failed to load your configuration",
+          description: "Failed to load your configurations",
           variant: "destructive"
         });
         return;
       }
 
-      if (data) {
-        setConfig({
-          id: data.id,
-          workLocationTypes: data.work_location_types || [],
-          remoteLocations: data.remote_locations || [],
-          onsiteLocations: data.onsite_locations || [],
-          jobTypes: data.job_types || [],
-          jobTitles: data.job_titles || [],
-          stepCompleted: data.step_completed || 1
-        });
+      const configs = data?.map(item => ({
+        id: item.id,
+        workLocationTypes: item.work_location_types || [],
+        remoteLocations: item.remote_locations || [],
+        onsiteLocations: item.onsite_locations || [],
+        jobTypes: item.job_types || [],
+        jobTitles: item.job_titles || [],
+        stepCompleted: item.step_completed || 1
+      })) || [];
+
+      setAllConfigs(configs);
+
+      // Set the most recent config as current
+      if (configs.length > 0) {
+        setConfig(configs[0]);
       }
     } catch (error) {
-      console.error('Error loading config:', error);
+      console.error('Error loading configs:', error);
       toast({
         title: "Error",
-        description: "Failed to load your configuration",
+        description: "Failed to load your configurations",
         variant: "destructive"
       });
     } finally {
       setIsLoading(false);
       setIsInitialized(true);
     }
+  };
+
+  const loadConfig = async () => {
+    // This method is kept for compatibility but now just calls loadAllConfigs
+    await loadAllConfigs();
+  };
+
+  const canCreateNewCopilot = () => {
+    return allConfigs.length < 2;
+  };
+
+  const createNewCopilot = () => {
+    if (!canCreateNewCopilot()) {
+      toast({
+        title: "Limit Reached",
+        description: "You can only create up to 2 copilot configurations",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    // Reset to fresh state for new copilot
+    setConfig({
+      workLocationTypes: [],
+      remoteLocations: [],
+      onsiteLocations: [],
+      jobTypes: [],
+      jobTitles: [],
+      stepCompleted: 1
+    });
+    return true;
   };
 
   const saveConfig = async (updatedConfig?: Partial<CopilotConfig>) => {
@@ -117,7 +151,17 @@ export const useCopilotConfig = () => {
           .select()
           .single();
       } else {
-        // Create new configuration (always creates a new record for new copilots)
+        // Check limit before creating new
+        if (!canCreateNewCopilot()) {
+          toast({
+            title: "Limit Reached",
+            description: "You can only create up to 2 copilot configurations",
+            variant: "destructive"
+          });
+          return false;
+        }
+
+        // Create new configuration
         result = await supabase
           .from('copilot_configurations')
           .insert([configData])
@@ -136,7 +180,7 @@ export const useCopilotConfig = () => {
       }
 
       // Update local state with saved data
-      setConfig({
+      const savedConfig = {
         id: result.data.id,
         workLocationTypes: result.data.work_location_types || [],
         remoteLocations: result.data.remote_locations || [],
@@ -144,7 +188,12 @@ export const useCopilotConfig = () => {
         jobTypes: result.data.job_types || [],
         jobTitles: result.data.job_titles || [],
         stepCompleted: result.data.step_completed || 1
-      });
+      };
+
+      setConfig(savedConfig);
+
+      // Refresh all configs to keep them in sync
+      await loadAllConfigs();
 
       toast({
         title: "Success",
@@ -168,11 +217,23 @@ export const useCopilotConfig = () => {
     setConfig(prev => ({ ...prev, ...updates }));
   };
 
+  const switchToConfig = (configId: string) => {
+    const foundConfig = allConfigs.find(c => c.id === configId);
+    if (foundConfig) {
+      setConfig(foundConfig);
+    }
+  };
+
   return {
     config,
+    allConfigs,
     updateConfig,
     saveConfig,
     loadConfig,
+    loadAllConfigs,
+    createNewCopilot,
+    canCreateNewCopilot,
+    switchToConfig,
     isLoading,
     isInitialized
   };

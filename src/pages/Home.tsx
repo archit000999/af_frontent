@@ -11,33 +11,38 @@ import { useEffect, useState } from 'react';
 const Home = () => {
   const { user } = useUser();
   const navigate = useNavigate();
-  const { config, updateConfig, saveConfig, isInitialized, isLoading } = useCopilotConfig();
-  const [copilotStatus, setCopilotStatus] = useState(false);
+  const { 
+    config, 
+    allConfigs, 
+    createNewCopilot, 
+    canCreateNewCopilot, 
+    switchToConfig, 
+    isInitialized, 
+    isLoading 
+  } = useCopilotConfig();
+  const [copilotStatuses, setCopilotStatuses] = useState<{[key: string]: boolean}>({});
 
   const handleSetupCopilot = () => {
-    // Completely clear all configuration data for a fresh start
-    updateConfig({
-      id: undefined, // Remove any existing ID to force creation of new record
-      workLocationTypes: [],
-      remoteLocations: [],
-      onsiteLocations: [],
-      jobTypes: [],
-      jobTitles: [],
-      stepCompleted: 1
-    });
-    
-    // Clear any cached configuration data from localStorage
-    localStorage.removeItem('copilot-config-draft');
-    localStorage.removeItem('copilot-config');
-    
-    // Navigate to setup with fresh state
-    navigate('/copilot-setup');
+    if (createNewCopilot()) {
+      // Clear any cached configuration data from localStorage
+      localStorage.removeItem('copilot-config-draft');
+      localStorage.removeItem('copilot-config');
+      
+      // Navigate to setup with fresh state
+      navigate('/copilot-setup');
+    }
   };
 
-  const handleEditConfiguration = () => {
+  const handleEditConfiguration = (configId?: string) => {
+    const targetConfig = configId ? allConfigs.find(c => c.id === configId) : config;
+    
+    if (configId && targetConfig) {
+      switchToConfig(configId);
+    }
+    
     // Navigate to the appropriate step based on where user left off
-    if (config && config.stepCompleted) {
-      switch (config.stepCompleted) {
+    if (targetConfig && targetConfig.stepCompleted) {
+      switch (targetConfig.stepCompleted) {
         case 1:
           navigate('/copilot-setup');
           break;
@@ -58,8 +63,15 @@ const Home = () => {
     }
   };
 
-  // Check if user has a saved configuration
-  const hasConfiguration = config && config.jobTitles && config.jobTitles.length > 0;
+  const handleCopilotStatusToggle = (configId: string, status: boolean) => {
+    setCopilotStatuses(prev => ({
+      ...prev,
+      [configId]: status
+    }));
+  };
+
+  // Check if user has any saved configurations
+  const hasConfigurations = allConfigs.length > 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
@@ -123,109 +135,146 @@ const Home = () => {
             Automate Job Applications
           </h1>
 
-          {/* Configuration Display or Setup Card */}
+          {/* Loading State */}
           {isLoading ? (
             <Card className="mb-8 border-0 shadow-lg bg-white">
               <CardContent className="p-8">
-                <div className="text-center text-gray-500">Loading configuration...</div>
+                <div className="text-center text-gray-500">Loading configurations...</div>
               </CardContent>
             </Card>
-          ) : hasConfiguration ? (
-            // Show saved configuration
-            <div className="flex gap-4 mb-8">
-              {/* Configuration Card */}
-              <Card className="flex-1 border-2 border-purple-200 shadow-lg bg-white">
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    {/* Job Title */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {config.jobTitles[0]}
-                        {config.jobTitles.length > 1 && (
-                          <span className="text-sm text-gray-500 font-normal">
-                            {" "}+ {config.jobTitles.length - 1} more
-                          </span>
-                        )}
-                      </h3>
-                    </div>
-
-                    {/* Location */}
-                    <div className="flex items-center space-x-2 text-gray-600">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm">
-                        {config.workLocationTypes.includes('remote') && config.remoteLocations.includes('Worldwide') 
-                          ? 'Anywhere in the World'
-                          : config.workLocationTypes.includes('remote') && config.remoteLocations.length > 0
-                          ? `Remote: ${config.remoteLocations.join(', ')}`
-                          : config.workLocationTypes.includes('onsite') && config.onsiteLocations.length > 0
-                          ? `On-site: ${config.onsiteLocations.join(', ')}`
-                          : 'Location not specified'
-                        }
-                      </span>
-                    </div>
-
-                    {/* Job Types */}
-                    <div className="flex items-center space-x-2 text-gray-600">
-                      <Briefcase className="w-4 h-4" />
-                      <span className="text-sm">
-                        {config.jobTypes.includes('fulltime') ? 'Auto-Apply Jobs' : 
-                         config.jobTypes.join(', ').replace(/fulltime/g, 'Full-time').replace(/parttime/g, 'Part-time').replace(/contractor/g, 'Contract').replace(/internship/g, 'Internship')}
-                      </span>
-                    </div>
-
-                    {/* Time Zone */}
-                    <div className="flex items-center space-x-2 text-gray-600">
-                      <Clock className="w-4 h-4" />
-                      <span className="text-sm">Time Zone</span>
-                    </div>
-
-                    {/* Status and Controls */}
-                    <div className="pt-4 border-t border-gray-100">
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="text-sm font-medium text-gray-900">Copilot Status:</span>
-                        <span className={`text-sm font-medium ${copilotStatus ? 'text-green-600' : 'text-gray-400'}`}>
-                          {copilotStatus ? 'ON' : 'OFF'}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <Switch
-                            checked={copilotStatus}
-                            onCheckedChange={setCopilotStatus}
-                            className="data-[state=checked]:bg-purple-600"
-                          />
-                          <span className="text-xs text-gray-400">OFF</span>
+          ) : hasConfigurations ? (
+            // Show all copilot configurations
+            <div className="space-y-4 mb-8">
+              {allConfigs.map((copilotConfig, index) => (
+                <div key={copilotConfig.id} className="flex gap-4">
+                  {/* Configuration Card */}
+                  <Card className="flex-1 border-2 border-purple-200 shadow-lg bg-white">
+                    <CardContent className="p-6">
+                      <div className="space-y-4">
+                        {/* Copilot Number and Job Title */}
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm text-gray-500 font-medium">
+                              Copilot #{index + 1}
+                            </span>
+                            <span className={`text-xs px-2 py-1 rounded-full ${
+                              copilotConfig.stepCompleted === 4 
+                                ? 'bg-green-100 text-green-700' 
+                                : 'bg-yellow-100 text-yellow-700'
+                            }`}>
+                              {copilotConfig.stepCompleted === 4 ? 'Complete' : `Step ${copilotConfig.stepCompleted} of 4`}
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-semibold text-gray-900">
+                            {copilotConfig.jobTitles && copilotConfig.jobTitles.length > 0 ? (
+                              <>
+                                {copilotConfig.jobTitles[0]}
+                                {copilotConfig.jobTitles.length > 1 && (
+                                  <span className="text-sm text-gray-500 font-normal">
+                                    {" "}+ {copilotConfig.jobTitles.length - 1} more
+                                  </span>
+                                )}
+                              </>
+                            ) : (
+                              <span className="text-gray-500">Job titles not set</span>
+                            )}
+                          </h3>
                         </div>
-                        
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={handleEditConfiguration}
-                          className="flex items-center space-x-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
-                        >
-                          <Edit className="w-4 h-4" />
-                          <span className="text-sm">Edit Configuration</span>
-                        </Button>
+
+                        {/* Location */}
+                        <div className="flex items-center space-x-2 text-gray-600">
+                          <MapPin className="w-4 h-4" />
+                          <span className="text-sm">
+                            {copilotConfig.workLocationTypes.includes('remote') && copilotConfig.remoteLocations.includes('Worldwide') 
+                              ? 'Anywhere in the World'
+                              : copilotConfig.workLocationTypes.includes('remote') && copilotConfig.remoteLocations.length > 0
+                              ? `Remote: ${copilotConfig.remoteLocations.join(', ')}`
+                              : copilotConfig.workLocationTypes.includes('onsite') && copilotConfig.onsiteLocations.length > 0
+                              ? `On-site: ${copilotConfig.onsiteLocations.join(', ')}`
+                              : 'Location not specified'
+                            }
+                          </span>
+                        </div>
+
+                        {/* Job Types */}
+                        <div className="flex items-center space-x-2 text-gray-600">
+                          <Briefcase className="w-4 h-4" />
+                          <span className="text-sm">
+                            {copilotConfig.jobTypes && copilotConfig.jobTypes.length > 0 
+                              ? copilotConfig.jobTypes.includes('fulltime') ? 'Auto-Apply Jobs' : 
+                                copilotConfig.jobTypes.join(', ').replace(/fulltime/g, 'Full-time').replace(/parttime/g, 'Part-time').replace(/contractor/g, 'Contract').replace(/internship/g, 'Internship')
+                              : 'Job types not specified'
+                            }
+                          </span>
+                        </div>
+
+                        {/* Time Zone */}
+                        <div className="flex items-center space-x-2 text-gray-600">
+                          <Clock className="w-4 h-4" />
+                          <span className="text-sm">Time Zone</span>
+                        </div>
+
+                        {/* Status and Controls */}
+                        <div className="pt-4 border-t border-gray-100">
+                          <div className="flex items-center justify-between mb-4">
+                            <span className="text-sm font-medium text-gray-900">Copilot Status:</span>
+                            <span className={`text-sm font-medium ${
+                              copilotStatuses[copilotConfig.id || ''] ? 'text-green-600' : 'text-gray-400'
+                            }`}>
+                              {copilotStatuses[copilotConfig.id || ''] ? 'ON' : 'OFF'}
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <Switch
+                                checked={copilotStatuses[copilotConfig.id || ''] || false}
+                                onCheckedChange={(checked) => handleCopilotStatusToggle(copilotConfig.id || '', checked)}
+                                className="data-[state=checked]:bg-purple-600"
+                              />
+                              <span className="text-xs text-gray-400">OFF</span>
+                            </div>
+                            
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleEditConfiguration(copilotConfig.id)}
+                              className="flex items-center space-x-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                            >
+                              <Edit className="w-4 h-4" />
+                              <span className="text-sm">Edit Configuration</span>
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
 
               {/* New Copilot Button */}
-              <div className="flex flex-col justify-center">
-                <Button 
-                  variant="outline"
-                  onClick={handleSetupCopilot}
-                  className="px-6 py-3 border-2 border-purple-300 text-purple-600 hover:bg-purple-50 font-medium"
-                >
-                  + New Copilot
-                </Button>
-              </div>
+              {canCreateNewCopilot() && (
+                <div className="flex justify-center pt-4">
+                  <Button 
+                    variant="outline"
+                    onClick={handleSetupCopilot}
+                    className="px-6 py-3 border-2 border-purple-300 text-purple-600 hover:bg-purple-50 font-medium"
+                  >
+                    + New Copilot ({allConfigs.length}/2)
+                  </Button>
+                </div>
+              )}
+
+              {!canCreateNewCopilot() && (
+                <div className="flex justify-center pt-4">
+                  <div className="text-sm text-gray-500">
+                    Maximum 2 copilots reached. Edit existing ones above.
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
-            // Show setup card if no configuration
+            // Show setup card if no configurations
             <Card className="mb-8 border-0 shadow-lg bg-white">
               <CardContent className="p-8">
                 <Button 

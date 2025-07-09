@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -78,7 +79,7 @@ const POPULAR_JOB_TITLES = [
 
 const CopilotSetup = () => {
   const navigate = useNavigate();
-  const { config, updateConfig, saveConfig, isLoading: configLoading, isInitialized } = useCopilotConfig();
+  const { config, updateConfig, saveConfig, canCreateNewCopilot, isLoading: configLoading, isInitialized } = useCopilotConfig();
   const [isLoading, setIsLoading] = useState(false);
   const [currentLocationDialogType, setCurrentLocationDialogType] = useState<'remote' | 'onsite'>('remote');
   const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);
@@ -96,21 +97,8 @@ const CopilotSetup = () => {
   // Always show step 1 for fresh setup - don't use saved stepCompleted
   const currentStep = 1;
 
-  // Clear any existing form state when component mounts for fresh setup
-  useEffect(() => {
-    if (isInitialized && (!config.id || config.stepCompleted === 1)) {
-      // If we're starting fresh or on step 1, ensure completely clean state
-      updateConfig({
-        id: undefined,
-        workLocationTypes: [],
-        remoteLocations: [],
-        onsiteLocations: [],
-        jobTypes: [],
-        jobTitles: [],
-        stepCompleted: 1
-      });
-    }
-  }, [isInitialized]);
+  // Check if we're creating a new copilot or editing existing one
+  const isNewCopilot = !config.id;
 
   const handleJobTypeToggle = (type: string) => {
     const newJobTypes = config.jobTypes.includes(type) 
@@ -186,6 +174,11 @@ const CopilotSetup = () => {
 
   const handleNext = async () => {
     if (validateForm()) {
+      // Check if creating new copilot and we've reached the limit
+      if (isNewCopilot && !canCreateNewCopilot()) {
+        return;
+      }
+
       setIsLoading(true);
       
       // Save current progress with step 2 (next step)
@@ -212,6 +205,11 @@ const CopilotSetup = () => {
   };
 
   const handleSaveAndClose = async () => {
+    // Check if creating new copilot and we've reached the limit
+    if (isNewCopilot && !canCreateNewCopilot()) {
+      return;
+    }
+
     // Save current state with step 1 (current step)
     const success = await saveConfig({
       stepCompleted: 1,
@@ -294,7 +292,7 @@ const CopilotSetup = () => {
             <div className="flex-shrink-0 p-8 pb-4">
               <div className="text-center">
                 <h1 className="text-base font-semibold text-gray-900">
-                  Copilot Configuration
+                  {isNewCopilot ? 'New Copilot Configuration' : 'Edit Copilot Configuration'}
                 </h1>
                 <p className="text-sm text-gray-600 mt-2">Step {currentStep} of 4</p>
                 <p className="text-sm text-gray-700 mt-4">
@@ -634,7 +632,8 @@ const CopilotSetup = () => {
                     config.jobTitles.length === 0 || 
                     (config.workLocationTypes.includes('remote') && config.remoteLocations.length === 0) ||
                     (config.workLocationTypes.includes('onsite') && config.onsiteLocations.length === 0) ||
-                    configLoading
+                    configLoading ||
+                    (isNewCopilot && !canCreateNewCopilot())
                   }
                 >
                   <span>Next: Optional Filters</span>
