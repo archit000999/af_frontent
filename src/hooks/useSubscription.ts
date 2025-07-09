@@ -8,6 +8,8 @@ interface SubscriptionStatus {
   planType: 'premium' | 'elite' | null;
   maxCopilots: number;
   isLoading: boolean;
+  subscriptionId: string | null;
+  currentPeriodEnd: string | null;
 }
 
 export const useSubscription = () => {
@@ -16,7 +18,9 @@ export const useSubscription = () => {
     isSubscribed: false,
     planType: null,
     maxCopilots: 1, // Allow 1 copilot for free users
-    isLoading: true
+    isLoading: true,
+    subscriptionId: null,
+    currentPeriodEnd: null
   });
 
   useEffect(() => {
@@ -31,7 +35,7 @@ export const useSubscription = () => {
     try {
       const { data, error } = await supabase
         .from('payments')
-        .select('plan_type, status')
+        .select('plan_type, status, stripe_subscription_id, created_at')
         .eq('user_email', user.emailAddresses[0].emailAddress)
         .eq('status', 'completed')
         .order('created_at', { ascending: false })
@@ -42,28 +46,49 @@ export const useSubscription = () => {
         setSubscriptionStatus({
           isSubscribed: false,
           planType: null,
-          maxCopilots: 0,
-          isLoading: false
+          maxCopilots: 1,
+          isLoading: false,
+          subscriptionId: null,
+          currentPeriodEnd: null
         });
         return;
       }
 
       if (data && data.length > 0) {
-        const planType = data[0].plan_type as 'premium' | 'elite';
-        const maxCopilots = planType === 'premium' ? 1 : planType === 'elite' ? 2 : 0;
+        const latestPayment = data[0];
+        const planType = latestPayment.plan_type as 'premium' | 'elite';
+        
+        // Determine max copilots based on plan
+        let maxCopilots = 1;
+        if (planType === 'premium') {
+          maxCopilots = 1;
+        } else if (planType === 'elite') {
+          maxCopilots = 2;
+        }
+        
+        console.log('Subscription found:', {
+          planType,
+          maxCopilots,
+          subscriptionId: latestPayment.stripe_subscription_id
+        });
         
         setSubscriptionStatus({
           isSubscribed: true,
           planType,
           maxCopilots,
-          isLoading: false
+          isLoading: false,
+          subscriptionId: latestPayment.stripe_subscription_id,
+          currentPeriodEnd: null // We could fetch this from Stripe if needed
         });
       } else {
+        console.log('No completed payments found, setting as free user');
         setSubscriptionStatus({
           isSubscribed: false,
           planType: null,
           maxCopilots: 1, // Allow 1 copilot for free users
-          isLoading: false
+          isLoading: false,
+          subscriptionId: null,
+          currentPeriodEnd: null
         });
       }
     } catch (error) {
@@ -72,13 +97,20 @@ export const useSubscription = () => {
         isSubscribed: false,
         planType: null,
         maxCopilots: 1, // Allow 1 copilot for free users
-        isLoading: false
+        isLoading: false,
+        subscriptionId: null,
+        currentPeriodEnd: null
       });
     }
   };
 
+  const refreshSubscription = async () => {
+    console.log('Refreshing subscription status...');
+    await checkSubscriptionStatus();
+  };
+
   return {
     ...subscriptionStatus,
-    refreshSubscription: checkSubscriptionStatus
+    refreshSubscription
   };
 };

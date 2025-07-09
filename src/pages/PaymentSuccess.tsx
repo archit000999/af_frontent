@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle, ArrowRight, Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useSubscription } from '@/hooks/useSubscription';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { refreshSubscription } = useSubscription();
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(true);
 
@@ -40,6 +42,11 @@ const PaymentSuccess = () => {
         });
       } else {
         console.log('Payment success processed:', data);
+        
+        // Refresh subscription status to update the UI
+        console.log('Refreshing subscription status after successful payment...');
+        await refreshSubscription();
+        
         toast({
           title: "Payment Successful!",
           description: "Your subscription has been activated. Welcome to JobCopilot Premium!",
@@ -80,7 +87,7 @@ const PaymentSuccess = () => {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <div className="flex items-center space-x-2">
                   <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-blue-700">Processing your payment...</span>
+                  <span className="text-blue-700">Processing your payment and updating your subscription...</span>
                 </div>
               </div>
             )}

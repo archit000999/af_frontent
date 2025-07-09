@@ -1,4 +1,3 @@
-
 import { UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, Settings, MapPin, Clock, Briefcase, Edit, Crown } from 'lucide-react';
@@ -12,7 +11,7 @@ import UpgradeDialog from '@/components/UpgradeDialog';
 const Home = () => {
   const { user } = useUser();
   const navigate = useNavigate();
-  const { isSubscribed, planType, maxCopilots, isLoading: subscriptionLoading } = useSubscription();
+  const { isSubscribed, planType, maxCopilots, isLoading: subscriptionLoading, refreshSubscription } = useSubscription();
   const { 
     config, 
     allConfigs, 
@@ -25,6 +24,13 @@ const Home = () => {
   const [copilotStatuses, setCopilotStatuses] = useState<{[key: string]: boolean}>({});
   const [isUpgradeDialogOpen, setIsUpgradeDialogOpen] = useState(false);
   const [upgradeDialogType, setUpgradeDialogType] = useState<'subscription' | 'elite'>('subscription');
+
+  // Refresh subscription status when component mounts or when returning from payment
+  useEffect(() => {
+    if (user) {
+      refreshSubscription();
+    }
+  }, [user, refreshSubscription]);
 
   const handleSetupCopilot = () => {
     // Check if user is trying to create a second copilot without Elite plan
@@ -118,7 +124,6 @@ const Home = () => {
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-2 text-purple-600 font-medium text-base">
-
               <span>Copilot</span>
             </div>
             <div 
@@ -156,6 +161,16 @@ const Home = () => {
         <div className="max-w-6xl">
           <div className="mb-12">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Copilots</h1>
+            
+            {/* Debug info for subscription status */}
+            {process.env.NODE_ENV === 'development' && (
+              <div className="mb-4 p-4 bg-gray-100 rounded-lg text-sm">
+                <strong>Debug Info:</strong> Subscribed: {isSubscribed ? 'Yes' : 'No'}, 
+                Plan: {planType || 'Free'}, 
+                Max Copilots: {maxCopilots},
+                Loading: {subscriptionLoading ? 'Yes' : 'No'}
+              </div>
+            )}
             
             {/* Copilot Configuration Section */}
             {(isLoading || subscriptionLoading) ? (
