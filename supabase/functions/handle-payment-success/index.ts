@@ -47,14 +47,28 @@ serve(async (req) => {
     );
 
     // Retrieve the checkout session
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ['subscription']
+    });
     console.log("✅ Retrieved session:", session.id);
 
     if (session.payment_status === 'paid') {
+      // Get subscription details if it's a subscription
+      let stripeSubscriptionId = null;
+      if (session.subscription && typeof session.subscription === 'object') {
+        stripeSubscriptionId = session.subscription.id;
+      } else if (typeof session.subscription === 'string') {
+        stripeSubscriptionId = session.subscription;
+      }
+
       // Update payment status in database
       const { error } = await supabase
         .from('payments')
-        .update({ status: 'completed' })
+        .update({ 
+          status: 'completed',
+          stripe_subscription_id: stripeSubscriptionId,
+          updated_at: new Date().toISOString()
+        })
         .eq('stripe_session_id', sessionId);
 
       if (error) {
@@ -70,7 +84,8 @@ serve(async (req) => {
 
     return new Response(JSON.stringify({ 
       success: true,
-      payment_status: session.payment_status 
+      payment_status: session.payment_status,
+      subscription_id: session.subscription
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
