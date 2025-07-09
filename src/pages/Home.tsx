@@ -2,15 +2,17 @@
 import { UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ChevronDown, Settings, MapPin, Clock, Briefcase, Edit } from 'lucide-react';
+import { ChevronDown, Settings, MapPin, Clock, Briefcase, Edit, Crown } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { useNavigate } from 'react-router-dom';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
+import { useSubscription } from '@/hooks/useSubscription';
 import { useEffect, useState } from 'react';
 
 const Home = () => {
   const { user } = useUser();
   const navigate = useNavigate();
+  const { isSubscribed, planType, maxCopilots, isLoading: subscriptionLoading } = useSubscription();
   const { 
     config, 
     allConfigs, 
@@ -19,10 +21,15 @@ const Home = () => {
     switchToConfig, 
     isInitialized, 
     isLoading 
-  } = useCopilotConfig();
+  } = useCopilotConfig(maxCopilots);
   const [copilotStatuses, setCopilotStatuses] = useState<{[key: string]: boolean}>({});
 
   const handleSetupCopilot = () => {
+    if (!isSubscribed) {
+      navigate('/payment');
+      return;
+    }
+
     if (createNewCopilot()) {
       // Clear any cached configuration data from localStorage
       localStorage.removeItem('copilot-config-draft');
@@ -73,6 +80,17 @@ const Home = () => {
   // Check if user has any saved configurations
   const hasConfigurations = allConfigs.length > 0;
 
+  const getPlanDisplayName = () => {
+    switch (planType) {
+      case 'premium':
+        return 'Premium';
+      case 'elite':
+        return 'Elite';
+      default:
+        return 'Free';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
       {/* Header */}
@@ -116,6 +134,12 @@ const Home = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
+            {isSubscribed && (
+              <div className="flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-blue-100 px-3 py-1 rounded-full">
+                <Crown className="w-4 h-4 text-purple-600" />
+                <span className="text-sm font-medium text-purple-700">{getPlanDisplayName()}</span>
+              </div>
+            )}
             <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900" />
             <UserButton 
               appearance={{
@@ -136,7 +160,7 @@ const Home = () => {
           </h1>
 
           {/* Loading State */}
-          {isLoading ? (
+          {(isLoading || subscriptionLoading) ? (
             <Card className="mb-8 border-0 shadow-lg bg-white">
               <CardContent className="p-8">
                 <div className="text-center text-gray-500">Loading configurations...</div>
@@ -252,23 +276,33 @@ const Home = () => {
                 </div>
               ))}
 
-              {/* New Copilot Button */}
-              {canCreateNewCopilot() && (
+              {/* New Copilot Button or Upgrade Message */}
+              {canCreateNewCopilot() && isSubscribed ? (
                 <div className="flex justify-center pt-4">
                   <Button 
                     variant="outline"
                     onClick={handleSetupCopilot}
                     className="px-6 py-3 border-2 border-purple-300 text-purple-600 hover:bg-purple-50 font-medium"
                   >
-                    + New Copilot ({allConfigs.length}/2)
+                    + New Copilot ({allConfigs.length}/{maxCopilots})
                   </Button>
                 </div>
-              )}
-
-              {!canCreateNewCopilot() && (
+              ) : !isSubscribed ? (
+                <div className="flex flex-col items-center pt-4 space-y-2">
+                  <p className="text-sm text-gray-500 text-center">
+                    Upgrade to Premium or Elite to create more copilots
+                  </p>
+                  <Button 
+                    onClick={() => navigate('/payment')}
+                    className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-6 py-2"
+                  >
+                    Upgrade Now
+                  </Button>
+                </div>
+              ) : (
                 <div className="flex justify-center pt-4">
                   <div className="text-sm text-gray-500">
-                    Maximum 2 copilots reached. Edit existing ones above.
+                    Maximum {maxCopilots} copilot{maxCopilots > 1 ? 's' : ''} reached with your {getPlanDisplayName()} plan.
                   </div>
                 </div>
               )}
@@ -277,13 +311,26 @@ const Home = () => {
             // Show setup card if no configurations
             <Card className="mb-8 border-0 shadow-lg bg-white">
               <CardContent className="p-8">
-                <Button 
-                  onClick={handleSetupCopilot}
-                  className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 text-lg font-semibold rounded-full flex items-center justify-center sm:justify-start space-x-2"
-                >
-                  <span>Setup your first copilot</span>
-                  <span className="ml-2">→</span>
-                </Button>
+                {!isSubscribed ? (
+                  <div className="text-center space-y-4">
+                    <p className="text-gray-600 mb-4">Subscribe to start creating your copilots</p>
+                    <Button 
+                      onClick={() => navigate('/payment')}
+                      className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 text-lg font-semibold rounded-full flex items-center justify-center sm:justify-start space-x-2"
+                    >
+                      <span>Choose Your Plan</span>
+                      <span className="ml-2">→</span>
+                    </Button>
+                  </div>
+                ) : (
+                  <Button 
+                    onClick={handleSetupCopilot}
+                    className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 text-lg font-semibold rounded-full flex items-center justify-center sm:justify-start space-x-2"
+                  >
+                    <span>Setup your first copilot</span>
+                    <span className="ml-2">→</span>
+                  </Button>
+                )}
               </CardContent>
             </Card>
           )}

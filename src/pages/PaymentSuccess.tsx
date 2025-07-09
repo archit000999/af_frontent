@@ -5,25 +5,57 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, ArrowRight, Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(true);
 
   useEffect(() => {
     const session_id = searchParams.get('session_id');
     if (session_id) {
       setSessionId(session_id);
-      console.log('Payment successful for session:', session_id);
-      
-      toast({
-        title: "Payment Successful!",
-        description: "Your subscription has been activated. Welcome to JobCopilot Premium!",
-      });
+      handlePaymentSuccess(session_id);
     }
-  }, [searchParams, toast]);
+  }, [searchParams]);
+
+  const handlePaymentSuccess = async (sessionId: string) => {
+    try {
+      console.log('Processing payment success for session:', sessionId);
+      
+      // Call the handle-payment-success function
+      const { data, error } = await supabase.functions.invoke('handle-payment-success', {
+        body: { sessionId }
+      });
+
+      if (error) {
+        console.error('Error processing payment success:', error);
+        toast({
+          title: "Warning",
+          description: "Payment was successful but there was an issue updating your account. Please contact support if needed.",
+          variant: "destructive"
+        });
+      } else {
+        console.log('Payment success processed:', data);
+        toast({
+          title: "Payment Successful!",
+          description: "Your subscription has been activated. Welcome to JobCopilot Premium!",
+        });
+      }
+    } catch (error) {
+      console.error('Error processing payment success:', error);
+      toast({
+        title: "Warning",
+        description: "Payment was successful but there was an issue updating your account. Please contact support if needed.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 py-12 px-4">
@@ -44,6 +76,15 @@ const PaymentSuccess = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
+            {isProcessing && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-blue-700">Processing your payment...</span>
+                </div>
+              </div>
+            )}
+
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <h3 className="font-semibold text-green-800 mb-2">What happens next?</h3>
               <ul className="space-y-2 text-green-700">
@@ -82,11 +123,11 @@ const PaymentSuccess = () => {
                 Go to Dashboard
               </Button>
               <Button
-                onClick={() => navigate('/copilot-preview')}
+                onClick={() => navigate('/copilot-setup')}
                 variant="outline"
                 className="flex-1"
               >
-                View Your Copilot
+                Setup Your First Copilot
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>

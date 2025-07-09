@@ -13,7 +13,7 @@ interface CopilotConfig {
   stepCompleted: number;
 }
 
-export const useCopilotConfig = () => {
+export const useCopilotConfig = (maxCopilots: number = 0) => {
   const { user } = useUser();
   const { toast } = useToast();
   const [config, setConfig] = useState<CopilotConfig>({
@@ -92,14 +92,15 @@ export const useCopilotConfig = () => {
   };
 
   const canCreateNewCopilot = () => {
-    return allConfigs.length < 2;
+    return allConfigs.length < maxCopilots;
   };
 
   const createNewCopilot = () => {
     if (!canCreateNewCopilot()) {
+      const planName = maxCopilots === 1 ? 'Premium' : maxCopilots === 2 ? 'Elite' : 'Free';
       toast({
         title: "Limit Reached",
-        description: "You can only create up to 2 copilot configurations",
+        description: `You can only create up to ${maxCopilots} copilot configuration${maxCopilots > 1 ? 's' : ''} with your ${planName} plan`,
         variant: "destructive"
       });
       return false;
@@ -153,9 +154,10 @@ export const useCopilotConfig = () => {
       } else {
         // Check limit before creating new
         if (!canCreateNewCopilot()) {
+          const planName = maxCopilots === 1 ? 'Premium' : maxCopilots === 2 ? 'Elite' : 'Free';
           toast({
             title: "Limit Reached",
-            description: "You can only create up to 2 copilot configurations",
+            description: `You can only create up to ${maxCopilots} copilot configuration${maxCopilots > 1 ? 's' : ''} with your ${planName} plan`,
             variant: "destructive"
           });
           return false;
@@ -235,6 +237,7 @@ export const useCopilotConfig = () => {
     canCreateNewCopilot,
     switchToConfig,
     isLoading,
-    isInitialized
+    isInitialized,
+    maxCopilots
   };
 };
