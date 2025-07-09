@@ -75,12 +75,12 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         jobTypes: item.job_types || [],
         jobTitles: item.job_titles || [],
         stepCompleted: item.step_completed || 1,
-        filtersData: (item as any).filters_data || {},
-        screeningData: (item as any).screening_data || {},
-        finalConfigData: (item as any).final_config_data || {},
-        resumeFileName: (item as any).resume_file_name,
-        resumeFileUrl: (item as any).resume_file_url,
-        personalInfo: (item as any).personal_info || {}
+        filtersData: item.filters_data || {},
+        screeningData: item.screening_data || {},
+        finalConfigData: item.final_config_data || {},
+        resumeFileName: item.resume_file_name,
+        resumeFileUrl: item.resume_file_url,
+        personalInfo: item.personal_info || {}
       })) || [];
 
       setAllConfigs(configs);
@@ -273,12 +273,12 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         jobTypes: result.data.job_types || [],
         jobTitles: result.data.job_titles || [],
         stepCompleted: result.data.step_completed || 1,
-        filtersData: (result.data as any).filters_data || {},
-        screeningData: (result.data as any).screening_data || {},
-        finalConfigData: (result.data as any).final_config_data || {},
-        resumeFileName: (result.data as any).resume_file_name,
-        resumeFileUrl: (result.data as any).resume_file_url,
-        personalInfo: (result.data as any).personal_info || {}
+        filtersData: result.data.filters_data || {},
+        screeningData: result.data.screening_data || {},
+        finalConfigData: result.data.final_config_data || {},
+        resumeFileName: result.data.resume_file_name,
+        resumeFileUrl: result.data.resume_file_url,
+        personalInfo: result.data.personal_info || {}
       };
 
       setConfig(savedConfig);
