@@ -79,12 +79,20 @@ const Payment = () => {
         }
       });
 
+      console.log("=== CREATE CHECKOUT RESPONSE ===");
+      console.log("Error:", error);
+      console.log("Data:", data);
+      console.log("Data type:", typeof data);
+      console.log("Data URL:", data?.url);
+      console.log("===================================");
+
       if (error) {
         console.error('Checkout error:', error);
         throw new Error(error.message || 'Failed to create checkout session');
       }
 
       if (!data?.url) {
+        console.error('No checkout URL received. Full data:', JSON.stringify(data, null, 2));
         throw new Error('No checkout URL received');
       }
 
