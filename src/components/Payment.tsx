@@ -1,16 +1,14 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, ArrowLeft, Sparkles, Crown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@clerk/clerk-react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 const Payment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { getToken, isSignedIn } = useAuth();
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
   const plans = [
@@ -54,85 +52,26 @@ const Payment = () => {
   ];
 
   const handleUpgrade = async (planType: string) => {
-    console.log("=== FRONTEND PAYMENT FLOW STARTED ===");
     console.log("Plan type selected:", planType);
     
     setIsLoading(planType);
+    
     try {
-      // Check if user is signed in with Clerk
-      console.log("Checking Clerk authentication...");
-      console.log("User signed in:", isSignedIn);
+      // Placeholder for future payment integration
+      console.log("Payment integration will be implemented here");
       
-      if (!isSignedIn) {
-        console.error("❌ User not signed in");
-        toast({
-          title: "Authentication Required",
-          description: "Please log in to purchase a subscription.",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      // Get Clerk token
-      console.log("Getting Clerk token...");
-      const token = await getToken();
-      console.log("Token received:", !!token);
-      console.log("Token length:", token?.length || 0);
-      console.log("Token preview:", token ? token.substring(0, 20) + "..." : "No token");
-      
-      if (!token) {
-        console.error("❌ No token received from Clerk");
-        toast({
-          title: "Authentication Error",
-          description: "Unable to authenticate. Please try logging in again.",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      console.log("=== MAKING REQUEST TO CREATE-CHECKOUT ===");
-      console.log("Supabase URL:", "https://osuyeptufjtmqsydulmq.supabase.co");
-      console.log("Request payload:", { planType });
-      console.log("Authorization header will include Clerk token");
-      
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { planType },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      // Show a temporary message
+      toast({
+        title: "Coming Soon",
+        description: "Payment integration will be available soon!",
+        variant: "default"
       });
-
-      console.log("=== SUPABASE FUNCTION RESPONSE ===");
-      console.log("Error:", error);
-      console.log("Data:", data);
-
-      if (error) {
-        console.error("❌ Function invoke error:", error);
-        console.error("Error message:", error.message);
-        console.error("Error details:", error.details);
-        throw error;
-      }
-
-      if (data?.url) {
-        console.log("✅ Checkout URL received:", data.url);
-        console.log("Redirecting to Stripe checkout...");
-        window.location.href = data.url;
-      } else {
-        console.error("❌ No checkout URL in response");
-        console.error("Response data:", data);
-        throw new Error("No checkout URL received");
-      }
+      
     } catch (error) {
-      console.error('❌ Checkout error:', error);
-      console.error('Error type:', typeof error);
-      console.error('Error constructor:', error?.constructor?.name);
-      if (error instanceof Error) {
-        console.error('Error message:', error.message);
-        console.error('Error stack:', error.stack);
-      }
+      console.error('Error:', error);
       toast({
         title: "Error",
-        description: "Failed to start checkout process. Please try again.",
+        description: "Something went wrong. Please try again.",
         variant: "destructive"
       });
     } finally {
