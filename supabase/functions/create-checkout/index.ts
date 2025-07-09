@@ -11,6 +11,7 @@ const corsHeaders = {
 serve(async (req) => {
   console.log("=== CREATE CHECKOUT FUNCTION STARTED ===");
   console.log("Request method:", req.method);
+  console.log("Request headers:", Object.fromEntries(req.headers.entries()));
 
   if (req.method === "OPTIONS") {
     console.log("Handling OPTIONS request (CORS preflight)");
@@ -18,12 +19,26 @@ serve(async (req) => {
   }
 
   try {
-    const { planType, userEmail } = await req.json();
-    console.log("Creating checkout for plan:", planType);
-    console.log("User email:", userEmail);
+    console.log("Attempting to parse request body...");
+    const requestBody = await req.text();
+    console.log("Raw request body:", requestBody);
+    
+    if (!requestBody) {
+      console.error("❌ Empty request body");
+      return new Response(JSON.stringify({ error: "Empty request body" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
+    }
+
+    const { planType, userEmail } = JSON.parse(requestBody);
+    console.log("Parsed - Creating checkout for plan:", planType);
+    console.log("Parsed - User email:", userEmail);
 
     if (!planType || !userEmail) {
       console.error("❌ Plan type or user email not provided");
+      console.error("Plan type:", planType);
+      console.error("User email:", userEmail);
       return new Response(JSON.stringify({ error: "Plan type and user email are required" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 400,
@@ -32,6 +47,7 @@ serve(async (req) => {
 
     // Get Stripe secret key
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+    console.log("Stripe key exists:", !!stripeKey);
     if (!stripeKey) {
       console.error("❌ STRIPE_SECRET_KEY not configured");
       return new Response(JSON.stringify({ error: "Payment system not configured" }), {
