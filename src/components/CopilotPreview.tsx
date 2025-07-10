@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Settings, Loader2 } from 'lucide-react';
@@ -22,6 +21,7 @@ const CopilotPreview = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dataSource, setDataSource] = useState<string>('');
 
   const handleBack = () => {
     navigate('/copilot-final-step');
@@ -39,6 +39,7 @@ const CopilotPreview = () => {
 
       setIsLoading(true);
       setError(null);
+      setDataSource('');
 
       try {
         console.log('Fetching jobs with config:', config);
@@ -52,6 +53,8 @@ const CopilotPreview = () => {
           }
         });
 
+        console.log('Edge function response:', data);
+
         if (functionError) {
           console.error('Edge function error:', functionError);
           throw new Error(functionError.message || 'Failed to fetch jobs');
@@ -59,6 +62,10 @@ const CopilotPreview = () => {
 
         if (data && data.jobs) {
           setJobs(data.jobs);
+          setDataSource(data.source || 'unknown');
+          if (data.message) {
+            console.log('API message:', data.message);
+          }
         } else {
           throw new Error('No jobs data received');
         }
@@ -111,6 +118,7 @@ const CopilotPreview = () => {
             type: 'Fulltime'
           }
         ]);
+        setDataSource('fallback');
       } finally {
         setIsLoading(false);
       }
@@ -183,6 +191,24 @@ const CopilotPreview = () => {
             <p className="text-gray-600 max-w-2xl mx-auto">
               Based on your configuration, here's a preview of jobs that your ApplyFirst will automatically apply to
             </p>
+            
+            {/* Data Source Indicator */}
+            {dataSource && (
+              <div className="mt-4">
+                {dataSource === 'perplexity-api' ? (
+                  <div className="inline-flex items-center px-3 py-1 bg-green-50 border border-green-200 rounded-full">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                    <span className="text-sm text-green-700 font-medium">Live data from Perplexity AI</span>
+                  </div>
+                ) : dataSource === 'fallback' ? (
+                  <div className="inline-flex items-center px-3 py-1 bg-orange-50 border border-orange-200 rounded-full">
+                    <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+                    <span className="text-sm text-orange-700 font-medium">Sample data (API not available)</span>
+                  </div>
+                ) : null}
+              </div>
+            )}
+            
             {error && (
               <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
                 <p className="text-sm text-orange-600">
@@ -198,6 +224,7 @@ const CopilotPreview = () => {
               <div className="text-center">
                 <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-purple-600" />
                 <p className="text-gray-600">Fetching latest job opportunities...</p>
+                <p className="text-sm text-gray-500 mt-2">Connecting to Perplexity AI for real-time data</p>
               </div>
             </div>
           ) : (
