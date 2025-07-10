@@ -50,16 +50,14 @@ serve(async (req) => {
     }
 
     // Create a more specific search query
-    const searchQuery = `Find current ${jobTitles.join(' or ')} job openings that are ${locationContext}. Include company names, specific job titles, locations, and brief descriptions. Focus on legitimate companies actively hiring in July 2025. Provide real job listings with accurate company information.`;
-
-    console.log('Making Perplexity API call with query:', searchQuery);
+    const searchQuery = `Find current ${jobTitles.join(' or ')} job openings that are ${locationContext}. Include company names, specific job titles, locations, and brief descriptions. Focus on legitimate companies actively hiring in January 2025. Provide real job listings with accurate company information.`;
 
     const requestBody = {
       model: 'sonar',
       messages: [
         {
           role: 'system',
-          content: 'You are a job search assistant. Return ONLY a valid JSON array of job objects. Each job must have: title, company, location, type (always "Fulltime"), and description. Maximum 50 jobs. Do not include any explanatory text, markdown, or additional formatting - just the JSON array.'
+          content: 'You are a job search assistant. Return ONLY a valid JSON array of job objects. Each job must have: title, company, location, type (always "Fulltime"), and description. Maximum 30 jobs. Do not include any explanatory text, markdown, or additional formatting - just the JSON array.'
         },
         {
           role: 'user',
@@ -87,15 +85,9 @@ serve(async (req) => {
       body: JSON.stringify(requestBody),
     });
 
-    console.log('Perplexity API response status:', response.status);
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-
     const responseText = await response.text();
-    console.log('Raw response:', responseText);
 
     if (!response.ok) {
-      console.error(`Perplexity API error: ${response.status} - ${response.statusText}`);
-      console.error('Error response:', responseText);
       
       const fallbackJobs = createFallbackJobs(jobTitles[0] || 'Software Engineer', locationContext);
       return new Response(JSON.stringify({ 
@@ -117,7 +109,6 @@ serve(async (req) => {
     try {
       data = JSON.parse(responseText);
     } catch (parseError) {
-      console.error('Failed to parse API response as JSON:', parseError);
       const fallbackJobs = createFallbackJobs(jobTitles[0] || 'Software Engineer', locationContext);
       return new Response(JSON.stringify({ 
         jobs: fallbackJobs,
@@ -128,21 +119,17 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-
-    console.log('Parsed API response:', JSON.stringify(data, null, 2));
     
     let jobsData;
     
     try {
       const content = data.choices[0].message.content;
-      console.log('Raw content from Perplexity:', content);
       
       // Try to parse the response as JSON
       let parsedContent;
       try {
         parsedContent = JSON.parse(content);
       } catch (parseError) {
-        console.log('Direct JSON parse failed, trying to extract JSON...');
         // Try to extract JSON array from the response
         const jsonMatch = content.match(/\[[\s\S]*\]/);
         if (jsonMatch) {
@@ -154,20 +141,17 @@ serve(async (req) => {
       
       if (Array.isArray(parsedContent)) {
         jobsData = parsedContent;
-        console.log('Successfully parsed jobs data:', jobsData.length, 'jobs');
       } else {
         throw new Error('Parsed content is not an array');
       }
       
     } catch (parseError) {
-      console.error('Error parsing jobs data:', parseError);
-      console.log('Falling back to sample data');
+     
       jobsData = createFallbackJobs(jobTitles[0] || 'Software Engineer', locationContext);
     }
 
     // Ensure we have valid job data
     if (!Array.isArray(jobsData) || jobsData.length === 0) {
-      console.log('Invalid or empty jobs data, using fallback');
       jobsData = createFallbackJobs(jobTitles[0] || 'Software Engineer', locationContext);
     }
 
@@ -181,7 +165,6 @@ serve(async (req) => {
       description: job.description || `Join our team as a ${job.title || jobTitles[0]} and work on exciting projects.`
     }));
 
-    console.log('Final jobs data:', jobsData.length, 'jobs processed');
 
     return new Response(JSON.stringify({ 
       jobs: jobsData,
@@ -192,8 +175,6 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    console.error('Error in fetch-jobs function:', error);
-    console.error('Error stack:', error.stack);
     
     const fallbackJobs = createFallbackJobs('Software Engineer', 'various locations');
     return new Response(JSON.stringify({ 
