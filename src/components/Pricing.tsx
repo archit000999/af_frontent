@@ -42,10 +42,7 @@ const Pricing = () => {
                     <span className="text-2xl font-bold text-green-600">First Week Fee Waived Off</span>
                   </div>
                   <p className="text-slate-700 font-medium mb-2">If you participate in our upcoming webinar &quot;Effective Strategies to find job in the era of AI&quot;</p>
-                  <button 
-                    onClick={() => window.open('https://calendly.com/vaasu_bhartia/job-search-ai-webinar', '_blank')}
-                    className="text-blue-600 hover:text-blue-800 font-medium underline transition-colors"
-                  >
+                  <button onClick={() => window.open('https://calendly.com/vaasu_bhartia/job-search-ai-webinar', '_blank')} className="text-blue-600 hover:text-blue-800 font-medium underline transition-colors">
                     Click here to see the schedule of webinar
                   </button>
                 </div>
@@ -54,7 +51,7 @@ const Pricing = () => {
                   <span className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">$99</span>
                   <div className="text-left">
                     <div className="text-slate-600 text-lg">/week</div>
-                    <div className="text-sm text-green-600 font-medium">Less than $0.60/hour</div>
+                    
                   </div>
                 </div>
                 
