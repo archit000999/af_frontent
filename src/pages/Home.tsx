@@ -2,7 +2,7 @@ import { UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, Settings, MapPin, Clock, Briefcase, Edit, Crown } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useEffect, useState } from 'react';
@@ -287,22 +287,34 @@ const Home = () => {
           <div className="mt-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Guides</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <Link 
+                to="/how-copilot-works"
+                className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+              >
                 <h3 className="font-semibold text-gray-900 mb-2">How copilot works</h3>
                 <p className="text-sm text-gray-600">Learn the basics of how your AI copilot finds and applies to jobs</p>
-              </div>
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              </Link>
+              <Link 
+                to="/how-to-train-copilot"
+                className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+              >
                 <h3 className="font-semibold text-gray-900 mb-2">How to train your copilot</h3>
                 <p className="text-sm text-gray-600">Optimize your copilot's performance with better training</p>
-              </div>
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              </Link>
+              <Link 
+                to="/how-to-apply-external"
+                className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+              >
                 <h3 className="font-semibold text-gray-900 mb-2">How to apply to external jobs</h3>
                 <p className="text-sm text-gray-600">Apply to jobs outside of our platform with your copilot</p>
-              </div>
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              </Link>
+              <Link 
+                to="/faq"
+                className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+              >
                 <h3 className="font-semibold text-gray-900 mb-2">FAQ</h3>
                 <p className="text-sm text-gray-600">Find answers to commonly asked questions</p>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
