@@ -79,46 +79,6 @@ const ATSProblem = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-white">
-          <div className="text-center mb-8">
-            <Shield className="h-12 w-12 mx-auto mb-4" />
-            <h3 className="text-3xl font-bold mb-4">We Bypass the ATS Entirely</h3>
-            <p className="text-xl leading-relaxed max-w-4xl mx-auto">
-              <strong>ApplyFirst doesn't apply through job portals.</strong> We identify the right person — the hiring manager — and send a personalized message with your resume directly to their inbox the moment a role opens.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-              <CheckCircle className="h-8 w-8 mx-auto mb-3 text-green-300" />
-              <div className="font-semibold">No filters. No flags. No bots.</div>
-            </div>
-            <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-              <Target className="h-8 w-8 mx-auto mb-3 text-green-300" />
-              <div className="font-semibold">Direct to hiring managers</div>
-            </div>
-            <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-              <CheckCircle className="h-8 w-8 mx-auto mb-3 text-green-300" />
-              <div className="font-semibold">Real conversations with real people</div>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl mb-6">
-              <h4 className="text-xl font-bold mb-2">It's the Only Way to Stand Out</h4>
-              <p className="text-lg">
-                With 85%+ of applicants never making it past the ATS, ApplyFirst gives you a completely different lane — one that actually works.
-              </p>
-            </div>
-            
-            <SignInButton mode="modal" forceRedirectUrl="/home">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold shadow-xl">
-                Start Your Free Evaluation <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </SignInButton>
-            <p className="text-sm mt-2 opacity-90">we only onboard 40 candidates each week</p>
-          </div>
-        </div>
       </div>
     </section>;
 };
