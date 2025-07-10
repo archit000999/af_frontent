@@ -11,16 +11,16 @@ const HowItWorks = () => {
       color: "from-blue-500 to-indigo-500"
     },
     {
-      icon: Mail,
-      title: "Instant Hiring Manager Outreach",
-      description: "Within 60 minutes, we email hiring managers with your resume and compelling introduction that cuts through the noise.",
+      icon: Target,
+      title: "You're in the First 10 Applicants",
+      description: "By reaching out instantly, you're among the first candidates they see, increasing your interview chances by 300%.",
       step: "02",
       color: "from-indigo-500 to-purple-500"
     },
     {
-      icon: Target,
-      title: "You're in the First 10 Applicants",
-      description: "By reaching out instantly, you're among the first candidates they see, increasing your interview chances by 300%.",
+      icon: Mail,
+      title: "Instant Hiring Manager Outreach",
+      description: "Within 60 minutes, we email hiring managers with your resume and compelling introduction that cuts through the noise.",
       step: "03",
       color: "from-purple-500 to-pink-500"
     }
