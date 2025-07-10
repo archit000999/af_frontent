@@ -17,10 +17,10 @@ serve(async (req) => {
     const { jobTitles, workLocationTypes, remoteLocations, onsiteLocations } = await req.json();
     
     const perplexityApiKey = Deno.env.get('PERPLEXITY_API_KEY');
-    console.log('Perplexity API Key present:', !!perplexityApiKey);
-    console.log('Environment check:', {
+    console.log('Perplexity API Key check:', {
       hasKey: !!perplexityApiKey,
-      keyLength: perplexityApiKey?.length || 0
+      keyLength: perplexityApiKey?.length || 0,
+      keyStart: perplexityApiKey?.substring(0, 8) || 'none'
     });
     
     if (!perplexityApiKey) {
@@ -49,11 +49,34 @@ serve(async (req) => {
       locationContext = 'jobs';
     }
 
-    // Create search query for Perplexity
-    const searchQuery = `Find current job openings for ${jobTitles.join(' or ')} positions as ${locationContext}. Include company names, job titles, locations, and brief descriptions. Focus on legitimate companies that are actively hiring in January 2025.`;
+    // Create a more specific search query
+    const searchQuery = `Find current ${jobTitles.join(' or ')} job openings that are ${locationContext}. Include company names, specific job titles, locations, and brief descriptions. Focus on legitimate companies actively hiring in January 2025. Provide real job listings with accurate company information.`;
 
-    console.log('Making Perplexity API call...');
-    console.log('Search query:', searchQuery);
+    console.log('Making Perplexity API call with query:', searchQuery);
+
+    const requestBody = {
+      model: 'llama-3.1-sonar-small-128k-online',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a job search assistant. Return ONLY a valid JSON array of job objects. Each job must have: title, company, location, type (always "Fulltime"), and description. Maximum 15 jobs. Do not include any explanatory text, markdown, or additional formatting - just the JSON array.'
+        },
+        {
+          role: 'user',
+          content: searchQuery
+        }
+      ],
+      temperature: 0.2,
+      top_p: 0.9,
+      max_tokens: 4000,
+      return_images: false,
+      return_related_questions: false,
+      search_recency_filter: 'month',
+      frequency_penalty: 1,
+      presence_penalty: 0
+    };
+
+    console.log('Request body:', JSON.stringify(requestBody, null, 2));
 
     const response = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
@@ -61,50 +84,52 @@ serve(async (req) => {
         'Authorization': `Bearer ${perplexityApiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: 'llama-3.1-sonar-small-128k-online',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a job search assistant. Provide current, real job listings with accurate company information. Return only a JSON array of job objects with properties: title, company, location, type (always "Fulltime"), and description. Limit to 15 jobs maximum. Return ONLY valid JSON, no additional text or explanations.'
-          },
-          {
-            role: 'user',
-            content: searchQuery
-          }
-        ],
-        temperature: 0.2,
-        top_p: 0.9,
-        max_tokens: 4000,
-        return_images: false,
-        return_related_questions: false,
-        search_recency_filter: 'month',
-        frequency_penalty: 1,
-        presence_penalty: 0
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     console.log('Perplexity API response status:', response.status);
     console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
+    const responseText = await response.text();
+    console.log('Raw response:', responseText);
+
     if (!response.ok) {
-      const errorText = await response.text();
       console.error(`Perplexity API error: ${response.status} - ${response.statusText}`);
-      console.error('Error details:', errorText);
+      console.error('Error response:', responseText);
       
       const fallbackJobs = createFallbackJobs(jobTitles[0] || 'Software Engineer', locationContext);
       return new Response(JSON.stringify({ 
         jobs: fallbackJobs,
         source: 'fallback',
         error: `API error ${response.status}: ${response.statusText}`,
-        message: `API error (${response.status}): Using sample data`
+        message: `API error (${response.status}): ${responseText}`,
+        debug: {
+          hasApiKey: !!perplexityApiKey,
+          keyLength: perplexityApiKey?.length || 0,
+          query: searchQuery
+        }
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const data = await response.json();
-    console.log('Perplexity API response:', JSON.stringify(data, null, 2));
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('Failed to parse API response as JSON:', parseError);
+      const fallbackJobs = createFallbackJobs(jobTitles[0] || 'Software Engineer', locationContext);
+      return new Response(JSON.stringify({ 
+        jobs: fallbackJobs,
+        source: 'fallback',
+        error: 'Invalid JSON response from API',
+        message: 'Using sample data - API returned invalid response'
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log('Parsed API response:', JSON.stringify(data, null, 2));
     
     let jobsData;
     
