@@ -67,7 +67,7 @@ const Pricing = () => {
               
 
               <div className="space-y-4">
-                <Button onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                <Button onClick={() => window.location.href = '/auth'} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                   See If You Qualify <ArrowRight className="ml-2 h-6 w-6" />
                 </Button>
                 <p className="text-center text-sm text-slate-500">
