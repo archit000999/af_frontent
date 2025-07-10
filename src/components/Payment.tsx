@@ -66,7 +66,15 @@ const Payment = () => {
                 </CardTitle>
                 
                 {/* Promotional Banner */}
-                
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-2xl p-4 mb-6">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <span className="text-xl font-bold text-green-600">First Week Fee Waived Off</span>
+                  </div>
+                  <p className="text-gray-700 font-medium mb-2">If you participate in our upcoming webinar "Effective Strategies to find job in the era of AI"</p>
+                  <button onClick={() => window.open('https://calendly.com/vaasu_bhartia/job-search-ai-webinar', '_blank')} className="text-blue-600 hover:text-blue-800 font-medium underline transition-colors">
+                    Click here to see the schedule of webinar
+                  </button>
+                </div>
 
                 <div className="flex items-center justify-center gap-2 mb-4">
                   <span className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
