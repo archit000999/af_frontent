@@ -18,8 +18,8 @@ const Payment = () => {
     {
       id: 'premium',
       name: 'Premium',
-      price: '$5.60',
-      period: '/week',
+      price: '$198',
+      period: '/2 weeks',
       originalPrice: '₹469',
       description: 'Perfect for job seekers who want automated applications',
       features: [
