@@ -45,8 +45,7 @@ const CopilotPreview = () => {
       setApiMessage('');
 
       try {
-        console.log('Fetching jobs with config:', config);
-        console.log('Calling supabase edge function...');
+        
         
         const { data, error: functionError } = await supabase.functions.invoke('fetch-jobs', {
           body: {
@@ -57,11 +56,9 @@ const CopilotPreview = () => {
           }
         });
 
-        console.log('Edge function response:', data);
-        console.log('Edge function error:', functionError);
+        
 
         if (functionError) {
-          console.error('Edge function error:', functionError);
           throw new Error(functionError.message || 'Failed to fetch jobs');
         }
 
@@ -71,13 +68,11 @@ const CopilotPreview = () => {
           setApiMessage(data.message || '');
           
           if (data.error) {
-            console.warn('API returned error:', data.error);
           }
         } else {
           throw new Error('No jobs data received');
         }
       } catch (err) {
-        console.error('Error fetching jobs:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch jobs');
         
         // Set fallback jobs on error
@@ -179,31 +174,19 @@ const CopilotPreview = () => {
                 {dataSource === 'perplexity-api' ? (
                   <div className="inline-flex items-center px-3 py-1 bg-green-50 border border-green-200 rounded-full">
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                    <span className="text-sm text-green-700 font-medium">Live data from Perplexity AI</span>
                   </div>
                 ) : (
                   <div className="inline-flex items-center px-3 py-1 bg-orange-50 border border-orange-200 rounded-full">
                     <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
-                    <span className="text-sm text-orange-700 font-medium">Sample data (API issue)</span>
                   </div>
                 )}
               </div>
             )}
             
             {/* API Message */}
-            {apiMessage && (
-              <div className="mt-2">
-                <p className="text-sm text-blue-600">{apiMessage}</p>
-              </div>
-            )}
             
-            {error && (
-              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-600">
-                  Error: {error}
-                </p>
-              </div>
-            )}
+            
+            
           </div>
 
           {/* Loading State */}
@@ -212,7 +195,6 @@ const CopilotPreview = () => {
               <div className="text-center">
                 <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-purple-600" />
                 <p className="text-gray-600">Fetching latest job opportunities...</p>
-                <p className="text-sm text-gray-500 mt-2">Connecting to Perplexity AI for real-time data</p>
               </div>
             </div>
           ) : (
