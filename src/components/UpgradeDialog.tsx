@@ -12,7 +12,7 @@ interface UpgradeDialogProps {
 const UpgradeDialog: React.FC<UpgradeDialogProps> = ({ 
   isOpen, 
   onClose, 
-  message = "Upgrade plan to activate ApplyFirst Concierge Service",
+  message = "Upgrade plan to ApplyFirst Concierge service",
   buttonText = "Upgrade"
 }) => {
   
