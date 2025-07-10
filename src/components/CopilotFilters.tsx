@@ -273,14 +273,14 @@ const CopilotFilters = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">CJ</span>
             </div>
-            <span className="text-xl font-semibold text-gray-900">JobCopilot</span>
+            <span className="text-xl font-semibold text-gray-900">ApplyFirst</span>
           </div>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-2 text-purple-600 font-medium">
              
-              <span>Copilot</span>
+              <span>ApplyFirst</span>
             </div>
             <div 
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer"
@@ -315,7 +315,7 @@ const CopilotFilters = () => {
             <div className="flex-shrink-0 p-8 pb-4">
               <div className="text-center">
                 <h1 className="text-lg font-semibold text-gray-900">
-                  Copilot Configuration
+                  ApplyFirst Configuration
                 </h1>
                 <p className="text-gray-600 mt-2">Step {currentStep} of 4</p>
                 <p className="text-gray-700 mt-4">
@@ -402,25 +402,25 @@ const CopilotFilters = () => {
                         <span className="text-yellow-500 mt-0.5">💡</span>
                         <div>
                           {jobMatchLevel === 'High' && (
-                            <span>Your copilot will <strong>only</strong> apply to jobs where you meet <strong>more than half</strong> of the key requirements.</span>
+                            <span>Your ApplyFirst will <strong>only</strong> apply to jobs where you meet <strong>more than half</strong> of the key requirements.</span>
                           )}
                           {jobMatchLevel === 'Higher' && (
                             <div>
                               <div className="mb-2">
-                                <span>Your copilot will <strong>only</strong> apply to jobs where you meet <strong>most</strong> of the key requirements.</span>
+                                <span>Your ApplyFirst will <strong>only</strong> apply to jobs where you meet <strong>most</strong> of the key requirements.</span>
                               </div>
                               <div className="text-gray-600">
-                                If your copilot doesn't apply to enough jobs, then try lowering this threshold and/or adding more information in your CV related to the jobs you are searching for.
+                                If your ApplyFirst doesn't apply to enough jobs, then try lowering this threshold and/or adding more information in your CV related to the jobs you are searching for.
                               </div>
                             </div>
                           )}
                           {jobMatchLevel === 'Highest' && (
                             <div>
                               <div className="mb-2">
-                                <span>Your copilot will <strong>only</strong> apply to jobs where you meet <strong>all</strong> of the key requirements.</span>
+                                <span>Your ApplyFirst will <strong>only</strong> apply to jobs where you meet <strong>all</strong> of the key requirements.</span>
                               </div>
                               <div className="text-gray-600">
-                                If your copilot doesn't apply to enough jobs, then try lowering this threshold and/or adding more information in your CV related to the jobs you are searching for.
+                                If your ApplyFirst doesn't apply to enough jobs, then try lowering this threshold and/or adding more information in your CV related to the jobs you are searching for.
                               </div>
                             </div>
                           )}
@@ -628,7 +628,7 @@ const CopilotFilters = () => {
                         <h4 className="text-lg font-medium text-gray-900 mb-3">Exclude Companies</h4>
                         <span className="text-sm text-gray-500">(optional)</span>
                         <p className="text-gray-600 text-sm mb-3 mt-2">
-                          Select companies to exclude so that your copilot doesn't apply for any jobs at these companies.
+                          Select companies to exclude so that your ApplyFirst doesn't apply for any jobs at these companies.
                         </p>
                         <textarea
                           value={excludeCompanies}

@@ -229,13 +229,13 @@ const CopilotSetup = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">CJ</span>
             </div>
-            <span className="text-xl font-semibold text-gray-900">JobCopilot</span>
+            <span className="text-xl font-semibold text-gray-900">ApplyFirst</span>
           </div>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-2 text-purple-600 font-medium text-sm">
-              <span>Copilot</span>
+              <span>ApplyFirst</span>
             </div>
             <div 
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm"

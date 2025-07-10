@@ -26,7 +26,7 @@ const HowToApplyExternal = () => {
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">How to Apply to External Jobs</h1>
           <p className="text-xl text-gray-600">
-            Use your copilot's resources and templates to apply to jobs outside our platform.
+            Use your ApplyFirst's resources and templates to apply to jobs outside our platform.
           </p>
         </div>
 
@@ -40,7 +40,7 @@ const HowToApplyExternal = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Use Generated Templates</h2>
                 <p className="text-gray-600 mb-4">
-                  Your copilot creates personalized cover letters and email templates that you can use for manual applications.
+                  Your ApplyFirst creates personalized cover letters and email templates that you can use for manual applications.
                 </p>
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <h3 className="font-semibold text-gray-900 mb-3">What You Get:</h3>
@@ -76,7 +76,7 @@ const HowToApplyExternal = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Direct Company Applications</h2>
                 <p className="text-gray-600 mb-4">
-                  Apply directly to company career pages using your copilot's research and templates.
+                  Apply directly to company career pages using your ApplyFirst's research and templates.
                 </p>
                 <div className="space-y-4">
                   <div className="border-l-4 border-blue-500 pl-4">
@@ -88,7 +88,7 @@ const HowToApplyExternal = () => {
                   <div className="border-l-4 border-purple-500 pl-4">
                     <h3 className="font-semibold text-gray-900 mb-2">Step 2: Customize</h3>
                     <p className="text-gray-600 text-sm">
-                      Adapt your copilot-generated templates to match the specific company and role
+                      Adapt your ApplyFirst-generated templates to match the specific company and role
                     </p>
                   </div>
                   <div className="border-l-4 border-green-500 pl-4">
@@ -111,7 +111,7 @@ const HowToApplyExternal = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Networking & Referrals</h2>
                 <p className="text-gray-600 mb-4">
-                  Leverage your copilot's contact research to build professional relationships.
+                  Leverage your ApplyFirst's contact research to build professional relationships.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-blue-50 p-4 rounded-lg">

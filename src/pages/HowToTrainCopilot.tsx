@@ -24,9 +24,9 @@ const HowToTrainCopilot = () => {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">How to Train Your Copilot</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">How to Train Your ApplyFirst</h1>
           <p className="text-xl text-gray-600">
-            Optimize your AI copilot's performance to get better job matches and higher success rates.
+            Optimize your AI ApplyFirst's performance to get better job matches and higher success rates.
           </p>
         </div>
 
@@ -40,7 +40,7 @@ const HowToTrainCopilot = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Refine Your Job Preferences</h2>
                 <p className="text-gray-600 mb-4">
-                  The more specific you are about your preferences, the better your copilot can target relevant opportunities.
+                  The more specific you are about your preferences, the better your ApplyFirst can target relevant opportunities.
                 </p>
                 <div className="space-y-3">
                   <div className="bg-gray-50 p-4 rounded-lg">
@@ -110,7 +110,7 @@ const HowToTrainCopilot = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Monitor and Adjust</h2>
                 <p className="text-gray-600 mb-4">
-                  Regularly review your copilot's performance and make adjustments based on results.
+                  Regularly review your ApplyFirst's performance and make adjustments based on results.
                 </p>
                 <div className="space-y-3">
                   <div className="bg-blue-50 p-4 rounded-lg">

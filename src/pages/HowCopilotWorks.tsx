@@ -24,7 +24,7 @@ const HowCopilotWorks = () => {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">How Copilot Works</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">How ApplyFirst Works</h1>
           <p className="text-xl text-gray-600">
             Your AI-powered job search assistant that works 24/7 to find and apply to the best opportunities for you.
           </p>
@@ -70,7 +70,7 @@ const HowCopilotWorks = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Smart Application Process</h2>
                 <p className="text-gray-600 mb-4">
-                  Your copilot analyzes each job posting and creates personalized applications. It tailors your resume 
+                  Your ApplyFirst analyzes each job posting and creates personalized applications. It tailors your resume 
                   and cover letter to highlight the most relevant skills and experiences for each position.
                 </p>
                 <ul className="space-y-2 text-gray-600">
@@ -100,7 +100,7 @@ const HowCopilotWorks = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Direct Outreach</h2>
                 <p className="text-gray-600 mb-4">
-                  Beyond standard applications, your copilot finds hiring managers and decision-makers on LinkedIn, 
+                  Beyond standard applications, your ApplyFirst finds hiring managers and decision-makers on LinkedIn, 
                   then sends personalized emails directly to their verified business addresses.
                 </p>
                 <ul className="space-y-2 text-gray-600">

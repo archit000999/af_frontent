@@ -49,7 +49,7 @@ const PaymentSuccess = () => {
         
         toast({
           title: "Payment Successful!",
-          description: "Your subscription has been activated. Welcome to JobCopilot Premium!",
+          description: "Your subscription has been activated. Welcome to JobApplyFirst Premium!",
         });
       }
     } catch (error) {
@@ -78,7 +78,7 @@ const PaymentSuccess = () => {
               Payment Successful!
             </CardTitle>
             <p className="text-gray-600 text-lg">
-              Thank you for subscribing to JobCopilot Premium
+              Thank you for subscribing to ApplyFirst Premium
             </p>
           </CardHeader>
 
@@ -105,7 +105,7 @@ const PaymentSuccess = () => {
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4" />
-                  Your JobCopilot will start working automatically
+                  Your ApplyFirst will start working automatically
                 </li>
               </ul>
             </div>
@@ -134,7 +134,7 @@ const PaymentSuccess = () => {
                 variant="outline"
                 className="flex-1"
               >
-                Setup Your First Copilot
+                Setup Your First ApplyFirst
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>

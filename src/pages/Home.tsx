@@ -124,7 +124,7 @@ const Home = () => {
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-2 text-purple-600 font-medium text-base">
-              <span>Copilot</span>
+              <span>ApplyFirst</span>
             </div>
             <div 
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base"
@@ -160,17 +160,17 @@ const Home = () => {
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="max-w-6xl">
           <div className="mb-12">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Copilots</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">ApplyFirstAi</h1>
             
             {/* Debug info for subscription status */}
-            {process.env.NODE_ENV === 'development' && (
+            {/* {process.env.NODE_ENV === 'development' && (
               <div className="mb-4 p-4 bg-gray-100 rounded-lg text-sm">
                 <strong>Debug Info:</strong> Subscribed: {isSubscribed ? 'Yes' : 'No'}, 
                 Plan: {planType || 'Free'}, 
                 Max Copilots: {maxCopilots},
                 Loading: {subscriptionLoading ? 'Yes' : 'No'}
               </div>
-            )}
+            )} */}
             
             {/* Copilot Configuration Section */}
             {(isLoading || subscriptionLoading) ? (
@@ -233,7 +233,7 @@ const Home = () => {
 
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <span className="text-sm font-medium text-gray-700">Copilot Status:</span>
+                        <span className="text-sm font-medium text-gray-700">ApplyFirst Status:</span>
                         <span className={`text-sm font-medium ${
                           copilotStatuses[copilotConfig.id || ''] ? 'text-green-600' : 'text-gray-500'
                         }`}>
@@ -259,7 +259,7 @@ const Home = () => {
                     onClick={handleSetupCopilot}
                     className="px-8 py-4 border-2 border-purple-300 text-purple-600 hover:bg-purple-50 font-medium rounded-lg"
                   >
-                    + New Copilot
+                    + New Form
                   </Button>
                 </div>
               </div>
@@ -269,15 +269,15 @@ const Home = () => {
                 <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center mx-auto mb-6">
                   <span className="text-white font-bold text-2xl">+</span>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Create Your First Copilot</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Create Your First ApplyFirst</h3>
                 <p className="text-gray-600 mb-8 max-w-md mx-auto">
-                  Set up your job search preferences and let our AI copilot help you find the perfect opportunities.
+                  Set up your job search preferences and let our AI ApplyFirst help you find the perfect opportunities.
                 </p>
                 <Button 
                   onClick={handleSetupCopilot}
                   className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 text-lg font-semibold rounded-lg"
                 >
-                  Setup Your First Copilot
+                  Setup Your First ApplyFirst
                 </Button>
               </div>
             )}
@@ -291,22 +291,22 @@ const Home = () => {
                 to="/how-copilot-works"
                 className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
               >
-                <h3 className="font-semibold text-gray-900 mb-2">How copilot works</h3>
-                <p className="text-sm text-gray-600">Learn the basics of how your AI copilot finds and applies to jobs</p>
+                <h3 className="font-semibold text-gray-900 mb-2">How ApplyFirst works</h3>
+                <p className="text-sm text-gray-600">Learn the basics of how your AI ApplyFirst finds and applies to jobs</p>
               </Link>
               <Link 
                 to="/how-to-train-copilot"
                 className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
               >
-                <h3 className="font-semibold text-gray-900 mb-2">How to train your copilot</h3>
-                <p className="text-sm text-gray-600">Optimize your copilot's performance with better training</p>
+                <h3 className="font-semibold text-gray-900 mb-2">How to train your ApplyFirst</h3>
+                <p className="text-sm text-gray-600">Optimize your ApplyFirst's performance with better training</p>
               </Link>
               <Link 
                 to="/how-to-apply-external"
                 className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
               >
                 <h3 className="font-semibold text-gray-900 mb-2">How to apply to external jobs</h3>
-                <p className="text-sm text-gray-600">Apply to jobs outside of our platform with your copilot</p>
+                <p className="text-sm text-gray-600">Apply to jobs outside of our platform with your ApplyFirst</p>
               </Link>
               <Link 
                 to="/faq"

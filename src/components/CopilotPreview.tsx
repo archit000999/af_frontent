@@ -137,7 +137,7 @@ const CopilotPreview = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">CJ</span>
             </div>
-            <span className="text-xl font-semibold text-gray-900">JobCopilot</span>
+            <span className="text-xl font-semibold text-gray-900">ApplyFirst</span>
           </div>
 
           {/* Navigation */}
@@ -146,7 +146,7 @@ const CopilotPreview = () => {
               <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
                 <span className="text-purple-600 text-xs">◯</span>
               </div>
-              <span>Copilot</span>
+              <span>ApplyFirst</span>
             </div>
             <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
               <div className="w-6 h-6 flex items-center justify-center">
@@ -188,10 +188,10 @@ const CopilotPreview = () => {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-semibold text-gray-900 mb-4">
-              Great! You've configured your Copilot
+              Great! You've configured your ApplyFirst
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Based on your configuration, here's a preview of jobs that your Copilot will automatically apply to
+              Based on your configuration, here's a preview of jobs that your ApplyFirst will automatically apply to
             </p>
             {error && (
               <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
@@ -256,7 +256,7 @@ const CopilotPreview = () => {
           {/* Bottom Text and Buttons */}
           <div className="text-center space-y-6">
             <h2 className="text-xl font-medium text-gray-900">
-              Want your Copilot to apply for these jobs?
+              Want your ApplyFirst to apply for these jobs?
             </h2>
             
             <div className="flex flex-col space-y-4 max-w-md mx-auto">
@@ -264,7 +264,7 @@ const CopilotPreview = () => {
                 onClick={handleActivateCopilot}
                 className="w-full py-4 text-base font-medium bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-full"
               >
-                Yes! Activate Copilot
+                Yes! Activate ApplyFirst
               </Button>
 
               <Button

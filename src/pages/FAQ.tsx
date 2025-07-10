@@ -6,20 +6,20 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 const FAQ = () => {
   const faqs = [
     {
-      question: "How does the AI copilot find relevant jobs?",
+      question: "How does the AI ApplyFirst find relevant jobs?",
       answer: "Our AI continuously monitors 50+ job boards including LinkedIn, Indeed, Glassdoor, and company career pages. It uses advanced natural language processing to understand job requirements and match them with your profile, skills, and preferences. The AI considers factors like job title, required skills, location, salary range, and company type to ensure high-quality matches."
     },
     {
-      question: "How many jobs will my copilot apply to each day?",
-      answer: "Your copilot applies to up to 20 relevant jobs per day. This number may vary based on the availability of suitable positions that match your criteria. We prioritize quality over quantity, ensuring each application is well-targeted and personalized rather than sending generic applications."
+      question: "How many jobs will my ApplyFirst apply to each day?",
+      answer: "Your ApplyFirst applies to up to 20 relevant jobs per day. This number may vary based on the availability of suitable positions that match your criteria. We prioritize quality over quantity, ensuring each application is well-targeted and personalized rather than sending generic applications."
     },
     {
-      question: "Can I control which jobs my copilot applies to?",
-      answer: "Yes! You have full control over your job preferences through detailed filters including job titles, company types, salary ranges, location preferences, and more. You can also set exclusion criteria for companies or roles you want to avoid. Your copilot learns from your feedback to continuously improve its targeting."
+      question: "Can I control which jobs my ApplyFirst applies to?",
+      answer: "Yes! You have full control over your job preferences through detailed filters including job titles, company types, salary ranges, location preferences, and more. You can also set exclusion criteria for companies or roles you want to avoid. Your ApplyFirst learns from your feedback to continuously improve its targeting."
     },
     {
       question: "How does the direct outreach to hiring managers work?",
-      answer: "Our system researches LinkedIn to identify hiring managers and decision-makers for relevant positions. We then find their verified business email addresses through our professional database. Your copilot sends personalized emails that include your resume and a tailored message explaining why you're a great fit for the role."
+      answer: "Our system researches LinkedIn to identify hiring managers and decision-makers for relevant positions. We then find their verified business email addresses through our professional database. Your ApplyFirst sends personalized emails that include your resume and a tailored message explaining why you're a great fit for the role."
     },
     {
       question: "What if I don't get the guaranteed interviews?",
@@ -51,7 +51,7 @@ const FAQ = () => {
     },
     {
       question: "What if I want to apply to a specific company?",
-      answer: "You can add specific companies to your target list, and your copilot will prioritize opportunities from those organizations. You can also provide a list of companies to avoid. For dream companies, we recommend combining our automated approach with manual networking for the best results."
+      answer: "You can add specific companies to your target list, and your ApplyFirst will prioritize opportunities from those organizations. You can also provide a list of companies to avoid. For dream companies, we recommend combining our automated approach with manual networking for the best results."
     }
   ];
 
@@ -81,7 +81,7 @@ const FAQ = () => {
             <h1 className="text-4xl font-bold text-gray-900">Frequently Asked Questions</h1>
           </div>
           <p className="text-xl text-gray-600">
-            Get answers to common questions about our AI copilot service.
+            Get answers to common questions about our AI ApplyFirst service.
           </p>
         </div>
 
@@ -130,15 +130,15 @@ const FAQ = () => {
             to="/how-copilot-works" 
             className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
           >
-            <h3 className="font-semibold text-gray-900 mb-2">How Copilot Works</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">How ApplyFirst Works</h3>
             <p className="text-sm text-gray-600">Learn how our AI finds and applies to jobs</p>
           </Link>
           <Link 
             to="/how-to-train-copilot" 
             className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
           >
-            <h3 className="font-semibold text-gray-900 mb-2">Training Your Copilot</h3>
-            <p className="text-sm text-gray-600">Optimize your copilot for better results</p>
+            <h3 className="font-semibold text-gray-900 mb-2">Training Your ApplyFirst</h3>
+            <p className="text-sm text-gray-600">Optimize your ApplyFirst for better results</p>
           </Link>
           <Link 
             to="/how-to-apply-external" 

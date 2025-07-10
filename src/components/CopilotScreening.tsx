@@ -301,14 +301,14 @@ const CopilotScreening = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">CJ</span>
             </div>
-            <span className="text-xl font-semibold text-gray-900">JobCopilot</span>
+            <span className="text-xl font-semibold text-gray-900">ApplyFirst</span>
           </div>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-2 text-purple-600 font-medium">
              
-              <span>Copilot</span>
+              <span>ApplyFirst</span>
             </div>
             <div 
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer"
@@ -344,7 +344,7 @@ const CopilotScreening = () => {
             <div className="flex-shrink-0 p-8 pb-4">
               <div className="text-center">
                 <h1 className="text-lg font-semibold text-gray-900">
-                  Copilot Configuration
+                  ApplyFirst Configuration
                 </h1>
                 <p className="text-gray-600 mt-2">Step {currentStep} of 4</p>
                 <p className="text-gray-700 mt-2 font-medium">Doing great so far!</p>
@@ -361,7 +361,7 @@ const CopilotScreening = () => {
                 {/* Introduction Text */}
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-gray-700 text-sm">
-                    In order for your copilot to answer job application questions on your behalf, 
+                    In order for your ApplyFirst to answer job application questions on your behalf, 
                     it needs your resume as well as your answers to commonly asked screening questions.
                   </p>
                   {extractedData && (
@@ -678,7 +678,7 @@ const CopilotScreening = () => {
                     In which countries are you eligible to work in?
                   </h3>
                   <p className="text-gray-600 text-sm mb-4">
-                    Note: your copilot will only apply to jobs in countries where you have the legal right to work in.
+                    Note: your ApplyFirst will only apply to jobs in countries where you have the legal right to work in.
                   </p>
                   
                   <Select 

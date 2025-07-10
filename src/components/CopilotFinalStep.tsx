@@ -74,14 +74,14 @@ const CopilotFinalStep = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">CJ</span>
             </div>
-            <span className="text-xl font-semibold text-gray-900">JobCopilot</span>
+            <span className="text-xl font-semibold text-gray-900">ApplyFirst</span>
           </div>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-2 text-purple-600 font-medium text-sm">
               
-              <span>Copilot</span>
+              <span>ApplyFirst</span>
             </div>
             <div 
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm"
@@ -117,7 +117,7 @@ const CopilotFinalStep = () => {
             <div className="flex-shrink-0 p-8 pb-6">
               <div className="text-center">
                 <h1 className="text-base font-semibold text-gray-900">
-                  Copilot Configuration
+                  ApplyFirst Configuration
                 </h1>
                 <p className="text-sm text-gray-600 mt-2">Step 4 of 4</p>
                 <p className="text-sm text-gray-700 mt-2 font-medium">Final Step!</p>
@@ -131,7 +131,7 @@ const CopilotFinalStep = () => {
                 {/* Main Selection */}
                 <div>
                   <h2 className="text-base font-semibold text-gray-900 mb-6">
-                    Select how your copilot should work:
+                    Select how your ApplyFirst should work:
                   </h2>
                   
                   {/* Auto Apply Option */}
@@ -156,7 +156,7 @@ const CopilotFinalStep = () => {
                         </div>
                         <div>
                           <p className="text-sm text-gray-900">
-                            Automatically apply to jobs: your copilot will auto-fill and submit applications on your behalf
+                            Automatically apply to jobs: your ApplyFirst will auto-fill and submit applications on your behalf
                           </p>
                         </div>
                       </div>
@@ -184,7 +184,7 @@ const CopilotFinalStep = () => {
                         <div>
                           <p className="text-sm text-gray-900">
                             Auto-fill application forms but do not submit applications: you can review jobs and answers before 
-                            submitting. This will allow you to <span className="text-purple-600 font-semibold">train your copilot</span> <span className="text-purple-600">⚡</span>
+                            submitting. This will allow you to <span className="text-purple-600 font-semibold">train your ApplyFirst</span> <span className="text-purple-600">⚡</span>
                           </p>
                         </div>
                       </div>
@@ -200,7 +200,7 @@ const CopilotFinalStep = () => {
                     className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
                     onClick={() => setIsExpanded(!isExpanded)}
                   >
-                    <span className="text-sm text-gray-700">Personalize how your copilot answers application questions.</span>
+                    <span className="text-sm text-gray-700">Personalize how your ApplyFirst answers application questions.</span>
                     <svg
                       className={`w-5 h-5 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
                       fill="none"
@@ -287,14 +287,14 @@ const CopilotFinalStep = () => {
                   <div className="flex items-start space-x-3">
                     <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700">
-                      Your copilot will filter live jobs that match your search criteria, then will search for new jobs every 4 hours.
+                      Your ApplyFirst will filter live jobs that match your search criteria, then will search for new jobs every 4 hours.
                     </p>
                   </div>
                   
                   <div className="flex items-start space-x-3">
                     <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700">
-                      Based on the information you gave in the previous step, your copilot will answer screening questions on 
+                      Based on the information you gave in the previous step, your ApplyFirst will answer screening questions on 
                       your behalf, powered by AI.
                     </p>
                   </div>
@@ -302,7 +302,7 @@ const CopilotFinalStep = () => {
                   <div className="flex items-start space-x-3">
                     <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700">
-                      Your copilot will not reapply to jobs that it previously applied to.
+                      Your ApplyFirst will not reapply to jobs that it previously applied to.
                     </p>
                   </div>
                 </div>
@@ -330,10 +330,10 @@ const CopilotFinalStep = () => {
                   {isLoading ? (
                     <div className="flex items-center space-x-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Launching Copilot...</span>
+                      <span>Launching ApplyFirst...</span>
                     </div>
                   ) : (
-                    <span>Launch Copilot</span>
+                    <span>Launch ApplyFirst</span>
                   )}
                 </Button>
               </div>
