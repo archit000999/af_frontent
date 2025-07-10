@@ -118,7 +118,7 @@ const HowCopilotWorks = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">The Results</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-2">20+</div>
+                <div className="text-3xl font-bold text-purple-600 mb-2">20</div>
                 <div className="text-gray-600">Applications per day</div>
               </div>
               <div className="text-center">
