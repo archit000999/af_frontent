@@ -14,8 +14,8 @@ interface UpgradeDialogProps {
 const UpgradeDialog: React.FC<UpgradeDialogProps> = ({ 
   isOpen, 
   onClose, 
-  message = "You need a Premium or Elite plan to activate ApplyFirst",
-  buttonText = "Upgrade to Elite"
+  message = "Upgrade plan to activate ApplyFirst Concierge Service",
+  buttonText = "Upgrade"
 }) => {
   const navigate = useNavigate();
 
