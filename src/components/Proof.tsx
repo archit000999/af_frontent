@@ -8,7 +8,7 @@ const Proof = () => {
     {
       icon: TrendingUp,
       number: "2-4",
-      label: "Average interviews landed per user in 2 months",
+      label: "Interviews in 1 month average",
       color: "from-green-400 to-emerald-500"
     },
     {
