@@ -60,12 +60,7 @@ const Hero = () => {
               </SignUpButton>
             </SignedOut>
             <SignedIn>
-              <Button 
-                onClick={() => navigate('/home')}
-                variant="outline" 
-                size="lg" 
-                className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300"
-              >
+              <Button onClick={() => navigate('/home')} variant="outline" size="lg" className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
                 Go to Dashboard
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -75,7 +70,7 @@ const Hero = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
               <CheckCircle className="h-8 w-8 text-green-400 mb-3" />
-              <span className="text-white font-semibold text-lg">10+ interviews</span>
+              <span className="text-white font-semibold text-lg">2-4 interviews</span>
               <span className="text-slate-400 text-sm">in 2 months average</span>
             </div>
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
