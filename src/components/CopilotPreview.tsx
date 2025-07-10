@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Settings, Loader2 } from 'lucide-react';
@@ -22,6 +23,7 @@ const CopilotPreview = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dataSource, setDataSource] = useState<string>('');
+  const [apiMessage, setApiMessage] = useState<string>('');
 
   const handleBack = () => {
     navigate('/copilot-final-step');
@@ -40,9 +42,11 @@ const CopilotPreview = () => {
       setIsLoading(true);
       setError(null);
       setDataSource('');
+      setApiMessage('');
 
       try {
         console.log('Fetching jobs with config:', config);
+        console.log('Calling supabase edge function...');
         
         const { data, error: functionError } = await supabase.functions.invoke('fetch-jobs', {
           body: {
@@ -54,6 +58,7 @@ const CopilotPreview = () => {
         });
 
         console.log('Edge function response:', data);
+        console.log('Edge function error:', functionError);
 
         if (functionError) {
           console.error('Edge function error:', functionError);
@@ -63,8 +68,10 @@ const CopilotPreview = () => {
         if (data && data.jobs) {
           setJobs(data.jobs);
           setDataSource(data.source || 'unknown');
-          if (data.message) {
-            console.log('API message:', data.message);
+          setApiMessage(data.message || '');
+          
+          if (data.error) {
+            console.warn('API returned error:', data.error);
           }
         } else {
           throw new Error('No jobs data received');
@@ -94,27 +101,6 @@ const CopilotPreview = () => {
             title: 'Software Developer',
             company: 'Cbts India',
             location: 'Chennai, India',
-            type: 'Fulltime'
-          },
-          {
-            id: 4,
-            title: 'Jio Tesseract-Software Developer/Engineering Manager/Senior Software Developer',
-            company: 'Nexthire',
-            location: 'Navi Mumbai, IN',
-            type: 'Fulltime'
-          },
-          {
-            id: 5,
-            title: 'Lead Software Developer',
-            company: 'Cbts India',
-            location: 'Chennai, India',
-            type: 'Fulltime'
-          },
-          {
-            id: 6,
-            title: 'Software Developer (React)',
-            company: 'Vagaro',
-            location: 'Ahmedabad, IN',
             type: 'Fulltime'
           }
         ]);
@@ -152,23 +138,18 @@ const CopilotPreview = () => {
           <nav className="hidden md:flex items-center space-x-8">
             <div
             onClick={()=>navigate("/")}
-            className="flex items-center space-x-2 text-purple-600 font-medium text-base">
-              
+            className="flex items-center space-x-2 text-purple-600 font-medium text-base cursor-pointer">
               <span>ApplyFirst</span>
             </div>
             <div
             onClick={()=>navigate("/applications")}
             className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base">
-              <div className="w-6 h-6 flex items-center justify-center">
-              </div>
               <span>Applications</span>
             </div>
-           
           </nav>
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            
             <UserButton 
               appearance={{
                 elements: {
@@ -200,19 +181,26 @@ const CopilotPreview = () => {
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                     <span className="text-sm text-green-700 font-medium">Live data from Perplexity AI</span>
                   </div>
-                ) : dataSource === 'fallback' ? (
+                ) : (
                   <div className="inline-flex items-center px-3 py-1 bg-orange-50 border border-orange-200 rounded-full">
                     <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
-                    <span className="text-sm text-orange-700 font-medium">Sample data (API not available)</span>
+                    <span className="text-sm text-orange-700 font-medium">Sample data (API issue)</span>
                   </div>
-                ) : null}
+                )}
+              </div>
+            )}
+            
+            {/* API Message */}
+            {apiMessage && (
+              <div className="mt-2">
+                <p className="text-sm text-blue-600">{apiMessage}</p>
               </div>
             )}
             
             {error && (
-              <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                <p className="text-sm text-orange-600">
-                  Note: Using sample data. {error}
+              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600">
+                  Error: {error}
                 </p>
               </div>
             )}

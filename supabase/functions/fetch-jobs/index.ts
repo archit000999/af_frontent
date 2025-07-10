@@ -1,6 +1,6 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -18,13 +18,17 @@ serve(async (req) => {
     
     const perplexityApiKey = Deno.env.get('PERPLEXITY_API_KEY');
     console.log('Perplexity API Key present:', !!perplexityApiKey);
+    console.log('Environment check:', {
+      hasKey: !!perplexityApiKey,
+      keyLength: perplexityApiKey?.length || 0
+    });
     
     if (!perplexityApiKey) {
       console.error('PERPLEXITY_API_KEY not configured');
-      // Return fallback jobs if API key is missing
       const fallbackJobs = createFallbackJobs(jobTitles[0] || 'Software Engineer', 'various locations');
       return new Response(JSON.stringify({ 
         jobs: fallbackJobs,
+        source: 'fallback',
         message: 'Using sample data - Perplexity API key not configured'
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -46,9 +50,10 @@ serve(async (req) => {
     }
 
     // Create search query for Perplexity
-    const searchQuery = `Find current job openings for ${jobTitles.join(' or ')} positions as ${locationContext}. Include company names, job titles, locations, and brief descriptions. Focus on legitimate companies that are actively hiring in January 2025. Return results as JSON array with properties: title, company, location, type (always "Fulltime"), and description.`;
+    const searchQuery = `Find current job openings for ${jobTitles.join(' or ')} positions as ${locationContext}. Include company names, job titles, locations, and brief descriptions. Focus on legitimate companies that are actively hiring in January 2025.`;
 
-    console.log('Calling Perplexity API with query:', searchQuery);
+    console.log('Making Perplexity API call...');
+    console.log('Search query:', searchQuery);
 
     const response = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
@@ -61,7 +66,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: 'You are a job search assistant. Provide current, real job listings with accurate company information. Return the response as a JSON array of job objects with properties: title, company, location, type (always "Fulltime"), and description. Limit to 20 jobs maximum. Only return valid JSON, no additional text.'
+            content: 'You are a job search assistant. Provide current, real job listings with accurate company information. Return only a JSON array of job objects with properties: title, company, location, type (always "Fulltime"), and description. Limit to 15 jobs maximum. Return ONLY valid JSON, no additional text or explanations.'
           },
           {
             role: 'user',
@@ -70,7 +75,7 @@ serve(async (req) => {
         ],
         temperature: 0.2,
         top_p: 0.9,
-        max_tokens: 3000,
+        max_tokens: 4000,
         return_images: false,
         return_related_questions: false,
         search_recency_filter: 'month',
@@ -80,16 +85,18 @@ serve(async (req) => {
     });
 
     console.log('Perplexity API response status:', response.status);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
     if (!response.ok) {
-      console.error(`Perplexity API error: ${response.status} - ${response.statusText}`);
       const errorText = await response.text();
+      console.error(`Perplexity API error: ${response.status} - ${response.statusText}`);
       console.error('Error details:', errorText);
       
-      // Return fallback jobs on API error
       const fallbackJobs = createFallbackJobs(jobTitles[0] || 'Software Engineer', locationContext);
       return new Response(JSON.stringify({ 
         jobs: fallbackJobs,
+        source: 'fallback',
+        error: `API error ${response.status}: ${response.statusText}`,
         message: `API error (${response.status}): Using sample data`
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -97,28 +104,39 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    console.log('Perplexity API response data:', JSON.stringify(data, null, 2));
+    console.log('Perplexity API response:', JSON.stringify(data, null, 2));
     
     let jobsData;
     
     try {
-      // Try to parse the response as JSON
       const content = data.choices[0].message.content;
-      console.log('Perplexity response content:', content);
+      console.log('Raw content from Perplexity:', content);
       
-      // Extract JSON from the response if it's wrapped in text
-      const jsonMatch = content.match(/\[[\s\S]*\]/);
-      if (jsonMatch) {
-        jobsData = JSON.parse(jsonMatch[0]);
-        console.log('Parsed jobs data:', jobsData);
-      } else {
-        // If no JSON found, create structured data from text
-        console.log('No JSON found, parsing text');
-        jobsData = parseJobsFromText(content, jobTitles[0] || 'Software Engineer');
+      // Try to parse the response as JSON
+      let parsedContent;
+      try {
+        parsedContent = JSON.parse(content);
+      } catch (parseError) {
+        console.log('Direct JSON parse failed, trying to extract JSON...');
+        // Try to extract JSON array from the response
+        const jsonMatch = content.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          parsedContent = JSON.parse(jsonMatch[0]);
+        } else {
+          throw new Error('No JSON array found in response');
+        }
       }
+      
+      if (Array.isArray(parsedContent)) {
+        jobsData = parsedContent;
+        console.log('Successfully parsed jobs data:', jobsData.length, 'jobs');
+      } else {
+        throw new Error('Parsed content is not an array');
+      }
+      
     } catch (parseError) {
       console.error('Error parsing jobs data:', parseError);
-      // Fallback: create sample jobs based on search criteria
+      console.log('Falling back to sample data');
       jobsData = createFallbackJobs(jobTitles[0] || 'Software Engineer', locationContext);
     }
 
@@ -138,20 +156,20 @@ serve(async (req) => {
       description: job.description || `Join our team as a ${job.title || jobTitles[0]} and work on exciting projects.`
     }));
 
-    console.log('Final jobs data:', jobsData.length, 'jobs');
+    console.log('Final jobs data:', jobsData.length, 'jobs processed');
 
     return new Response(JSON.stringify({ 
       jobs: jobsData,
       source: 'perplexity-api',
-      message: `Found ${jobsData.length} jobs via Perplexity API`
+      message: `Found ${jobsData.length} jobs via Perplexity AI`
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
     console.error('Error in fetch-jobs function:', error);
+    console.error('Error stack:', error.stack);
     
-    // Always return fallback jobs with proper CORS headers
     const fallbackJobs = createFallbackJobs('Software Engineer', 'various locations');
     return new Response(JSON.stringify({ 
       jobs: fallbackJobs,
@@ -159,72 +177,11 @@ serve(async (req) => {
       error: error.message,
       message: 'Using sample data due to error'
     }), {
-      status: 200, // Return 200 to avoid CORS issues
+      status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 });
-
-function parseJobsFromText(text: string, jobTitle: string): any[] {
-  // Simple text parsing to extract job information
-  const lines = text.split('\n').filter(line => line.trim());
-  const jobs = [];
-  
-  for (let i = 0; i < Math.min(lines.length, 10); i++) {
-    const line = lines[i];
-    if (line.includes('*') || line.includes('-') || line.includes('•')) {
-      const cleanLine = line.replace(/[*\-•]\s*/, '').trim();
-      if (cleanLine.length > 10) {
-        jobs.push({
-          id: i + 1,
-          title: jobTitle,
-          company: extractCompanyName(cleanLine),
-          location: extractLocation(cleanLine),
-          type: "Fulltime",
-          description: cleanLine
-        });
-      }
-    }
-  }
-  
-  return jobs.length > 0 ? jobs : createFallbackJobs(jobTitle, 'various locations');
-}
-
-function extractCompanyName(text: string): string {
-  // Try to extract company name from text
-  const companyPatterns = [
-    /at\s+([A-Z][a-zA-Z\s&]+)/i,
-    /([A-Z][a-zA-Z\s&]+)\s+is\s+hiring/i,
-    /([A-Z][a-zA-Z\s&]+)\s+-/i
-  ];
-  
-  for (const pattern of companyPatterns) {
-    const match = text.match(pattern);
-    if (match && match[1]) {
-      return match[1].trim();
-    }
-  }
-  
-  return 'Growing Tech Company';
-}
-
-function extractLocation(text: string): string {
-  // Try to extract location from text
-  const locationPatterns = [
-    /in\s+([A-Z][a-zA-Z\s,]+)/i,
-    /([A-Z][a-zA-Z\s]+,\s*[A-Z]{2})/i,
-    /(Remote)/i
-  ];
-  
-  for (const pattern of locationPatterns) {
-    const match = text.match(pattern);
-    if (match && match[1]) {
-      return match[1].trim();
-    }
-  }
-  
-  return 'Remote';
-}
 
 function createFallbackJobs(jobTitle: string, locationContext: string): any[] {
   const companies = [
