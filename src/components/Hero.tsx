@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
-import { SignUpButton } from '@clerk/clerk-react';
+import { SignUpButton, SignedIn, SignedOut } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 import ApplicationForm from "./ApplicationForm";
 import AuthButton from "./AuthButton";
 const Hero = () => {
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
+  const navigate = useNavigate();
   return <>
     {/* Fixed header with logo and auth */}
     <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 py-4">
@@ -50,9 +52,24 @@ const Hero = () => {
           <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">ApplyFirst monitors job boards in real time and instantly contacts hiring managers with your resume. If there's interest, we apply on your behalf.</p>
           
           <div className="flex justify-center mb-16">
-            <SignUpButton mode="modal" forceRedirectUrl="/home">
-              <Button variant="outline" size="lg" className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">Try it now</Button>
-            </SignUpButton>
+            <SignedOut>
+              <SignUpButton mode="modal" forceRedirectUrl="/home">
+                <Button variant="outline" size="lg" className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
+                  Try it now
+                </Button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <Button 
+                onClick={() => navigate('/home')}
+                variant="outline" 
+                size="lg" 
+                className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300"
+              >
+                Go to Dashboard
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </SignedIn>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
