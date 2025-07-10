@@ -14,7 +14,7 @@ interface UpgradeDialogProps {
 const UpgradeDialog: React.FC<UpgradeDialogProps> = ({ 
   isOpen, 
   onClose, 
-  message = "You need a Premium or Elite plan to activate Copilot",
+  message = "You need a Premium or Elite plan to activate ApplyFirst",
   buttonText = "View Plans ↗"
 }) => {
   const navigate = useNavigate();

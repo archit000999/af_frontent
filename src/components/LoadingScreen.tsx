@@ -23,7 +23,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
           </h2>
           
           <p className="text-sm text-gray-600">
-            Please wait while we set up your copilot...
+            Please wait while we set up your ApplyFirst...
           </p>
         </div>
       </div>

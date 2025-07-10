@@ -68,7 +68,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
       const planName = getPlanName(maxCopilots);
       toast({
         title: "Limit Reached",
-        description: `You can only create up to ${Math.max(maxCopilots, 1)} copilot configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
+        description: `You can only create up to ${Math.max(maxCopilots, 1)} ApplyFirst configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
         variant: "destructive"
       });
       return false;
@@ -145,7 +145,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
       if (!silent) {
         toast({
           title: "Success",
-          description: "Your copilot configuration has been saved"
+          description: "Your ApplyFirst configuration has been saved"
         });
       }
       return true;

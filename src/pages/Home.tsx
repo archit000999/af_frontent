@@ -326,8 +326,8 @@ const Home = () => {
         onClose={() => setIsUpgradeDialogOpen(false)}
         message={
           upgradeDialogType === 'elite' 
-            ? "You need an Elite plan to create multiple copilots."
-            : "You need a Premium or Elite plan to activate Copilot"
+            ? "You need an Elite plan to create multiple ApplyFirst."
+            : "You need a Premium or Elite plan to activate ApplyFirst"
         }
         buttonText={
           upgradeDialogType === 'elite' 
