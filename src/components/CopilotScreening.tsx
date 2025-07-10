@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Settings, ChevronRight, ChevronDown, Upload, HelpCircle, X, Check, Loader2 } from 'lucide-react';
+import { ArrowLeft, Settings, ChevronRight, ChevronDown, Upload, HelpCircle, X, Check, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UserButton } from '@clerk/clerk-react';
 import { extractResumeData, ExtractedResumeData } from '@/utils/resumeExtractor';
@@ -291,6 +291,51 @@ const CopilotScreening = () => {
            expectedSalary;
   };
 
+  // Get required fields status for better UX
+  const getRequiredFieldsStatus = () => {
+    const fields = [
+      { name: 'CV/Resume', completed: !!cvFile, label: 'Upload your CV/Resume' },
+      { name: 'Phone Number', completed: !!phoneNumber, label: 'Enter your phone number' },
+      { name: 'Country', completed: !!country, label: 'Select your country' },
+      { name: 'City', completed: !!city, label: 'Enter your city' },
+      { name: 'Job Title', completed: !!jobTitle, label: 'Enter your job title' },
+      { name: 'Availability', completed: !!availability, label: 'Select your availability' },
+      { name: 'Work Countries', completed: workCountries.length > 0, label: 'Select work countries' },
+      { name: 'Sponsorship', completed: !!sponsorship, label: 'Select sponsorship status' },
+      { name: 'Nationality', completed: !!nationality, label: 'Enter your nationality' },
+      { name: 'Current Salary', completed: !!currentSalary, label: 'Enter current salary' },
+      { name: 'Expected Salary', completed: !!expectedSalary, label: 'Enter expected salary' }
+    ];
+    
+    const completed = fields.filter(field => field.completed).length;
+    const total = fields.length;
+    const missing = fields.filter(field => !field.completed);
+    
+    return { fields, completed, total, missing };
+  };
+
+  // Helper component for required field indicator
+  const RequiredIndicator = () => (
+    <span className="text-red-500 ml-1">*</span>
+  );
+
+  // Helper component for field validation feedback
+  const FieldValidation = ({ isValid, fieldName }: { isValid: boolean; fieldName: string }) => (
+    <div className="mt-1 flex items-center text-sm">
+      {isValid ? (
+        <div className="flex items-center text-green-600">
+          <CheckCircle className="w-4 h-4 mr-1" />
+          <span>Completed</span>
+        </div>
+      ) : (
+        <div className="flex items-center text-red-600">
+          <AlertCircle className="w-4 h-4 mr-1" />
+          <span>{fieldName} is required</span>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 to-purple-50 overflow-hidden">
       {/* Header */}
@@ -380,8 +425,13 @@ const CopilotScreening = () => {
                 {/* CV/Resume Upload */}
                 <div>
                   <div className="flex items-center space-x-2 mb-3">
-                    <h3 className="text-lg font-medium text-gray-900">Confirm the CV/Resume you would like to use</h3>
-                    
+                    <h3 className="text-lg font-medium text-gray-900">
+                      Confirm the CV/Resume you would like to use
+                      <RequiredIndicator />
+                    </h3>
+                    {cvFile && (
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    )}
                   </div>
                   
                   {!cvFile ? (
@@ -446,6 +496,7 @@ const CopilotScreening = () => {
                       </div>
                     </div>
                   )}
+                  <FieldValidation isValid={!!cvFile} fieldName="CV/Resume" />
                 </div>
 
                 {/* Cover Letter */}
@@ -525,11 +576,15 @@ const CopilotScreening = () => {
                   <div className="flex items-center space-x-2 mb-3">
                     <h3 className="text-lg font-medium text-gray-900">
                       Please enter your mobile number for employers to contact you
+                      <RequiredIndicator />
                     </h3>
                     {extractedData?.phone && phoneNumber && (
                       <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
                         Auto-filled
                       </Badge>
+                    )}
+                    {phoneNumber && (
+                      <CheckCircle className="w-5 h-5 text-green-600" />
                     )}
                   </div>
                   <div className="flex items-center space-x-2">
@@ -552,29 +607,40 @@ const CopilotScreening = () => {
                       type="tel"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      className="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      className={`flex-1 max-w-xs px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm ${
+                        phoneNumber ? 'border-green-300 bg-green-50' : 'border-gray-300'
+                      }`}
                       placeholder="Enter your mobile number"
                       required
                     />
                   </div>
+                  <FieldValidation isValid={!!phoneNumber} fieldName="Phone number" />
                 </div>
 
                 {/* Location */}
                 <div>
                   <div className="flex items-center space-x-2 mb-4">
-                    <h3 className="text-lg font-medium text-gray-900">Where are you currently based?</h3>
+                    <h3 className="text-lg font-medium text-gray-900">
+                      Where are you currently based?
+                      <RequiredIndicator />
+                    </h3>
                     {extractedData?.location && (city || country) && (
                       <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
                         Auto-filled
                       </Badge>
                     )}
+                    {country && city && (
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    )}
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Country <RequiredIndicator />
+                      </label>
                       <Select value={country} onValueChange={setCountry}>
-                        <SelectTrigger>
+                        <SelectTrigger className={country ? 'border-green-300 bg-green-50' : 'border-gray-300'}>
                           <SelectValue placeholder="Select country" />
                         </SelectTrigger>
                         <SelectContent>
@@ -586,13 +652,17 @@ const CopilotScreening = () => {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        City <RequiredIndicator />
+                      </label>
                       <input
                         type="text"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         placeholder="Type in your city/town, ex: Chicago"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm ${
+                          city ? 'border-green-300 bg-green-50' : 'border-gray-300'
+                        }`}
                         required
                       />
                     </div>
@@ -619,6 +689,7 @@ const CopilotScreening = () => {
                       />
                     </div>
                   </div>
+                  <FieldValidation isValid={!!(country && city)} fieldName="Location (Country and City)" />
                 </div>
 
                 {/* Job Title */}
@@ -626,11 +697,15 @@ const CopilotScreening = () => {
                   <div className="flex items-center space-x-2 mb-3">
                     <h3 className="text-lg font-medium text-gray-900">
                       What is your current (or previous) job title?
+                      <RequiredIndicator />
                     </h3>
                     {extractedData?.jobTitle && jobTitle && (
                       <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
                         Auto-filled
                       </Badge>
+                    )}
+                    {jobTitle && (
+                      <CheckCircle className="w-5 h-5 text-green-600" />
                     )}
                   </div>
                   <input
@@ -638,16 +713,25 @@ const CopilotScreening = () => {
                     value={jobTitle}
                     onChange={(e) => setJobTitle(e.target.value)}
                     placeholder="Enter your current or previous job title"
-                    className="w-full max-w-md px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                    className={`w-full max-w-md px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm ${
+                      jobTitle ? 'border-green-300 bg-green-50' : 'border-gray-300'
+                    }`}
                     required
                   />
+                  <FieldValidation isValid={!!jobTitle} fieldName="Job title" />
                 </div>
 
                 {/* Availability */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">
-                    What is your availability / notice period?
-                  </h3>
+                  <div className="flex items-center space-x-2 mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">
+                      What is your availability / notice period?
+                      <RequiredIndicator />
+                    </h3>
+                    {availability && (
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    )}
+                  </div>
                   
                   <div className="flex flex-wrap gap-3">
                     {availabilityOptions.map((option) => (
@@ -667,13 +751,20 @@ const CopilotScreening = () => {
                       </button>
                     ))}
                   </div>
+                  <FieldValidation isValid={!!availability} fieldName="Availability" />
                 </div>
 
                 {/* Work Countries */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">
-                    In which countries are you eligible to work in?
-                  </h3>
+                  <div className="flex items-center space-x-2 mb-3">
+                    <h3 className="text-lg font-medium text-gray-900">
+                      In which countries are you eligible to work in?
+                      <RequiredIndicator />
+                    </h3>
+                    {workCountries.length > 0 && (
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    )}
+                  </div>
                   <p className="text-gray-600 text-sm mb-4">
                     Note: your ApplyFirst will only apply to jobs in countries where you have the legal right to work in.
                   </p>
@@ -682,7 +773,9 @@ const CopilotScreening = () => {
                     value={workCountries[0] || ''} 
                     onValueChange={(value) => setWorkCountries([value])}
                   >
-                    <SelectTrigger className={`w-full max-w-sm ${workCountries.length > 0 ? 'bg-purple-600 text-white' : ''}`}>
+                    <SelectTrigger className={`w-full max-w-sm ${
+                      workCountries.length > 0 ? 'bg-green-50 border-green-300' : 'border-gray-300'
+                    }`}>
                       <SelectValue placeholder="Select country" />
                     </SelectTrigger>
                     <SelectContent>
@@ -691,13 +784,20 @@ const CopilotScreening = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FieldValidation isValid={workCountries.length > 0} fieldName="Work countries" />
                 </div>
 
                 {/* Sponsorship */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">
-                    Will you now or in the future require sponsorship for an employment visa?
-                  </h3>
+                  <div className="flex items-center space-x-2 mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">
+                      Will you now or in the future require sponsorship for an employment visa?
+                      <RequiredIndicator />
+                    </h3>
+                    {sponsorship && (
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    )}
+                  </div>
                   
                   <div className="flex space-x-4">
                     <button
@@ -728,6 +828,7 @@ const CopilotScreening = () => {
                       <span className="text-sm">No</span>
                     </button>
                   </div>
+                  <FieldValidation isValid={!!sponsorship} fieldName="Sponsorship status" />
                 </div>
 
          
@@ -738,12 +839,16 @@ const CopilotScreening = () => {
                     <div className="flex items-center space-x-2 mb-3">
                       <h3 className="text-lg font-medium text-gray-900">
                         What is your current (or previous) yearly salary?
+                        <RequiredIndicator />
                       </h3>
                       
                       {extractedData?.salary && currentSalary && (
                         <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
                           Auto-filled
                         </Badge>
+                      )}
+                      {currentSalary && (
+                        <CheckCircle className="w-5 h-5 text-green-600" />
                       )}
                     </div>
                     
@@ -755,23 +860,30 @@ const CopilotScreening = () => {
                         type="text"
                         value={currentSalary}
                         onChange={(e) => setCurrentSalary(e.target.value)}
-                        className="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                        className={`flex-1 max-w-xs px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm ${
+                          currentSalary ? 'border-green-300 bg-green-50' : 'border-gray-300'
+                        }`}
                         placeholder="Enter current salary"
                         required
                       />
                     </div>
+                    <FieldValidation isValid={!!currentSalary} fieldName="Current salary" />
                   </div>
 
                   <div>
                     <div className="flex items-center space-x-2 mb-3">
                       <h3 className="text-lg font-medium text-gray-900">
                         What is your expected yearly salary for a fulltime position?
+                        <RequiredIndicator />
                       </h3>
                       
                       {extractedData?.salary && expectedSalary && (
                         <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
                           Auto-filled
                         </Badge>
+                      )}
+                      {expectedSalary && (
+                        <CheckCircle className="w-5 h-5 text-green-600" />
                       )}
                     </div>
                     
@@ -783,11 +895,14 @@ const CopilotScreening = () => {
                         type="text"
                         value={expectedSalary}
                         onChange={(e) => setExpectedSalary(e.target.value)}
-                        className="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                        className={`flex-1 max-w-xs px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm ${
+                          expectedSalary ? 'border-green-300 bg-green-50' : 'border-gray-300'
+                        }`}
                         placeholder="Enter expected salary"
                         required
                       />
                     </div>
+                    <FieldValidation isValid={!!expectedSalary} fieldName="Expected salary" />
                   </div>
                 </div>
 
@@ -1137,23 +1252,71 @@ const CopilotScreening = () => {
               </div>
             </div>
 
+            {/* Progress and Requirements Summary */}
+            <div className="flex-shrink-0 px-8 py-4 bg-gray-50 border-t">
+              {(() => {
+                const status = getRequiredFieldsStatus();
+                return (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm font-medium text-gray-700">Form Progress:</span>
+                        <span className="text-sm text-purple-600 font-semibold">
+                          {status.completed} of {status.total} required fields completed
+                        </span>
+                      </div>
+                      <div className="w-32 bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${(status.completed / status.total) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                    
+                    {status.missing.length > 0 && (
+                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                        <div className="flex items-start space-x-2">
+                          <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                          <div className="space-y-1">
+                            <p className="text-sm font-medium text-amber-800">
+                              Please complete the following required fields:
+                            </p>
+                            <ul className="text-xs text-amber-700 space-y-0.5">
+                              {status.missing.slice(0, 3).map((field, index) => (
+                                <li key={index}>• {field.label}</li>
+                              ))}
+                              {status.missing.length > 3 && (
+                                <li>• And {status.missing.length - 3} more...</li>
+                              )}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
+
             {/* Footer Buttons - Fixed */}
             <div className="flex-shrink-0 p-8 pt-4">
-              <div className="flex justify-between border-t pt-4">                  <Button
+              <div className="flex justify-between border-t pt-4">
+                <Button
+                  variant="outline"
+                  onClick={handleBack}
+                  className="px-6 py-2 text-sm"
+                >
+                  Back
+                </Button>
+                <div className="flex space-x-3">
+                  <Button
                     variant="outline"
-                    onClick={handleBack}
+                    onClick={handleSaveAndClose}
                     className="px-6 py-2 text-sm"
                   >
-                    Back
+                    Save & Close
                   </Button>
-                  <div className="flex space-x-3">
-                    <Button
-                      variant="outline"
-                      onClick={handleSaveAndClose}
-                      className="px-6 py-2 text-sm"
-                    >
-                      Save & Close
-                    </Button>
+                  <div className="relative">
                     <Button
                       onClick={handleNext}
                       disabled={!isFormValid() || isLoading}
@@ -1171,6 +1334,7 @@ const CopilotScreening = () => {
                         </>
                       )}
                     </Button>
+                  </div>
                 </div>
               </div>
             </div>
