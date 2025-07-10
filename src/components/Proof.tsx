@@ -13,7 +13,7 @@ const Proof = () => {
     },
     {
       icon: Users,
-      number: "600+",
+      number: "400+",
       label: "High-intent contacts reached monthly per user",
       color: "from-blue-400 to-cyan-500"
     },
