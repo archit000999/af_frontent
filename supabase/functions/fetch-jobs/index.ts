@@ -55,11 +55,11 @@ serve(async (req) => {
     console.log('Making Perplexity API call with query:', searchQuery);
 
     const requestBody = {
-      model: 'llama-3.1-sonar-small-128k-online',
+      model: 'sonar',
       messages: [
         {
           role: 'system',
-          content: 'You are a job search assistant. Return ONLY a valid JSON array of job objects. Each job must have: title, company, location, type (always "Fulltime"), and description. Maximum 15 jobs. Do not include any explanatory text, markdown, or additional formatting - just the JSON array.'
+          content: 'You are a job search assistant. Return ONLY a valid JSON array of job objects. Each job must have: title, company, location, type (always "Fulltime"), and description. Maximum 20 jobs. Do not include any explanatory text, markdown, or additional formatting - just the JSON array.'
         },
         {
           role: 'user',
