@@ -13,7 +13,7 @@ const HowItWorks = () => {
     {
       icon: Target,
       title: "You're in the First 10 Applicants",
-      description: "By reaching out instantly, you're among the first candidates they see, increasing your interview chances by 300%.",
+      description: "Our human agents manually apply to each job using our in-house Chrome extension — ensuring you're among the first 10 applicants.",
       step: "02",
       color: "from-indigo-500 to-purple-500"
     },
