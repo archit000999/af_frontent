@@ -1,8 +1,6 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 interface UpgradeDialogProps {
   isOpen: boolean;
@@ -17,7 +15,7 @@ const UpgradeDialog: React.FC<UpgradeDialogProps> = ({
   message = "Upgrade plan to activate ApplyFirst Concierge Service",
   buttonText = "Upgrade"
 }) => {
-  const navigate = useNavigate();
+  
 
   const handleViewPlans = () => {
     window.open('https://buy.stripe.com/4gMaEX8Cxg8afIN59C8ww00', '_blank');
@@ -27,14 +25,7 @@ const UpgradeDialog: React.FC<UpgradeDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader className="relative">
-          <button
-            onClick={onClose}
-            className="absolute p-1 right-0 top-0 rounded-sm opacity-70 
-           
-            ">
-            
-          </button>
+        <DialogHeader>
           <DialogTitle className="text-center text-lg font-semibold">
             {message}
           </DialogTitle>
