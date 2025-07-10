@@ -50,7 +50,7 @@ serve(async (req) => {
     }
 
     // Create a more specific search query
-    const searchQuery = `Find current ${jobTitles.join(' or ')} job openings that are ${locationContext}. Include company names, specific job titles, locations, and brief descriptions. Focus on legitimate companies actively hiring in January 2025. Provide real job listings with accurate company information.`;
+    const searchQuery = `Find current ${jobTitles.join(' or ')} job openings that are ${locationContext}. Include company names, specific job titles, locations, and brief descriptions. Focus on legitimate companies actively hiring in July 2025. Provide real job listings with accurate company information.`;
 
     console.log('Making Perplexity API call with query:', searchQuery);
 
@@ -59,7 +59,7 @@ serve(async (req) => {
       messages: [
         {
           role: 'system',
-          content: 'You are a job search assistant. Return ONLY a valid JSON array of job objects. Each job must have: title, company, location, type (always "Fulltime"), and description. Maximum 20 jobs. Do not include any explanatory text, markdown, or additional formatting - just the JSON array.'
+          content: 'You are a job search assistant. Return ONLY a valid JSON array of job objects. Each job must have: title, company, location, type (always "Fulltime"), and description. Maximum 50 jobs. Do not include any explanatory text, markdown, or additional formatting - just the JSON array.'
         },
         {
           role: 'user',
