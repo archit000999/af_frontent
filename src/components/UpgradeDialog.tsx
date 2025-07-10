@@ -20,7 +20,7 @@ const UpgradeDialog: React.FC<UpgradeDialogProps> = ({
   const navigate = useNavigate();
 
   const handleViewPlans = () => {
-    navigate('/payment');
+    window.open('https://buy.stripe.com/4gMaEX8Cxg8afIN59C8ww00', '_blank');
     onClose();
   };
 
