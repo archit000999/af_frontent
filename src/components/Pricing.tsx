@@ -55,6 +55,7 @@ const Pricing = () => {
                   <div className="text-left">
                     <div className="text-slate-600 text-lg">/week</div>
                     <div className="text-sm text-green-600 font-medium">
+                      <span className="text-slate-700 text-lg">Human reviews each job to evaluate fit and verify hiring managers and verify each email before sending from your inbox email</span>
                   </div>
                   </div>
                 </div>
