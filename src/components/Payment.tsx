@@ -28,7 +28,7 @@ const Payment = () => {
   };
   const handleUpgrade = async () => {
     // Open the Stripe payment link in a new tab
-    window.open('https://buy.stripe.com/4gMaEX8Cxg8afIN59C8ww00', '_blank');
+    window.open('https://buy.stripe.com/aFa9AT3id2hkbsxatW8ww02', '_blank');
   };
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 py-12 px-4">
       <div className="max-w-6xl mx-auto">
