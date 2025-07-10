@@ -49,6 +49,7 @@ serve(async (req) => {
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     console.log("Stripe key exists:", !!stripeKey);
     console.log("Stripe key prefix:", stripeKey ? stripeKey.substring(0, 8) + "..." : "none");
+    console.log("Stripe key type:", stripeKey ? (stripeKey.startsWith('sk_live_') ? 'LIVE' : stripeKey.startsWith('sk_test_') ? 'TEST' : 'UNKNOWN') : 'NONE');
     
     if (!stripeKey) {
       console.error("❌ STRIPE_SECRET_KEY not configured");
@@ -60,7 +61,7 @@ serve(async (req) => {
 
     // Validate Stripe key format
     if (!stripeKey.startsWith('sk_')) {
-      console.error("❌ Invalid Stripe key format");
+      console.error("❌ Invalid Stripe key format - must start with 'sk_'");
       return new Response(JSON.stringify({ error: "Invalid payment configuration" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,
@@ -79,16 +80,35 @@ serve(async (req) => {
     console.log("🔄 Initializing Stripe...");
     const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
 
-    // Test Stripe connection first
+    // Test Stripe connection with detailed error handling
     try {
       console.log("🔄 Testing Stripe connection...");
-      await stripe.customers.list({ limit: 1 });
+      const testResult = await stripe.customers.list({ limit: 1 });
       console.log("✅ Stripe connection successful");
+      console.log("✅ Stripe account info - has_more:", testResult.has_more);
     } catch (stripeError) {
       console.error("❌ Stripe connection failed:", stripeError);
+      console.error("❌ Stripe error type:", stripeError.type);
+      console.error("❌ Stripe error code:", stripeError.code);
+      console.error("❌ Stripe error message:", stripeError.message);
+      console.error("❌ Stripe error param:", stripeError.param);
+      
+      let errorMessage = "Payment system connection failed";
+      if (stripeError.code === 'account_invalid') {
+        errorMessage = "Stripe account not activated for live payments. Please complete your account setup in Stripe Dashboard.";
+      } else if (stripeError.code === 'api_key_expired') {
+        errorMessage = "Stripe API key has expired. Please generate a new one.";
+      } else if (stripeError.code === 'testmode_charges_only') {
+        errorMessage = "This Stripe account can only accept test payments. Please activate live payments.";
+      } else if (stripeError.code === 'account_restricted') {
+        errorMessage = "Stripe account is restricted. Please check your account status in Stripe Dashboard.";
+      }
+      
       return new Response(JSON.stringify({ 
-        error: "Payment system connection failed",
-        details: stripeError.message 
+        error: errorMessage,
+        details: stripeError.message,
+        stripeErrorCode: stripeError.code,
+        stripeErrorType: stripeError.type
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,
