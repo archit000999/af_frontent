@@ -21,14 +21,7 @@ const Payment = () => {
     price: '$99',
     period: '/week',
     description: 'AI scans 50+ job boards, human agents apply to 20 matching jobs daily',
-    features: [
-      'AI scans 50+ job boards in real time, and our human agents apply to 20 matching jobs on your behalf every day',
-      'We find the right hiring managers using LinkedIn research and verified emails from trusted data providers',
-      '20 personalized emails sent daily from your Gmail — complete with your resume, tailored messaging, and your name',
-      'Save 20+ hours every week — spend less time applying, and more time preparing for interviews',
-      '2–4 interviews guaranteed per month — or your next month is free',
-      'We onboard only 40 candidates per week, focused on roles paying $100K+'
-    ],
+    features: ['AI scans 50+ job boards in real time, and our human agents apply to 20 matching jobs on your behalf every day', 'We find the right hiring managers using LinkedIn research and verified emails from trusted data providers', '20 personalized emails sent daily from your Gmail — complete with your resume, tailored messaging, and your name', 'Save 20+ hours every week — spend less time applying, and more time preparing for interviews', '2–4 interviews guaranteed per month — or your next month is free', 'We onboard only 40 candidates per week, focused on roles paying $100K+'],
     buttonText: 'Get Started',
     popular: true,
     color: 'from-blue-600 to-indigo-600'
@@ -42,14 +35,11 @@ const Payment = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
-            <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-3 rounded-full">
-              <Sparkles className="w-8 h-8 text-white" />
-            </div>
+            
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Plan</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Unlock the full potential of JobCopilot with our premium features
-          </p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        </h1>
+          
         </div>
 
         {/* Pricing Card */}
@@ -81,10 +71,7 @@ const Payment = () => {
                     <span className="text-xl font-bold text-green-600">First Week Fee Waived Off</span>
                   </div>
                   <p className="text-gray-700 font-medium mb-2">If you participate in our upcoming webinar "Effective Strategies to find job in the era of AI"</p>
-                  <button 
-                    onClick={() => window.open('https://calendly.com/vaasu_bhartia/job-search-ai-webinar', '_blank')} 
-                    className="text-blue-600 hover:text-blue-800 font-medium underline transition-colors"
-                  >
+                  <button onClick={() => window.open('https://calendly.com/vaasu_bhartia/job-search-ai-webinar', '_blank')} className="text-blue-600 hover:text-blue-800 font-medium underline transition-colors">
                     Click here to see the schedule of webinar
                   </button>
                 </div>
@@ -100,36 +87,26 @@ const Payment = () => {
               </CardHeader>
 
               <CardContent className="px-12 pb-12">
-                <Button 
-                  onClick={handleUpgrade} 
-                  disabled={isLoading} 
-                  className="w-full mb-8 py-6 text-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-                >
-                  {isLoading ? (
-                    <div className="flex items-center gap-2">
+                <Button onClick={handleUpgrade} disabled={isLoading} className="w-full mb-8 py-6 text-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                  {isLoading ? <div className="flex items-center gap-2">
                       <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                       Processing...
-                    </div>
-                  ) : (
-                    <>
+                    </div> : <>
                       {plan.buttonText}
                       <ArrowLeft className="ml-2 w-5 h-5 rotate-180" />
-                    </>
-                  )}
+                    </>}
                 </Button>
 
                 {/* Features */}
                 <div className="space-y-4">
-                  {plan.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex items-start gap-3">
+                  {plan.features.map((feature, featureIndex) => <div key={featureIndex} className="flex items-start gap-3">
                       <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
                         <Check className="w-4 h-4 text-green-600" />
                       </div>
                       <span className="text-gray-700 text-lg leading-relaxed">
                         {feature}
                       </span>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
                 
                 <p className="text-center text-sm text-gray-500 mt-8">
