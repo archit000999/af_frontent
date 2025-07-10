@@ -142,35 +142,25 @@ const CopilotPreview = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center space-x-2 text-purple-600 font-medium text-sm">
-              <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-purple-600 text-xs">◯</span>
-              </div>
+            <div
+            onClick={()=>navigate("/")}
+            className="flex items-center space-x-2 text-purple-600 font-medium text-base">
+              
               <span>ApplyFirst</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
+            <div
+            onClick={()=>navigate("/applications")}
+            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base">
               <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">📋</span>
               </div>
               <span>Applications</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
-              <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">🔧</span>
-              </div>
-              <span>Tools</span>
-            </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm">
-              <div className="w-6 h-6 flex items-center justify-center">
-                <span className="text-gray-600 text-xs">❓</span>
-              </div>
-              <span>Support</span>
-            </div>
+           
           </nav>
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900" />
+            
             <UserButton 
               appearance={{
                 elements: {
@@ -212,12 +202,12 @@ const CopilotPreview = () => {
             </div>
           ) : (
             /* Jobs Grid */
-            <div className="flex-1 overflow-y-auto mb-8">
+            <div className="flex-1 overflow-y-auto mb-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {jobs.map((job) => (
                   <div
                     key={job.id}
-                    className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow"
+                    className="bg-white rounded-lg border border-gray-200 px-5 py-4 hover:shadow-sm transition-shadow"
                   >
                     <div className="space-y-4">
                       {/* Job Title */}

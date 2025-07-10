@@ -97,7 +97,7 @@ const CopilotFinalStep = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900" />
+            
             <UserButton 
               appearance={{
                 elements: {
@@ -116,7 +116,7 @@ const CopilotFinalStep = () => {
             {/* Header - Fixed */}
             <div className="flex-shrink-0 p-8 pb-6">
               <div className="text-center">
-                <h1 className="text-base font-semibold text-gray-900">
+                <h1 className="text-xl font-semibold text-gray-900">
                   ApplyFirst Configuration
                 </h1>
                 <p className="text-sm text-gray-600 mt-2">Step 4 of 4</p>
@@ -172,7 +172,7 @@ const CopilotFinalStep = () => {
                       onClick={() => setSelectedMode('auto-fill')}
                     >
                       <div className="flex items-start space-x-3">
-                        <div className={`w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${
+                        <div className={`w-6 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${
                           selectedMode === 'auto-fill'
                             ? 'border-purple-500 bg-purple-500'
                             : 'border-gray-300'
@@ -244,7 +244,6 @@ const CopilotFinalStep = () => {
                                 <SelectItem value="casual" className="text-sm">Casual</SelectItem>
                               </SelectContent>
                             </Select>
-                            <HelpCircle className="w-5 h-5 text-purple-500 cursor-pointer" />
                           </div>
                         </div>
 
@@ -262,20 +261,8 @@ const CopilotFinalStep = () => {
                                 <SelectItem value="advanced" className="text-sm">Advanced</SelectItem>
                               </SelectContent>
                             </Select>
-                            <HelpCircle className="w-5 h-5 text-purple-500 cursor-pointer" />
-                          </div>
-                        </div>
 
-                        {/* Action Buttons */}
-                        <div className="flex items-center justify-between pt-4">
-                          <button className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 transition-colors">
-                            <Eye className="w-4 h-4" />
-                            <span className="text-sm">Preview writing style</span>
-                          </button>
-                          <button className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 transition-colors">
-                            <RotateCcw className="w-4 h-4" />
-                            <span className="text-sm">Reset to default</span>
-                          </button>
+                          </div>
                         </div>
                       </div>
                     </div>

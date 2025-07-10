@@ -15,7 +15,7 @@ const UpgradeDialog: React.FC<UpgradeDialogProps> = ({
   isOpen, 
   onClose, 
   message = "You need a Premium or Elite plan to activate ApplyFirst",
-  buttonText = "View Plans ↗"
+  buttonText = "Upgrade to Elite"
 }) => {
   const navigate = useNavigate();
 
@@ -30,9 +30,10 @@ const UpgradeDialog: React.FC<UpgradeDialogProps> = ({
         <DialogHeader className="relative">
           <button
             onClick={onClose}
-            className="absolute right-0 top-0 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-          >
-            <X className="h-4 w-4" />
+            className="absolute p-1 right-0 top-0 rounded-sm opacity-70 
+           
+            ">
+            
           </button>
           <DialogTitle className="text-center text-lg font-semibold">
             {message}

@@ -249,7 +249,7 @@ const CopilotSetup = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900" />
+            
             <UserButton 
               appearance={{
                 elements: {
@@ -266,10 +266,10 @@ const CopilotSetup = () => {
         <div className="max-w-4xl mx-auto h-full flex flex-col">
           <div className="bg-white rounded-lg shadow-lg flex flex-col h-full overflow-hidden">
             {/* Header - Fixed */}
-            <div className="flex-shrink-0 p-8 pb-4">
+            <div className="flex-shrink-0 px-8 pb-2 py-4">
               <div className="text-center">
-                <h1 className="text-base font-semibold text-gray-900">
-                  {isNewCopilot ? 'New Copilot Configuration' : 'Edit Copilot Configuration'}
+                <h1 className="text-xl font-semibold text-gray-900">
+                  {isNewCopilot ? 'New ApplyFirst Configuration' : 'Edit ApplyFirst Configuration'}
                 </h1>
                 <p className="text-sm text-gray-600 mt-2">Step {currentStep} of 4</p>
                 <p className="text-sm text-gray-700 mt-4">
@@ -330,7 +330,7 @@ const CopilotSetup = () => {
                       
                       {/* Remote locations section */}
                       {config.workLocationTypes.includes('remote') && (
-                        <div className="border rounded-lg p-4 bg-gray-50">
+                        <div className="border rounded-lg px-4 py-2 bg-gray-50">
                           <h4 className="text-base font-medium text-gray-900 mb-3">Remote Job Locations</h4>
                           <div className="flex items-center space-x-3 mb-4">
                             <Button

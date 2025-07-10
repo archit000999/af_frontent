@@ -324,7 +324,7 @@ const CopilotScreening = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900" />
+            
             <UserButton 
               appearance={{
                 elements: {
@@ -337,18 +337,18 @@ const CopilotScreening = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-hidden px-6 py-6">
+      <main className="flex-1 overflow-hidden px-6 py-2">
         <div className="max-w-4xl mx-auto h-full flex flex-col">
           <div className="bg-white rounded-lg shadow-lg flex flex-col h-full overflow-hidden">
             {/* Header - Fixed */}
-            <div className="flex-shrink-0 p-8 pb-4">
+            <div className="flex-shrink-0 p-8 pb-1">
               <div className="text-center">
-                <h1 className="text-lg font-semibold text-gray-900">
+                <h1 className="text-xl font-semibold text-gray-900">
                   ApplyFirst Configuration
                 </h1>
-                <p className="text-gray-600 mt-2">Step {currentStep} of 4</p>
-                <p className="text-gray-700 mt-2 font-medium">Doing great so far!</p>
-                <p className="text-gray-600 mt-2">
+                <p className="text-gray-600 mt-2 text-sm">Step {currentStep} of 4</p>
+                
+                <p className="text-gray-600 mt-2 text-sm">
                   Now let's complete screening questions
                 </p>
               </div>
@@ -356,7 +356,7 @@ const CopilotScreening = () => {
 
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto px-8">
-              <div className="space-y-6 pb-4">
+              <div className="space-y-2 pb-4">
                 
                 {/* Introduction Text */}
                 <div className="bg-gray-50 p-4 rounded-lg">
@@ -381,7 +381,7 @@ const CopilotScreening = () => {
                 <div>
                   <div className="flex items-center space-x-2 mb-3">
                     <h3 className="text-lg font-medium text-gray-900">Confirm the CV/Resume you would like to use</h3>
-                    <HelpCircle className="w-4 h-4 text-gray-400 cursor-pointer" />
+                    
                   </div>
                   
                   {!cvFile ? (
@@ -398,7 +398,7 @@ const CopilotScreening = () => {
                         className="flex items-center justify-center w-full max-w-sm px-4 py-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
                       >
                         <Upload className="w-4 h-4 mr-2 text-gray-600" />
-                        <span className="text-gray-700">Upload CV in PDF or Word</span>
+                        <span className="text-gray-700 text-sm">Upload CV in PDF or Word</span>
                       </label>
                     </div>
                   ) : (
@@ -408,7 +408,7 @@ const CopilotScreening = () => {
                           <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
                             <span className="text-blue-600 text-xs">📄</span>
                           </div>
-                          <span className="text-gray-900 font-medium">{cvFile.name}</span>
+                          <span className="text-gray-900 font-medium text-sm">{cvFile.name}</span>
                         </div>
                         <button
                           onClick={() => handleRemoveFile('cv')}
@@ -451,8 +451,8 @@ const CopilotScreening = () => {
                 {/* Cover Letter */}
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 mb-4">Cover Letter</h3>
-                  
-                  <div className="flex space-x-4 mb-4">
+                  <div className='flex items-center space-x-6 mb-3'>
+                  <div className="flex space-x-2 ">
                     <button
                       onClick={() => setCoverLetterOption('generate')}
                       className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-colors ${
@@ -461,10 +461,8 @@ const CopilotScreening = () => {
                           : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
                       }`}
                     >
-                      <div className={`w-2 h-2 rounded-full ${
-                        coverLetterOption === 'generate' ? 'bg-white' : 'bg-gray-400'
-                      }`}></div>
-                      <span>Automatically generate a tailored cover letter for each job (recommended)</span>
+                     
+                      <span className="text-sm px-2">Automatically generate cover letter (recommended)</span>
                     </button>
                   </div>
                   
@@ -477,11 +475,10 @@ const CopilotScreening = () => {
                           : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
                       }`}
                     >
-                      <div className={`w-2 h-2 rounded-full ${
-                        coverLetterOption === 'upload' ? 'bg-white' : 'bg-gray-400'
-                      }`}></div>
-                      <span>Upload my own generic Cover Letter</span>
+                     
+                      <span className="text-sm">Upload my own generic Cover Letter</span>
                     </button>
+                  </div>
                   </div>
 
                   {coverLetterOption === 'upload' && (
@@ -500,7 +497,7 @@ const CopilotScreening = () => {
                             className="flex items-center justify-center w-full max-w-sm px-4 py-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
                           >
                             <Upload className="w-4 h-4 mr-2 text-gray-600" />
-                            <span className="text-gray-700">Upload Cover Letter</span>
+                            <span className="text-gray-700 text-sm">Upload Cover Letter</span>
                           </label>
                         </>
                       ) : (
@@ -555,7 +552,7 @@ const CopilotScreening = () => {
                       type="tel"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      className="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                       placeholder="Enter your mobile number"
                       required
                     />
@@ -595,7 +592,7 @@ const CopilotScreening = () => {
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         placeholder="Type in your city/town, ex: Chicago"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                         required
                       />
                     </div>
@@ -607,7 +604,7 @@ const CopilotScreening = () => {
                         value={stateRegion}
                         onChange={(e) => setStateRegion(e.target.value)}
                         placeholder="Type in your region/state, ex: California"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                       />
                     </div>
                     
@@ -618,7 +615,7 @@ const CopilotScreening = () => {
                         value={postCode}
                         onChange={(e) => setPostCode(e.target.value)}
                         placeholder="Post code, ex: NW1 4NP"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                       />
                     </div>
                   </div>
@@ -641,7 +638,7 @@ const CopilotScreening = () => {
                     value={jobTitle}
                     onChange={(e) => setJobTitle(e.target.value)}
                     placeholder="Enter your current or previous job title"
-                    className="w-full max-w-md px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full max-w-md px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                     required
                   />
                 </div>
@@ -666,7 +663,7 @@ const CopilotScreening = () => {
                         <div className={`w-2 h-2 rounded-full ${
                           availability === option ? 'bg-white' : 'bg-gray-400'
                         }`}></div>
-                        <span>{option}</span>
+                        <span className="text-sm">{option}</span>
                       </button>
                     ))}
                   </div>
@@ -714,7 +711,7 @@ const CopilotScreening = () => {
                       <div className={`w-2 h-2 rounded-full ${
                         sponsorship === 'Yes' ? 'bg-white' : 'bg-gray-400'
                       }`}></div>
-                      <span>Yes</span>
+                      <span className="text-sm">Yes</span>
                     </button>
                     
                     <button
@@ -728,36 +725,21 @@ const CopilotScreening = () => {
                       <div className={`w-2 h-2 rounded-full ${
                         sponsorship === 'No' ? 'bg-white' : 'bg-gray-400'
                       }`}></div>
-                      <span>No</span>
+                      <span className="text-sm">No</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Nationality */}
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">What is your nationality?</h3>
-                  <p className="text-gray-600 text-sm mb-3">You can select up to 3</p>
-                  
-                  <Select value={nationality} onValueChange={setNationality}>
-                    <SelectTrigger className="w-full max-w-sm">
-                      <SelectValue placeholder="Select nationality" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {countries.map((c) => (
-                        <SelectItem key={c} value={c}>{c}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+         
 
                 {/* Salary Information */}
                 <div className="space-y-4">
                   <div>
                     <div className="flex items-center space-x-2 mb-3">
                       <h3 className="text-lg font-medium text-gray-900">
-                        What is your current (or previous) <span className="underline">yearly</span> salary?
+                        What is your current (or previous) yearly salary?
                       </h3>
-                      <HelpCircle className="w-4 h-4 text-gray-400 cursor-pointer" />
+                      
                       {extractedData?.salary && currentSalary && (
                         <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
                           Auto-filled
@@ -766,14 +748,14 @@ const CopilotScreening = () => {
                     </div>
                     
                     <div className="flex items-center space-x-2">
-                      <span className="text-gray-600 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                      <span className="text-gray-600 px-3 py-1.5 border border-gray-300 rounded-lg bg-gray-50">
                         $
                       </span>
                       <input
                         type="text"
                         value={currentSalary}
                         onChange={(e) => setCurrentSalary(e.target.value)}
-                        className="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                         placeholder="Enter current salary"
                         required
                       />
@@ -783,9 +765,9 @@ const CopilotScreening = () => {
                   <div>
                     <div className="flex items-center space-x-2 mb-3">
                       <h3 className="text-lg font-medium text-gray-900">
-                        What is your expected <span className="underline">yearly</span> salary for a fulltime position?
+                        What is your expected yearly salary for a fulltime position?
                       </h3>
-                      <HelpCircle className="w-4 h-4 text-gray-400 cursor-pointer" />
+                      
                       {extractedData?.salary && expectedSalary && (
                         <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
                           Auto-filled
@@ -794,14 +776,14 @@ const CopilotScreening = () => {
                     </div>
                     
                     <div className="flex items-center space-x-2">
-                      <span className="text-gray-600 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                      <span className="text-gray-600 px-3 py-1.5 border border-gray-300 rounded-lg bg-gray-50">
                         $
                       </span>
                       <input
                         type="text"
                         value={expectedSalary}
                         onChange={(e) => setExpectedSalary(e.target.value)}
-                        className="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                         placeholder="Enter expected salary"
                         required
                       />
@@ -826,7 +808,7 @@ const CopilotScreening = () => {
                     value={linkedinProfile}
                     onChange={(e) => setLinkedinProfile(e.target.value)}
                     placeholder="https://linkedin.com/in/yourprofile"
-                    className="w-full max-w-lg px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full max-w-lg px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                   />
                 </div>
 
@@ -834,7 +816,7 @@ const CopilotScreening = () => {
                 <div>
                   <button
                     onClick={() => setShowAdditionalQuestions(!showAdditionalQuestions)}
-                    className="flex items-center space-x-2 text-gray-900 font-medium hover:text-purple-600 transition-colors"
+                    className="flex items-center space-x-2 text-gray-900 font-medium hover:text-purple-600 transition-colors text-sm"
                   >
                     <span>Additional Screening Questions</span>
                     <ChevronDown className={`w-4 h-4 transition-transform ${showAdditionalQuestions ? 'rotate-180' : ''}`} />
@@ -858,7 +840,7 @@ const CopilotScreening = () => {
                           value={experienceSummary}
                           onChange={(e) => setExperienceSummary(e.target.value)}
                           placeholder="Please ensure the summary is at least 100 characters in length"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none text-sm"
                           rows={4}
                           maxLength={500}
                         />
@@ -882,7 +864,7 @@ const CopilotScreening = () => {
                             <div className={`w-2 h-2 rounded-full ${
                               comfortableWithTravelling === 'Yes' ? 'bg-white' : 'bg-gray-400'
                             }`}></div>
-                            <span>Yes</span>
+                            <span className="text-sm">Yes</span>
                           </button>
                           
                           <button
@@ -896,7 +878,7 @@ const CopilotScreening = () => {
                             <div className={`w-2 h-2 rounded-full ${
                               comfortableWithTravelling === 'No' ? 'bg-white' : 'bg-gray-400'
                             }`}></div>
-                            <span>No</span>
+                            <span className="text-sm">No</span>
                           </button>
                         </div>
                       </div>
@@ -916,7 +898,7 @@ const CopilotScreening = () => {
                             <div className={`w-2 h-2 rounded-full ${
                               openToRelocation === 'Yes' ? 'bg-white' : 'bg-gray-400'
                             }`}></div>
-                            <span>Yes</span>
+                            <span className="text-sm">Yes</span>
                           </button>
                           
                           <button
@@ -930,7 +912,7 @@ const CopilotScreening = () => {
                             <div className={`w-2 h-2 rounded-full ${
                               openToRelocation === 'No' ? 'bg-white' : 'bg-gray-400'
                             }`}></div>
-                            <span>No</span>
+                            <span className="text-sm">No</span>
                           </button>
                         </div>
                       </div>
@@ -985,7 +967,7 @@ const CopilotScreening = () => {
                           type="date"
                           value={dateOfBirth}
                           onChange={(e) => setDateOfBirth(e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                         />
                       </div>
 
@@ -998,7 +980,7 @@ const CopilotScreening = () => {
                           value={gpaScore}
                           onChange={(e) => setGpaScore(e.target.value)}
                           placeholder="e.g., 3.8"
-                          className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                         />
                       </div>
 
@@ -1017,7 +999,7 @@ const CopilotScreening = () => {
                             <div className={`w-2 h-2 rounded-full ${
                               isAtLeast18 === 'Yes' ? 'bg-white' : 'bg-gray-400'
                             }`}></div>
-                            <span>Yes</span>
+                            <span className="text-sm">Yes</span>
                           </button>
                           
                           <button
@@ -1031,7 +1013,7 @@ const CopilotScreening = () => {
                             <div className={`w-2 h-2 rounded-full ${
                               isAtLeast18 === 'No' ? 'bg-white' : 'bg-gray-400'
                             }`}></div>
-                            <span>No</span>
+                            <span className="text-sm">No</span>
                           </button>
                         </div>
                       </div>
@@ -1066,7 +1048,7 @@ const CopilotScreening = () => {
                             <div className={`w-2 h-2 rounded-full ${
                               hasDisability === 'Yes' ? 'bg-white' : 'bg-gray-400'
                             }`}></div>
-                            <span>Yes</span>
+                            <span className="text-sm">Yes</span>
                           </button>
                           
                           <button
@@ -1080,7 +1062,7 @@ const CopilotScreening = () => {
                             <div className={`w-2 h-2 rounded-full ${
                               hasDisability === 'No' ? 'bg-white' : 'bg-gray-400'
                             }`}></div>
-                            <span>No</span>
+                            <span className="text-sm">No</span>
                           </button>
 
                           <button
@@ -1094,7 +1076,7 @@ const CopilotScreening = () => {
                             <div className={`w-2 h-2 rounded-full ${
                               hasDisability === 'Prefer not to say' ? 'bg-white' : 'bg-gray-400'
                             }`}></div>
-                            <span>Prefer not to say</span>
+                            <span className="text-sm">Prefer not to say</span>
                           </button>
                         </div>
                       </div>
@@ -1117,7 +1099,7 @@ const CopilotScreening = () => {
                                 }}
                                 className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                               />
-                              <span className="text-gray-700">{license}</span>
+                              <span className="text-sm text-gray-700">{license}</span>
                             </label>
                           ))}
                           <label className="flex items-center space-x-3">
@@ -1133,7 +1115,7 @@ const CopilotScreening = () => {
                               }}
                               className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                             />
-                            <span className="text-gray-700">I do not have a driving license</span>
+                            <span className="text-sm text-gray-700">I do not have a driving license</span>
                           </label>
                         </div>
                       </div>
@@ -1146,7 +1128,7 @@ const CopilotScreening = () => {
                           value={securityClearance}
                           onChange={(e) => setSecurityClearance(e.target.value)}
                           placeholder="Enter security clearance level if applicable"
-                          className="w-full max-w-lg px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full max-w-lg px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                         />
                       </div>
                     </div>
@@ -1157,39 +1139,38 @@ const CopilotScreening = () => {
 
             {/* Footer Buttons - Fixed */}
             <div className="flex-shrink-0 p-8 pt-4">
-              <div className="flex justify-between border-t pt-4">
-                <Button
-                  variant="outline"
-                  onClick={handleBack}
-                  className="px-6 py-2"
-                >
-                  Back
-                </Button>
-                <div className="flex space-x-3">
-                  <Button
+              <div className="flex justify-between border-t pt-4">                  <Button
                     variant="outline"
-                    onClick={handleSaveAndClose}
-                    className="px-6 py-2"
+                    onClick={handleBack}
+                    className="px-6 py-2 text-sm"
                   >
-                    Save & Close
+                    Back
                   </Button>
-                  <Button
-                    onClick={handleNext}
-                    disabled={!isFormValid() || isLoading}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 flex items-center space-x-2 disabled:opacity-50"
-                  >
-                    {isLoading ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        <span>Processing...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Next: Final Configuration</span>
-                        <ChevronRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </Button>
+                  <div className="flex space-x-3">
+                    <Button
+                      variant="outline"
+                      onClick={handleSaveAndClose}
+                      className="px-6 py-2 text-sm"
+                    >
+                      Save & Close
+                    </Button>
+                    <Button
+                      onClick={handleNext}
+                      disabled={!isFormValid() || isLoading}
+                      className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 flex items-center space-x-2 disabled:opacity-50 text-sm"
+                    >
+                      {isLoading ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Processing...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Next: Final Configuration</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </Button>
                 </div>
               </div>
             </div>

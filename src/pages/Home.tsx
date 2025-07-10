@@ -144,7 +144,7 @@ const Home = () => {
                 <span className="text-sm font-medium text-purple-700">{getPlanDisplayName()}</span>
               </div>
             )}
-            <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900" />
+            
             <UserButton 
               appearance={{
                 elements: {
@@ -332,7 +332,7 @@ const Home = () => {
         buttonText={
           upgradeDialogType === 'elite' 
             ? "Upgrade to Elite"
-            : "View Plans ↗"
+            : "Upgrade to Elite"
         }
       />
     </div>

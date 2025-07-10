@@ -295,7 +295,7 @@ const CopilotFilters = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900" />
+            
             <UserButton 
               appearance={{
                 elements: {
@@ -314,7 +314,7 @@ const CopilotFilters = () => {
             {/* Header - Fixed */}
             <div className="flex-shrink-0 p-8 pb-4">
               <div className="text-center">
-                <h1 className="text-lg font-semibold text-gray-900">
+                <h1 className="text-xl font-semibold text-gray-900">
                   ApplyFirst Configuration
                 </h1>
                 <p className="text-gray-600 mt-2">Step {currentStep} of 4</p>
@@ -338,7 +338,7 @@ const CopilotFilters = () => {
                       <h3 className="text-lg font-medium text-gray-900">Increase Job Match</h3>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <HelpCircle className="w-4 h-4 text-gray-400 cursor-pointer" />
+                      
                       <Switch
                         checked={increaseJobMatch}
                         onCheckedChange={setIncreaseJobMatch}
@@ -501,7 +501,7 @@ const CopilotFilters = () => {
                   </div>
                   
                   <Select value={industry} onValueChange={setIndustry}>
-                    <SelectTrigger className="w-full max-w-md bg-purple-600 text-white">
+                    <SelectTrigger className="w-full max-w-xs bg-purple-600 text-white">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="max-h-60">
@@ -583,14 +583,14 @@ const CopilotFilters = () => {
 
                       {/* Job Description Keywords */}
                       <div>
-                        <h4 className="text-lg font-medium text-gray-900 mb-4">Job Description Keywords</h4>
-                        <span className="text-sm text-gray-500">(optional)</span>
+                        <h4 className="text-lg font-medium text-gray-900">Job Description Keywords
+                        <span className="text-sm text-gray-500"> (Optional)</span></h4>
                         
                         {/* Include Keywords */}
                         <div className="mb-4">
                           <div className="flex items-center space-x-2 mb-2">
                             <span className="text-sm font-medium text-purple-600">INCLUDE</span>
-                            <HelpCircle className="w-4 h-4 text-gray-400 cursor-pointer" />
+                            
                           </div>
                           <p className="text-gray-600 text-sm mb-3">
                             Only apply to jobs that include <strong>ANY</strong> of these keywords in the job description.
@@ -608,7 +608,7 @@ const CopilotFilters = () => {
                         <div className="mb-4">
                           <div className="flex items-center space-x-2 mb-2">
                             <span className="text-sm font-medium text-red-600">EXCLUDE</span>
-                            <HelpCircle className="w-4 h-4 text-gray-400 cursor-pointer" />
+                            
                           </div>
                           <p className="text-gray-600 text-sm mb-3">
                             Exclude jobs that contain <strong>ANY</strong> of these keywords in the job description.
@@ -625,8 +625,8 @@ const CopilotFilters = () => {
 
                       {/* Exclude Companies */}
                       <div>
-                        <h4 className="text-lg font-medium text-gray-900 mb-3">Exclude Companies</h4>
-                        <span className="text-sm text-gray-500">(optional)</span>
+                        <h4 className="text-lg font-medium text-gray-900 mb-3">Exclude Companies
+                        <span className="text-sm text-gray-500"> (Optional)</span></h4>
                         <p className="text-gray-600 text-sm mb-3 mt-2">
                           Select companies to exclude so that your ApplyFirst doesn't apply for any jobs at these companies.
                         </p>
