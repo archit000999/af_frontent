@@ -48,9 +48,20 @@ serve(async (req) => {
     // Get Stripe secret key
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     console.log("Stripe key exists:", !!stripeKey);
+    console.log("Stripe key prefix:", stripeKey ? stripeKey.substring(0, 8) + "..." : "none");
+    
     if (!stripeKey) {
       console.error("❌ STRIPE_SECRET_KEY not configured");
       return new Response(JSON.stringify({ error: "Payment system not configured" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
+
+    // Validate Stripe key format
+    if (!stripeKey.startsWith('sk_')) {
+      console.error("❌ Invalid Stripe key format");
+      return new Response(JSON.stringify({ error: "Invalid payment configuration" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,
       });
@@ -65,9 +76,27 @@ serve(async (req) => {
     console.log("✅ Using user email from request:", userEmail);
 
     // Initialize Stripe
+    console.log("🔄 Initializing Stripe...");
     const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
 
+    // Test Stripe connection first
+    try {
+      console.log("🔄 Testing Stripe connection...");
+      await stripe.customers.list({ limit: 1 });
+      console.log("✅ Stripe connection successful");
+    } catch (stripeError) {
+      console.error("❌ Stripe connection failed:", stripeError);
+      return new Response(JSON.stringify({ 
+        error: "Payment system connection failed",
+        details: stripeError.message 
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
+
     // Check if customer exists
+    console.log("🔄 Checking for existing customer...");
     const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
     let customerId = null;
     if (customers.data.length > 0) {
@@ -164,7 +193,15 @@ serve(async (req) => {
 
   } catch (error) {
     console.error("❌ Error in create-checkout:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error("❌ Error stack:", error.stack);
+    console.error("❌ Error name:", error.name);
+    console.error("❌ Error message:", error.message);
+    
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      errorType: error.name,
+      timestamp: new Date().toISOString()
+    }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
