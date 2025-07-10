@@ -75,7 +75,7 @@ const Hero = () => {
             </div>
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
               <CheckCircle className="h-8 w-8 text-green-400 mb-3" />
-              <span className="text-white font-semibold text-lg">100+ contacts</span>
+              <span className="text-white font-semibold text-lg">400+ contacts</span>
               <span className="text-slate-400 text-sm">monthly outreach</span>
             </div>
             <div className="flex flex-col items-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
