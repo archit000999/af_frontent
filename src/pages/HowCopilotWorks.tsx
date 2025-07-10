@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Bot, Search, Mail, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-
 const HowCopilotWorks = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
@@ -69,10 +67,7 @@ const HowCopilotWorks = () => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Smart Application Process</h2>
-                <p className="text-gray-600 mb-4">
-                  Your ApplyFirst analyzes each job posting and creates personalized applications. It tailors your resume 
-                  and cover letter to highlight the most relevant skills and experiences for each position.
-                </p>
+                <p className="text-gray-600 mb-4">Our human agent manually apply to each job posting using our in-house chrome extension. It tailors your resume and cover letter to highlight the most relevant skills and experiences for each position.</p>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="w-4 h-4 text-green-500" />
@@ -141,8 +136,6 @@ const HowCopilotWorks = () => {
           </div>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default HowCopilotWorks;
