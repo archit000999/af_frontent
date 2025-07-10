@@ -94,7 +94,7 @@ const HowCopilotWorks = () => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Direct Outreach</h2>
-                <p className="text-gray-600 mb-4">Beyond standard applications, ApplyFirst AI can identify hiring managers and decision-makers on LinkedIn, then human agent sends personalized emails directly to their verified business addresses on your behalf</p>
+                <p className="text-gray-600 mb-4">Post applying to Job within 60 minutes of job posting, ApplyFirst AI identify hiring managers and decision-makers on LinkedIn, then human agent sends personalized emails directly to their verified business addresses on your behalf to increase your chances of landing an interview</p>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="w-4 h-4 text-green-500" />
