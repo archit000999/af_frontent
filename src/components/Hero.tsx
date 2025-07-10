@@ -49,7 +49,7 @@ const Hero = () => {
             </span>
           </h1>
           
-          <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">ApplyFirst monitor job boards in real time and instantly contacts hiring managers with your resume and apply for Job on your behalf</p>
+          <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">ApplyFirst monitors job boards in real time, instantly contacts hiring managers with your resume, and applies to jobs on your behalf — human-led, AI-assisted</p>
           
           <div className="flex justify-center mb-16">
             <SignedOut>
