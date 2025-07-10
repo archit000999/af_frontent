@@ -23,7 +23,7 @@ const Home = () => {
   } = useCopilotConfig(isSubscribed ? maxCopilots : 1);
   const [copilotStatuses, setCopilotStatuses] = useState<{[key: string]: boolean}>({});
   const [isUpgradeDialogOpen, setIsUpgradeDialogOpen] = useState(false);
-  const [upgradeDialogType, setUpgradeDialogType] = useState<'subscription' | 'elite'>('subscription');
+  const [upgradeDialogType, setUpgradeDialogType] = useState<'subscription' | 'multiple'>('subscription');
 
   // Refresh subscription status when component mounts or when returning from payment
   useEffect(() => {
@@ -33,9 +33,9 @@ const Home = () => {
   }, [user, refreshSubscription]);
 
   const handleSetupCopilot = () => {
-    // Check if user is trying to create a second copilot without Elite plan
-    if (allConfigs.length >= 1 && planType !== 'elite') {
-      setUpgradeDialogType('elite');
+    // Check if user is trying to create a second copilot without subscription
+    if (allConfigs.length >= 1 && !isSubscribed) {
+      setUpgradeDialogType('multiple');
       setIsUpgradeDialogOpen(true);
       return;
     }
@@ -98,14 +98,10 @@ const Home = () => {
   const hasConfigurations = allConfigs.length > 0;
 
   const getPlanDisplayName = () => {
-    switch (planType) {
-      case 'premium':
-        return 'Premium';
-      case 'elite':
-        return 'Elite';
-      default:
-        return 'Free';
+    if (isSubscribed && planType === 'concierge') {
+      return 'Concierge';
     }
+    return 'Free';
   };
 
   return (
@@ -325,13 +321,13 @@ const Home = () => {
         isOpen={isUpgradeDialogOpen} 
         onClose={() => setIsUpgradeDialogOpen(false)}
         message={
-          upgradeDialogType === 'elite' 
-            ? "You need an Elite plan to create multiple copilots."
-            : "You need a Premium or Elite plan to activate Copilot"
+          upgradeDialogType === 'multiple' 
+            ? "You need to subscribe to create multiple copilots."
+            : "You need to subscribe to activate Copilot features"
         }
         buttonText={
-          upgradeDialogType === 'elite' 
-            ? "Upgrade to Elite"
+          upgradeDialogType === 'multiple' 
+            ? "Subscribe to Create More"
             : "View Plans ↗"
         }
       />
