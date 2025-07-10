@@ -113,7 +113,7 @@ const ATSProblem = () => {
             <Button size="lg" onClick={() => window.open('https://calendly.com/archit-trysaki/qualifying-call', '_blank')} className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold shadow-xl">
               Start Your Free Evaluation <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <p className="text-sm mt-2 opacity-90">Get ahead before the filters even kick in</p>
+            <p className="text-sm mt-2 opacity-90">we only onboard 40 candidates each week</p>
           </div>
         </div>
       </div>
