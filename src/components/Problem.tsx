@@ -1,24 +1,24 @@
 
-import { AlertTriangle, Clock, DollarSign, Target } from "lucide-react";
+import { AlertTriangle, Clock, DollarSign, Users } from "lucide-react";
 
 const Problem = () => {
   const painPoints = [
     {
-      icon: Target,
-      title: "Ghost Jobs & Bad Timing",
-      description: "You apply to jobs that are already filled internally or miss the perfect window when positions first open up.",
+      icon: Clock,
+      title: "You're Too Late to Apply",
+      description: "Many roles are already filled internally or receive 500+ applicants within days. By the time you apply, the opportunity window has likely closed.",
       color: "from-red-500 to-pink-500"
     },
     {
       icon: DollarSign,
-      title: "Expensive InMails Get Ignored",
-      description: "LinkedIn InMails cost $10+ each but rarely get responses from busy hiring managers who get hundreds daily.",
+      title: "LinkedIn InMails Are Costly and Ineffective",
+      description: "Sending 100 messages through InMail can cost over $1,000 per month, with low open and response rates from busy hiring managers.",
       color: "from-orange-500 to-red-500"
     },
     {
-      icon: Clock,
-      title: "Manual Outreach Takes Forever",
-      description: "Researching hiring managers and crafting personalized emails is time-consuming and converts at less than 2%.",
+      icon: Users,
+      title: "Manual Outreach Isn't Scalable",
+      description: "Spending hours each day researching companies and writing personalized messages isn't sustainable. Most professionals struggle to keep up this effort consistently over time.",
       color: "from-yellow-500 to-orange-500"
     }
   ];
@@ -28,13 +28,13 @@ const Problem = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
           <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6">
-            Why LinkedIn{" "}
+            Why Your{" "}
             <span className="bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
-              Isn't Enough
+              Job Search Isn't Working
             </span>
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Traditional job searching leaves you frustrated and always behind the competition.
+            Despite your best efforts, you're not seeing the results you deserve.
             Here's what's actually holding you back:
           </p>
         </div>
@@ -56,7 +56,7 @@ const Problem = () => {
         <div className="text-center">
           <div className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-yellow-100 to-orange-100 border-2 border-yellow-300 text-yellow-800 rounded-2xl shadow-lg">
             <AlertTriangle className="h-6 w-6 mr-3 text-yellow-600" />
-            <span className="font-semibold text-lg">Result: You're always playing catch-up in a crowded field of 500+ applicants</span>
+            <span className="font-semibold text-lg">⚠️ Result: You're stuck in a high-effort, low-return process</span>
           </div>
         </div>
       </div>
