@@ -21,6 +21,7 @@ export interface ExtractedResumeData {
   education?: string[];
   linkedin?: string;
   salary?: string;
+  nationality?: string;
 }
 
 // Common patterns for extraction

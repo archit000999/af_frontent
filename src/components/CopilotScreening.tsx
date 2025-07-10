@@ -787,6 +787,41 @@ const CopilotScreening = () => {
                   <FieldValidation isValid={workCountries.length > 0} fieldName="Work countries" />
                 </div>
 
+                {/* Nationality */}
+                <div>
+                  <div className="flex items-center space-x-2 mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">
+                      What is your nationality?
+                      <RequiredIndicator />
+                    </h3>
+                    
+                    {nationality && (
+                      <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+                        Auto-filled
+                      </Badge>
+                    )}
+                    {nationality && (
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    )}
+                  </div>
+                  
+                  <Select value={nationality} onValueChange={setNationality}>
+                    <SelectTrigger className={`w-full max-w-lg ${
+                      nationality ? 'border-green-300 bg-green-50' : 'border-gray-300'
+                    }`}>
+                      <SelectValue placeholder="Select your nationality" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((country) => (
+                        <SelectItem key={country} value={country}>
+                          {country}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FieldValidation isValid={!!nationality} fieldName="Nationality" />
+                </div>
+
                 {/* Sponsorship */}
                 <div>
                   <div className="flex items-center space-x-2 mb-4">
