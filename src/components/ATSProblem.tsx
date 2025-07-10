@@ -1,5 +1,6 @@
 import { AlertTriangle, Bot, Shield, Target, CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SignInButton } from '@clerk/clerk-react';
 const ATSProblem = () => {
   return <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-red-50 to-orange-50">
       <div className="max-w-7xl mx-auto">
@@ -110,9 +111,11 @@ const ATSProblem = () => {
               </p>
             </div>
             
-            <Button size="lg" onClick={() => window.location.href = '/auth'} className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold shadow-xl">
-              Start Your Free Evaluation <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <SignInButton mode="modal" forceRedirectUrl="/home">
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold shadow-xl">
+                Start Your Free Evaluation <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </SignInButton>
             <p className="text-sm mt-2 opacity-90">we only onboard 40 candidates each week</p>
           </div>
         </div>
