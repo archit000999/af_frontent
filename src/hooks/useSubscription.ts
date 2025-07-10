@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface SubscriptionStatus {
   isSubscribed: boolean;
-  planType: 'premium' | 'elite' | null;
+  planType: 'concierge' | null;
   maxCopilots: number;
   isLoading: boolean;
   subscriptionId: string | null;
@@ -35,21 +35,12 @@ export const useSubscription = () => {
     try {
       console.log('🔍 Checking subscription for email:', user.emailAddresses[0].emailAddress);
       
-      // First, let's check ALL payments for this user to see what's in the database
-      const { data: allPayments, error: allError } = await supabase
-        .from('payments')
-        .select('*')
-        .eq('user_email', user.emailAddresses[0].emailAddress)
-        .order('created_at', { ascending: false });
-
-      console.log('🗂️ ALL payments for user:', allPayments);
-      console.log('🗂️ ALL payments error:', allError);
-      
+      // Check for completed payments for this user
       const { data, error } = await supabase
         .from('payments')
-        .select('plan_type, status, stripe_subscription_id, created_at, amount')
+        .select('plan_type, status, stripe_subscription_id, created_at, amount, id')
         .eq('user_email', user.emailAddresses[0].emailAddress)
-        .in('status', ['completed', 'paid']) // Check for both completed and paid status
+        .eq('status', 'completed')
         .order('created_at', { ascending: false })
         .limit(1);
 
@@ -70,19 +61,17 @@ export const useSubscription = () => {
 
       if (data && data.length > 0) {
         const latestPayment = data[0];
-        console.log('✅ Latest payment found:', latestPayment);
+        console.log('✅ Latest completed payment found:', latestPayment);
         
-        const planType = latestPayment.plan_type as 'premium' | 'elite';
+        const planType = latestPayment.plan_type as 'concierge';
         
         // Determine max copilots based on plan
         let maxCopilots = 1;
-        if (planType === 'premium') {
-          maxCopilots = 1;
-        } else if (planType === 'elite') {
-          maxCopilots = 2;
+        if (planType === 'concierge') {
+          maxCopilots = 5; // Concierge service gets more copilots
         }
         
-        console.log('🚀 Subscription found:', {
+        console.log('🚀 Active subscription found:', {
           planType,
           maxCopilots,
           subscriptionId: latestPayment.stripe_subscription_id,
@@ -96,10 +85,10 @@ export const useSubscription = () => {
           maxCopilots,
           isLoading: false,
           subscriptionId: latestPayment.stripe_subscription_id,
-          currentPeriodEnd: null // We could fetch this from Stripe if needed
+          currentPeriodEnd: null // We could calculate this based on plan duration if needed
         });
       } else {
-        console.log('❌ No completed/paid payments found, setting as free user');
+        console.log('❌ No completed payments found, setting as free user');
         setSubscriptionStatus({
           isSubscribed: false,
           planType: null,
