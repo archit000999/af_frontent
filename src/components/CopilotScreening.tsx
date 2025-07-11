@@ -197,7 +197,7 @@ const CopilotScreening = () => {
       if (success) {
         setTimeout(() => {
           setIsLoading(false);
-          navigate('/copilot-final');
+          navigate('/copilot-final-step');
         }, 1500);
       } else {
         setIsLoading(false);
