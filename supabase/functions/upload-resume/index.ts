@@ -1,3 +1,4 @@
+
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.2';
 
 const corsHeaders = {
@@ -27,24 +28,38 @@ Deno.serve(async (req) => {
     const clerkToken = authHeader.substring(7); // Remove 'Bearer ' prefix
     console.log('Received Clerk token (first 10 chars):', clerkToken.substring(0, 10));
 
-    // Validate Clerk token by calling Clerk's API
-    const clerkResponse = await fetch('https://clerk.applyfirst.trysaki.com/v1/me', {
-      headers: {
-        'Authorization': `Bearer ${clerkToken}`,
-      },
-    });
+    // Validate Clerk token by calling Clerk's user endpoint
+    let clerkUser;
+    try {
+      const clerkResponse = await fetch('https://clerk.applyfirst.trysaki.com/v1/users/me', {
+        headers: {
+          'Authorization': `Bearer ${clerkToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-    if (!clerkResponse.ok) {
-      console.log('Clerk token validation failed:', clerkResponse.status);
+      console.log('Clerk response status:', clerkResponse.status);
+      
+      if (!clerkResponse.ok) {
+        const errorText = await clerkResponse.text();
+        console.log('Clerk API error response:', errorText);
+        return new Response(
+          JSON.stringify({ error: 'Invalid authentication token' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      clerkUser = await clerkResponse.json();
+      console.log('Validated user ID from Clerk:', clerkUser.id);
+    } catch (error) {
+      console.error('Error validating Clerk token:', error);
       return new Response(
-        JSON.stringify({ error: 'Invalid authentication token' }),
+        JSON.stringify({ error: 'Authentication validation failed' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const clerkUser = await clerkResponse.json();
     const userId = clerkUser.id;
-    console.log('Validated user ID from Clerk:', userId);
 
     // Parse the multipart form data
     const formData = await req.formData();
