@@ -37,7 +37,7 @@ const ATSProblem = () => {
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-3 mt-0.5">
                     <span className="text-blue-600 text-sm font-bold">✓</span>
                   </div>
-                  <span className="text-gray-700"><strong>Human agents drive the outreach</strong>, tailoring every application with nuance and context</span>
+                  <span className="text-gray-700"><strong>Human agents drive the outreach</strong>, tailoring every application with precision and accuracy</span>
                 </div>
                 <div className="flex items-start">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-3 mt-0.5">
