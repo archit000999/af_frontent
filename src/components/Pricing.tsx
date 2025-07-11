@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Shield, DollarSign, ArrowRight, Sparkles } from "lucide-react";
 import { SignInButton } from '@clerk/clerk-react';
 const Pricing = () => {
-  const features = ["AI scans 50+ job boards in real time, and our human agents apply to 20 matching jobs on your behalf every day", "We find the right hiring managers using LinkedIn research and verified emails from trusted data providers", "20 personalized emails sent daily from your Gmail — complete with your resume, tailored messaging, and your name", "Save 20+ hours every week — spend less time applying, and more time preparing for interviews", "2–4 interviews guaranteed per month — or your next month is free", "We onboard 20 candidates each week"];
+  const features = ["AI scans 50+ job boards in real time, and our human agents apply to 20 matching jobs on your behalf every day", "We find the right hiring managers using LinkedIn research and verified emails from trusted data providers", "20 personalized emails sent daily from your Gmail — complete with your resume, tailored messaging, and your name", "Save 20+ hours every week — spend less time applying, and more time preparing for interviews", "2–4 interviews guaranteed per month — or your next month is free", "We only onboard 20 candidates each week, focused on roles paying $100K+"];
   return <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
