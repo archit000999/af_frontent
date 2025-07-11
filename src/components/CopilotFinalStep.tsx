@@ -274,22 +274,21 @@ const CopilotFinalStep = () => {
                   <div className="flex items-start space-x-3">
                     <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700">
-                      Your ApplyFirst will filter live jobs that match your search criteria, then will search for new jobs every 4 hours.
+                      ApplyFirst scans 500+ job boards in real time — including LinkedIn, company sites, and insider channels — to find jobs tailored to your profile.
                     </p>
                   </div>
                   
                   <div className="flex items-start space-x-3">
                     <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700">
-                      Based on the information you gave in the previous step, your ApplyFirst will answer screening questions on 
-                      your behalf, powered by AI.
+                      Be among the first 10 applicants. Our team manually applies to 20+ jobs daily using our Chrome extension. Set it on autopilot and stay ahead of the crowd.
                     </p>
                   </div>
                   
                   <div className="flex items-start space-x-3">
                     <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700">
-                      Your ApplyFirst will not reapply to jobs that it previously applied to.
+                      We contact hiring managers within 10 minutes — sending your resume and a personalized intro to land you a screening call before others even apply.
                     </p>
                   </div>
                 </div>
