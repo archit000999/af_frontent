@@ -124,14 +124,14 @@ const Home = () => {
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-2 text-purple-600 font-medium text-base">
-              <span>ApplyFirst</span>
+              <button>ApplyFirst</button>
             </div>
             <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/applications')}>
               <div className="w-6 h-6 flex items-center justify-center">
               </div>
-              <span>Applications</span>
+              <button>Applications</button>
             </div>
-             <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/support')}>
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/support')}>
               <div className="w-6 h-6 flex items-center justify-center">
               </div>
               <button>Support</button>
@@ -240,6 +240,7 @@ const Home = () => {
                 <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center mx-auto mb-6">
                   <span className="text-white font-bold text-2xl">+</span>
                 </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Create Your First ApplyFirst</h3>
                 <p className="text-gray-600 mb-8 max-w-md mx-auto">
                   Set up your job search preferences and let our AI ApplyFirst help you find the perfect opportunities.
                 </p>
