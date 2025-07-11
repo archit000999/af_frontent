@@ -7,8 +7,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <h3 className="text-2xl font-bold mb-4">ApplyFirst</h3>
             <p className="text-gray-300 mb-4 max-w-md">
-              The concierge job-seeking service that gets you in front of hiring managers 
-              before jobs hit LinkedIn. Land interviews faster, skip the application queue.
+              Human + AI-powered job search service that helps you land interviews. It monitors live job boards, applies to jobs , and contacts hiring managers for an intro call. You save 20+ hours a week and focus on what matters most: prepping for interviews, not searching for jobs.
             </p>
           </div>
           
