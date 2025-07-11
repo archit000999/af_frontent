@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Shield, DollarSign, ArrowRight, Sparkles } from "lucide-react";
 import { SignInButton } from '@clerk/clerk-react';
 const Pricing = () => {
-  const features = ["AI scans 50+ job boards in real time, and our human agents apply to 20 matching jobs on your behalf every day", "We find the right hiring managers using LinkedIn research and verified emails from trusted data providers", "20 personalized emails sent daily from your Gmail — complete with your resume, tailored messaging, and your name", "Save 20+ hours every week — spend less time applying, and more time preparing for interviews", "2–4 interviews guaranteed per month — or your next month is free", "We only onboard 20 candidates each week, focused on roles paying $100K+"];
+  const features = ["AI scans 50+ job boards in real time, and our human agents apply to 20 matching jobs on your behalf every day", "We find the right hiring managers using LinkedIn research and verified emails from trusted data providers", "20 personalized emails sent daily from your Gmail. Complete with your resume and hyper-personalized messaging.", "Save 20+ hours every week. Spend less time applying, and more time preparing for interviews.", "2–4 interviews guaranteed per month. Or your next month is free.", "We only onboard 20 candidates each week, focused on roles paying $100K+"];
   return <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
@@ -42,9 +42,9 @@ const Pricing = () => {
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <span className="text-2xl font-bold text-green-600">First Week Fee Waived Off</span>
                   </div>
-                  <p className="text-slate-700 font-medium mb-2">If you participate in our upcoming webinar &quot;Effective Strategies to find job in the era of AI&quot;</p>
+                  <p className="text-slate-700 font-medium mb-2">Upon participation in our upcoming webinar &quot;AI Strategies for Job Search - Mastering Cold Outreach.&quot;</p>
                   <button onClick={() => window.open('https://calendly.com/vaasu_bhartia/job-search-ai-webinar', '_blank')} className="text-blue-600 hover:text-blue-800 font-medium underline transition-colors">
-                    Click here to see the schedule of webinar
+                    Click here for the schedule.
                   </button>
                 </div>
 
