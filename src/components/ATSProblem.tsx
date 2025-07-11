@@ -49,7 +49,7 @@ const ATSProblem = () => {
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-3 mt-0.5">
                     <span className="text-blue-600 text-sm font-bold">✓</span>
                   </div>
-                  <span className="text-gray-700"><strong>Applications are both high-quality and ATS-compliant</strong> — avoiding auto-rejection</span>
+                  <span className="text-gray-700"><strong>Applications are both high-quality and ATS-compliant</strong> thereby avoiding auto-rejection</span>
                 </div>
               </div>
               
