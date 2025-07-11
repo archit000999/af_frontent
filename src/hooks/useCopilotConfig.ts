@@ -89,14 +89,32 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
       return null;
     }
 
+    console.log('uploadResume called with file:', file.name, 'for user:', user.id);
+
     try {
       setIsLoading(true);
-      return await uploadResumeFile(file, user.id);
-    } catch (error) {
+      const result = await uploadResumeFile(file, user.id);
+      console.log('Upload completed successfully:', result);
+      return result;
+    } catch (error: any) {
       console.error('Error uploading resume:', error);
+      
+      let errorMessage = "Failed to upload resume";
+      
+      // Provide more specific error messages based on the error
+      if (error?.message?.includes('row-level security')) {
+        errorMessage = "Permission denied. Please check your authentication.";
+      } else if (error?.message?.includes('413')) {
+        errorMessage = "File too large. Please use a file smaller than 10MB.";
+      } else if (error?.message?.includes('415')) {
+        errorMessage = "Unsupported file type. Please use PDF or Word documents.";
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Upload Error",
-        description: "Failed to upload resume",
+        description: errorMessage,
         variant: "destructive"
       });
       return null;
