@@ -18,7 +18,7 @@ const UpgradeDialog: React.FC<UpgradeDialogProps> = ({
   
 
   const handleViewPlans = () => {
-    window.open('https://buy.stripe.com/4gMaEX8Cxg8afIN59C8ww00', '_blank');
+    window.open('https://buy.stripe.com/aFa9AT3id2hkbsxatW8ww02', '_blank');
     onClose();
   };
 
