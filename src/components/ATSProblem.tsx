@@ -29,7 +29,7 @@ const ATSProblem = () => {
               </div>
               
               <p className="text-gray-700 mb-6 leading-relaxed">
-                Most platforms rely entirely on automation — submitting hundreds of AI-generated applications quickly, which triggers ATS filters designed to detect bot-like behavior. <strong>At ApplyFirst, we chose a different path.</strong>
+                Most platforms rely entirely on automation by submitting hundreds of AI-generated applications quickly, which triggers ATS filters designed to detect bot-like behavior. <strong>At ApplyFirst, we chose a different path.</strong>
               </p>
               
               <div className="space-y-4 mb-6">
