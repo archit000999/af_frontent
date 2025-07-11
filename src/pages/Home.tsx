@@ -131,7 +131,7 @@ const Home = () => {
               </div>
               <span>Applications</span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/support')}>
+             <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/support')}>
               <div className="w-6 h-6 flex items-center justify-center">
               </div>
               <button>Support</button>
