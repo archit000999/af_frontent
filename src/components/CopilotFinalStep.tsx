@@ -274,21 +274,21 @@ const CopilotFinalStep = () => {
                   <div className="flex items-start space-x-3">
                     <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700">
-                      ApplyFirst scans 500+ job boards in real time — including LinkedIn, company sites, and insider channels — to find jobs tailored to your profile.
+                      Your ApplyFirst scans 500+ job boards — including LinkedIn and 20M+ company websites — to find roles that match your background and preferences.
                     </p>
                   </div>
                   
                   <div className="flex items-start space-x-3">
                     <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700">
-                      Be among the first 10 applicants. Our team manually applies to 20+ jobs daily using our Chrome extension. Set it on autopilot and stay ahead of the crowd.
+                      Your ApplyFirst human agent team manually applies to each job using the info you provided — avoiding ATS bot blocking and ensuring tailored applications.
                     </p>
                   </div>
                   
                   <div className="flex items-start space-x-3">
                     <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700">
-                      We contact hiring managers within 10 minutes — sending your resume and a personalized intro to land you a screening call before others even apply.
+                      Your ApplyFirst contacts hiring managers within minutes, sending your resume and a personalized intro to help you land a screening call faster.
                     </p>
                   </div>
                 </div>
