@@ -298,6 +298,69 @@ const CopilotScreening = () => {
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto px-8">
               <div className="space-y-6 pb-4">
+                {/* Resume Upload */}
+                <div>
+                  <h3 className="text-base font-medium text-gray-900 mb-4">Resume Upload</h3>
+                  
+                  {!formData.resumeFileName ? (
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+                      <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-600 mb-4">
+                        Upload your resume (PDF or Word document)
+                      </p>
+                      <input
+                        id="resume-file-input"
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                        disabled={isUploading}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        disabled={isUploading}
+                        className="text-purple-600 border-purple-300 hover:bg-purple-50"
+                        onClick={handleChooseFileClick}
+                      >
+                        {isUploading ? 'Uploading...' : 'Choose File'}
+                      </Button>
+                      <p className="text-xs text-gray-500 mt-2">
+                        Maximum file size: 10MB
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="border border-gray-300 rounded-lg p-4 bg-gray-50">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <FileText className="w-6 h-6 text-purple-600" />
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">
+                              {formData.resumeFileName}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Resume uploaded successfully
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleRemoveFile}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {errors.resume && (
+                    <p className="text-sm text-red-500 mt-2">Resume is required</p>
+                  )}
+                </div>
+
                 {/* Personal Information */}
                 <div>
                   <h3 className="text-base font-medium text-gray-900 mb-4">Personal Information</h3>
@@ -386,69 +449,6 @@ const CopilotScreening = () => {
                       />
                     </div>
                   </div>
-                </div>
-
-                {/* Resume Upload */}
-                <div>
-                  <h3 className="text-base font-medium text-gray-900 mb-4">Resume Upload</h3>
-                  
-                  {!formData.resumeFileName ? (
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
-                      <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-600 mb-4">
-                        Upload your resume (PDF or Word document)
-                      </p>
-                      <input
-                        id="resume-file-input"
-                        type="file"
-                        accept=".pdf,.doc,.docx"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                        disabled={isUploading}
-                      />
-                      <Button 
-                        type="button" 
-                        variant="outline"
-                        disabled={isUploading}
-                        className="text-purple-600 border-purple-300 hover:bg-purple-50"
-                        onClick={handleChooseFileClick}
-                      >
-                        {isUploading ? 'Uploading...' : 'Choose File'}
-                      </Button>
-                      <p className="text-xs text-gray-500 mt-2">
-                        Maximum file size: 10MB
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="border border-gray-300 rounded-lg p-4 bg-gray-50">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <FileText className="w-6 h-6 text-purple-600" />
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">
-                              {formData.resumeFileName}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              Resume uploaded successfully
-                            </p>
-                          </div>
-                        </div>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleRemoveFile}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                        >
-                          <X className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {errors.resume && (
-                    <p className="text-sm text-red-500 mt-2">Resume is required</p>
-                  )}
                 </div>
 
                 {/* Cover Letter */}
