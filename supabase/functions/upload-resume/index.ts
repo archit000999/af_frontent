@@ -1,10 +1,14 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.2';
+import { verify } from 'https://deno.land/x/djwt@v3.0.2/mod.ts';
+import { decode } from 'https://deno.land/x/djwt@v3.0.2/mod.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const CLERK_JWKS_URL = 'https://clerk.applyfirst.trysaki.com/.well-known/jwks.json';
 
 Deno.serve(async (req) => {
   // Handle CORS preflight requests
@@ -28,38 +32,49 @@ Deno.serve(async (req) => {
     const clerkToken = authHeader.substring(7); // Remove 'Bearer ' prefix
     console.log('Received Clerk token (first 10 chars):', clerkToken.substring(0, 10));
 
-    // Validate Clerk token by calling Clerk's user endpoint
-    let clerkUser;
+    // Validate Clerk JWT token using JWKS
+    let userId;
     try {
-      const clerkResponse = await fetch('https://clerk.applyfirst.trysaki.com/v1/users/me', {
-        headers: {
-          'Authorization': `Bearer ${clerkToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      console.log('Clerk response status:', clerkResponse.status);
-      
-      if (!clerkResponse.ok) {
-        const errorText = await clerkResponse.text();
-        console.log('Clerk API error response:', errorText);
-        return new Response(
-          JSON.stringify({ error: 'Invalid authentication token' }),
-          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+      // Fetch JWKS from Clerk
+      const jwksResponse = await fetch(CLERK_JWKS_URL);
+      if (!jwksResponse.ok) {
+        throw new Error('Failed to fetch JWKS');
       }
-
-      clerkUser = await clerkResponse.json();
-      console.log('Validated user ID from Clerk:', clerkUser.id);
+      const jwks = await jwksResponse.json();
+      
+      // Decode the token to get the header
+      const [header] = decode(clerkToken);
+      if (!header || !header.kid) {
+        throw new Error('Invalid token header');
+      }
+      
+      // Find the matching key from JWKS
+      const key = jwks.keys.find((k: any) => k.kid === header.kid);
+      if (!key) {
+        throw new Error('No matching key found in JWKS');
+      }
+      
+      // Import the key for verification
+      const cryptoKey = await crypto.subtle.importKey(
+        'jwk',
+        key,
+        { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+        false,
+        ['verify']
+      );
+      
+      // Verify the token
+      const payload = await verify(clerkToken, cryptoKey);
+      console.log('JWT verified successfully, user ID:', payload.sub);
+      
+      userId = payload.sub as string;
     } catch (error) {
-      console.error('Error validating Clerk token:', error);
+      console.error('Error validating Clerk JWT token:', error);
       return new Response(
-        JSON.stringify({ error: 'Authentication validation failed' }),
+        JSON.stringify({ error: 'Invalid authentication token' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    const userId = clerkUser.id;
 
     // Parse the multipart form data
     const formData = await req.formData();
