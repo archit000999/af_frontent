@@ -41,10 +41,10 @@ export const LocationSelectionDialog: React.FC<LocationSelectionDialogProps> = (
     
     // Set default country to India (as shown in image)
     if (allCountries.length > 0) {
-      const india = allCountries.find(country => country.name === 'India');
-      if (india) {
-        setSelectedCountry(india.isoCode);
-        loadStatesAndCities(india.isoCode);
+      const unitedStates = allCountries.find(country => country.name === "United States");
+      if (unitedStates) {
+        setSelectedCountry(unitedStates.isoCode);
+        loadStatesAndCities(unitedStates.isoCode);
       }
     }
   }, []);
