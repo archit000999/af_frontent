@@ -53,6 +53,39 @@ export type Database = {
         }
         Relationships: []
       }
+      cancellation_requests: {
+        Row: {
+          additional_feedback: string | null
+          created_at: string
+          id: string
+          reason: string
+          stripe_email: string
+          updated_at: string
+          user_email: string
+          user_id: string
+        }
+        Insert: {
+          additional_feedback?: string | null
+          created_at?: string
+          id?: string
+          reason: string
+          stripe_email: string
+          updated_at?: string
+          user_email: string
+          user_id: string
+        }
+        Update: {
+          additional_feedback?: string | null
+          created_at?: string
+          id?: string
+          reason?: string
+          stripe_email?: string
+          updated_at?: string
+          user_email?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       copilot_configurations: {
         Row: {
           created_at: string
