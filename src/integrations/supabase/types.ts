@@ -112,46 +112,46 @@ export type Database = {
       }
       payments: {
         Row: {
-          amount: number
-          created_at: string
+          amount: number | null
+          created_at: string | null
           currency: string | null
           id: string
-          plan_name: string
-          plan_type: string
+          plan_name: string | null
+          plan_type: string | null
           status: string | null
           stripe_customer_id: string | null
-          stripe_session_id: string
+          stripe_session_id: string | null
           stripe_subscription_id: string | null
-          updated_at: string
-          user_email: string
+          updated_at: string | null
+          user_email: string | null
         }
         Insert: {
-          amount: number
-          created_at?: string
+          amount?: number | null
+          created_at?: string | null
           currency?: string | null
           id?: string
-          plan_name: string
-          plan_type: string
+          plan_name?: string | null
+          plan_type?: string | null
           status?: string | null
           stripe_customer_id?: string | null
-          stripe_session_id: string
+          stripe_session_id?: string | null
           stripe_subscription_id?: string | null
-          updated_at?: string
-          user_email: string
+          updated_at?: string | null
+          user_email?: string | null
         }
         Update: {
-          amount?: number
-          created_at?: string
+          amount?: number | null
+          created_at?: string | null
           currency?: string | null
           id?: string
-          plan_name?: string
-          plan_type?: string
+          plan_name?: string | null
+          plan_type?: string | null
           status?: string | null
           stripe_customer_id?: string | null
-          stripe_session_id?: string
+          stripe_session_id?: string | null
           stripe_subscription_id?: string | null
-          updated_at?: string
-          user_email?: string
+          updated_at?: string | null
+          user_email?: string | null
         }
         Relationships: []
       }
