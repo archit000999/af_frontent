@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useUser } from '@clerk/clerk-react';
+import { useUser, useAuth } from '@clerk/clerk-react';
 import { useToast } from '@/hooks/use-toast';
 import { CopilotConfig } from '@/types/copilot';
 import { 
@@ -13,14 +13,35 @@ import {
   deleteConfigFromDatabase,
   uploadResumeFile
 } from '@/services/copilotService';
+import { setSupabaseAuth } from '@/integrations/supabase/client';
 
 export const useCopilotConfig = (maxCopilots: number = 1) => {
   const { user } = useUser();
+  const { getToken } = useAuth();
   const { toast } = useToast();
   const [config, setConfig] = useState<CopilotConfig>(createEmptyConfig());
   const [allConfigs, setAllConfigs] = useState<CopilotConfig[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+
+  // Set Supabase auth when user changes
+  useEffect(() => {
+    const updateAuth = async () => {
+      if (user) {
+        try {
+          const token = await getToken({ template: 'supabase' });
+          await setSupabaseAuth(token);
+          console.log('Supabase auth updated with Clerk token');
+        } catch (error) {
+          console.error('Error getting Clerk token:', error);
+        }
+      } else {
+        await setSupabaseAuth(null);
+      }
+    };
+    
+    updateAuth();
+  }, [user, getToken]);
 
   // Load all existing configurations on mount
   useEffect(() => {
