@@ -317,6 +317,9 @@ verify_jwt = false
 [functions.fetch-jobs]
 verify_jwt = false
 
+[functions.upload-resume]
+verify_jwt = false
+
 [edge_runtime]
 enabled = true
 # Configure one of the supported runtimes: `base`, `node`, `python`.

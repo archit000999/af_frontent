@@ -57,41 +57,36 @@ export const deleteConfigFromDatabase = async (configId: string, userId: string)
   }
 };
 
-export const uploadResumeFile = async (file: File, userId: string) => {
-  console.log('Starting uploadResumeFile with:', { fileName: file.name, fileType: file.type, fileSize: file.size, userId });
-  
-  const fileExt = file.name.split('.').pop();
-  const fileName = `${userId}/${Date.now()}.${fileExt}`;
-  
-  console.log('Generated file path:', fileName);
+export const uploadResumeFile = async (file: File, clerkToken: string) => {
+  console.log('Starting uploadResumeFile with:', { fileName: file.name, fileType: file.type, fileSize: file.size });
   
   try {
-    const { data, error } = await supabase.storage
-      .from('resumes')
-      .upload(fileName, file, {
-        cacheControl: '3600',
-        upsert: true, // Changed to true to allow overwriting
-        contentType: file.type
-      });
+    // Create FormData for the file upload
+    const formData = new FormData();
+    formData.append('file', file);
 
-    console.log('Supabase upload response:', { data, error });
+    // Call the Edge Function instead of direct Supabase
+    const response = await fetch('https://osuyeptufjtmqsydulmq.supabase.co/functions/v1/upload-resume', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${clerkToken}`,
+      },
+      body: formData,
+    });
 
-    if (error) {
-      console.error('Supabase storage error:', error);
-      throw error;
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Upload failed' }));
+      console.error('Edge function error:', errorData);
+      throw new Error(errorData.error || 'Upload failed');
     }
 
-    // Get the public URL - note the bucket is not public so we need signed URL for access
-    const { data: { publicUrl } } = supabase.storage
-      .from('resumes')
-      .getPublicUrl(fileName);
-
-    console.log('Generated public URL:', publicUrl);
+    const result = await response.json();
+    console.log('Upload successful:', result);
 
     return {
-      fileName: file.name,
-      filePath: fileName,
-      fileUrl: publicUrl
+      fileName: result.fileName,
+      filePath: result.filePath,
+      fileUrl: result.fileUrl
     };
   } catch (error) {
     console.error('Error in uploadResumeFile:', error);

@@ -114,7 +114,14 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
 
     try {
       setIsLoading(true);
-      const result = await uploadResumeFile(file, user.id);
+      
+      // Get Clerk token for authentication
+      const clerkToken = await getToken();
+      if (!clerkToken) {
+        throw new Error('No authentication token available');
+      }
+
+      const result = await uploadResumeFile(file, clerkToken);
       console.log('Upload completed successfully:', result);
       return result;
     } catch (error: any) {
