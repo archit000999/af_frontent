@@ -5,7 +5,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <h3 className="text-2xl font-bold mb-4">ApplyFirst</h3>
-            <p className="text-gray-300 mb-4 max-w-md">Human + AI-powered job search service that monitors live job boards, applies to jobs within 4 hours of posting, and contacts hiring managers to get you intro calls. Save 20+ hours a week and focus on what matters most—preparing for interviews, not hunting for jobs.</p>
+            <p className="text-gray-300 mb-4 max-w-md">Human + AI-powered job search service that monitors live job boards, applies to jobs within 4 hours of posting, and contacts hiring managers to get you intro calls. Save 20+ hours a week and focus on what matters most preparing for interviews, not hunting for jobs.</p>
           </div>
           
           <div>
