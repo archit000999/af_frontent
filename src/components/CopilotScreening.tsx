@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -84,6 +83,8 @@ const CopilotScreening = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    console.log('File selected:', file.name, file.type, file.size);
+
     // Validate file type
     const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     if (!allowedTypes.includes(file.type)) {
@@ -106,9 +107,12 @@ const CopilotScreening = () => {
     }
 
     setIsUploading(true);
+    console.log('Starting file upload...');
+    
     try {
       // Upload file to Supabase storage
       const uploadResult = await uploadResume(file);
+      console.log('Upload result:', uploadResult);
       
       if (uploadResult) {
         setFormData(prev => ({
@@ -154,6 +158,14 @@ const CopilotScreening = () => {
       resumeFileName: '',
       resumeFileUrl: ''
     });
+  };
+
+  const handleChooseFileClick = () => {
+    console.log('Choose file button clicked');
+    const fileInput = document.getElementById('resume-file-input') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
   };
 
   const handleNext = async () => {
@@ -387,23 +399,23 @@ const CopilotScreening = () => {
                       <p className="text-gray-600 mb-4">
                         Upload your resume (PDF or Word document)
                       </p>
-                      <label className="cursor-pointer">
-                        <input
-                          type="file"
-                          accept=".pdf,.doc,.docx"
-                          onChange={handleFileUpload}
-                          className="hidden"
-                          disabled={isUploading}
-                        />
-                        <Button 
-                          type="button" 
-                          variant="outline"
-                          disabled={isUploading}
-                          className="text-purple-600 border-purple-300 hover:bg-purple-50"
-                        >
-                          {isUploading ? 'Uploading...' : 'Choose File'}
-                        </Button>
-                      </label>
+                      <input
+                        id="resume-file-input"
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                        disabled={isUploading}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        disabled={isUploading}
+                        className="text-purple-600 border-purple-300 hover:bg-purple-50"
+                        onClick={handleChooseFileClick}
+                      >
+                        {isUploading ? 'Uploading...' : 'Choose File'}
+                      </Button>
                       <p className="text-xs text-gray-500 mt-2">
                         Maximum file size: 10MB
                       </p>
