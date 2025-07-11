@@ -20,7 +20,7 @@ const Hero = () => {
             </div>
             <span className="text-gray-900 text-xl font-bold">ApplyFirst</span>
           </div>
-          <span className="text-gray-500 text-xs ml-13 -mt-1">powered by Saki AI</span>
+          <span className="text-gray-500 text-xs ml-13 -mt-1 my-[9px] mx-[42px]">powered by Saki AI</span>
         </div>
         
         {/* Auth buttons */}
