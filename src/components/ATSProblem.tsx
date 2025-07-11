@@ -1,5 +1,4 @@
 import { Shield, Users, Target, CheckCircle, AlertTriangle } from "lucide-react";
-
 const ATSProblem = () => {
   return <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-indigo-50">
       <div className="max-w-7xl mx-auto">
@@ -69,7 +68,7 @@ const ATSProblem = () => {
             <div className="bg-white p-6 rounded-xl shadow-lg border-2 border-blue-200">
               <div className="text-6xl font-bold text-blue-600 mb-2">85%+</div>
               <p className="text-gray-700 font-semibold mb-2">of applicants never make it past the ATS</p>
-              <p className="text-blue-600 font-medium text-sm">ApplyFirst users break through — because real people apply like real professionals.</p>
+              <p className="text-blue-600 font-medium text-sm">ApplyFirst users break through because real people apply like real professionals.</p>
             </div>
           </div>
         </div>
@@ -77,5 +76,4 @@ const ATSProblem = () => {
       </div>
     </section>;
 };
-
 export default ATSProblem;
