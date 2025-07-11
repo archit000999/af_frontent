@@ -54,7 +54,7 @@ const ATSProblem = () => {
               </div>
               
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <p className="text-blue-800 font-medium">Our north star metric: help users land real interviews — not just build scalable technology.</p>
+                <p className="text-blue-800 font-medium">Our north star metric: Designed to be unsubscribed</p>
               </div>
             </div>
           </div>
