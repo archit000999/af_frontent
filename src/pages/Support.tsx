@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
@@ -132,14 +131,18 @@ const Support = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/home')}>
-              <span>ApplyFirst</span>
+            <div onClick={()=>navigate("/home")} className="flex items-center space-x-2 text-purple-600 font-medium text-base">
+              <button>ApplyFirst</button>
             </div>
             <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/applications')}>
-              <span>Applications</span>
+              <div className="w-6 h-6 flex items-center justify-center">
+              </div>
+              <button>Applications</button>
             </div>
-            <div className="flex items-center space-x-2 text-purple-600 font-medium text-base">
-              <span>Support</span>
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/support')}>
+              <div className="w-6 h-6 flex items-center justify-center">
+              </div>
+              <button>Support</button>
             </div>
           </nav>
 
