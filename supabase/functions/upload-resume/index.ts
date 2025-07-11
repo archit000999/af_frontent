@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
     console.log('Received Clerk token (first 10 chars):', clerkToken.substring(0, 10));
 
     // Validate Clerk token by calling Clerk's API
-    const clerkResponse = await fetch('https://api.clerk.com/v1/me', {
+    const clerkResponse = await fetch('https://clerk.applyfirst.trysaki.com/v1/me', {
       headers: {
         'Authorization': `Bearer ${clerkToken}`,
       },
