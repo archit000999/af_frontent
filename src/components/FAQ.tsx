@@ -1,43 +1,27 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 const FAQ = () => {
-  const faqs = [
-    {
-      question: "How do you protect my privacy during outreach?",
-      answer: "We use professional email accounts and never share your personal information without explicit permission. All outreach is done with your consent and you can review messaging templates before we send them. We maintain strict data security protocols and never spam or mass-blast."
-    },
-    {
-      question: "How quickly will I see results?",
-      answer: "Most users start receiving responses from hiring managers within the first 72 hours. On average, our users land their first interview within 2-3 weeks of starting the service. We've had clients get interview requests within 24 hours of launch."
-    },
-    {
-      question: "What if I don't get any interviews?",
-      answer: "If we don't generate any interviews for you within the first 30 days, we'll refund your entire $299 deposit immediately. We're confident in our system and stand behind our results with this iron-clad guarantee."
-    },
-    {
-      question: "Do you work with all industries and experience levels?",
-      answer: "We specialize in mid to senior-level professionals earning $100K+ across tech, finance, marketing, sales, consulting, and healthcare. We focus on roles where our direct outreach approach is most effective and where hiring managers have decision-making authority."
-    },
-    {
-      question: "How is this different from other job search services?",
-      answer: "Unlike traditional recruiters or job boards, we proactively reach hiring managers before jobs are widely posted. This puts you in the first wave of candidates they see, dramatically improving your response rates. We're not a recruiting firm - we're your personal outreach team."
-    },
-    {
-      question: "When exactly do I pay the success fee?",
-      answer: "The 1% success fee is only charged if and when you accept a job offer that came directly through our outreach efforts. It's calculated based on your first month's total compensation (salary + bonuses + equity). No job = no fee, ever."
-    }
-  ];
-
-  return (
-    <section id="faq" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+  const faqs = [{
+    question: "How do you protect my privacy during outreach?",
+    answer: "We use professional email accounts and never share your personal information without explicit permission. All outreach is done with your consent and you can review messaging templates before we send them. We maintain strict data security protocols and never spam or mass-blast."
+  }, {
+    question: "How quickly will I see results?",
+    answer: "Most users start receiving responses from hiring managers within the first 72 hours. On average, our users land their first interview within 2-3 weeks of starting the service. We've had clients get interview requests within 24 hours of launch."
+  }, {
+    question: "What if I don't get any interviews?",
+    answer: "If we don't generate any interviews for you within the first 30 days, we'll refund your entire $299 deposit immediately. We're confident in our system and stand behind our results with this iron-clad guarantee."
+  }, {
+    question: "Do you work with all industries and experience levels?",
+    answer: "We specialize in mid to senior-level professionals earning $100K+ across tech, finance, marketing, sales, consulting, and healthcare. We focus on roles where our direct outreach approach is most effective and where hiring managers have decision-making authority."
+  }, {
+    question: "How is this different from other job search services?",
+    answer: "Unlike traditional recruiters or job boards, we proactively reach hiring managers before jobs are widely posted. This puts you in the first wave of candidates they see, dramatically improving your response rates. We're not a recruiting firm - we're your personal outreach team."
+  }, {
+    question: "When exactly do I pay the success fee?",
+    answer: "The 1% success fee is only charged if and when you accept a job offer that came directly through our outreach efforts. It's calculated based on your first month's total compensation (salary + bonuses + equity). No job = no fee, ever."
+  }];
+  return <section id="faq" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-20">
           <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6">
@@ -52,16 +36,14 @@ const FAQ = () => {
         </div>
 
         <Accordion type="single" collapsible className="space-y-4 mb-16">
-          {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={`item-${index}`} className="bg-slate-50 rounded-2xl border border-slate-200 px-6 hover:shadow-lg transition-all duration-300">
+          {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`} className="bg-slate-50 rounded-2xl border border-slate-200 px-6 hover:shadow-lg transition-all duration-300">
               <AccordionTrigger className="py-6 text-left hover:no-underline group">
                 <span className="font-bold text-slate-900 text-lg group-hover:text-blue-600 transition-colors duration-300">{faq.question}</span>
               </AccordionTrigger>
               <AccordionContent className="pb-6 text-slate-600 text-base leading-relaxed">
                 {faq.answer}
               </AccordionContent>
-            </AccordionItem>
-          ))}
+            </AccordionItem>)}
         </Accordion>
 
         <div className="text-center bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-12 border border-blue-100">
@@ -84,13 +66,9 @@ const FAQ = () => {
             </Button>
           </div>
           
-          <p className="text-sm text-slate-500 mt-4">
-            30-day money-back guarantee • No long-term contracts • Setup in 24 hours
-          </p>
+          <p className="text-sm text-slate-500 mt-4">Interview guarantee • Designed to unsubscribe • Setup in 24 hours</p>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default FAQ;
