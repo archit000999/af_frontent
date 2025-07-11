@@ -26,19 +26,18 @@ const Applications = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <div
-            onClick={handleNavigateHome}
-            className="flex cursor-pointer items-center space-x-2 text-purple-600 font-medium text-base">
-                
-              <span>ApplyFirst</span>
+            <div onClick={() => navigate('/home')} className="flex items-center space-x-2 text-purple-600 font-medium text-base">
+              <button>ApplyFirst</button>
             </div>
-            <div 
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base"
-              onClick={() => navigate('/applications')}
-            >
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" >
               <div className="w-6 h-6 flex items-center justify-center">
               </div>
-              <span>Applications</span>
+              <button>Applications</button>
+            </div>
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/support')}>
+              <div className="w-6 h-6 flex items-center justify-center">
+              </div>
+              <button>Support</button>
             </div>
           </nav>
 
@@ -62,7 +61,7 @@ const Applications = () => {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-3">
             <h1 className="text-2xl font-semibold text-gray-900">Application Tracker</h1>
-            <HelpCircle className="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-600" />
+            
           </div>
           
           {/* Search Bar */}
@@ -78,9 +77,6 @@ const Applications = () => {
               placeholder="Search"
             />
           </div>
-          
-          {/* External Link Icon */}
-          <ExternalLink className="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-600" />
         </div>
 
         {/* Application Stages */}
