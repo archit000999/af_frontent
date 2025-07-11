@@ -100,16 +100,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
   };
 
   const uploadResume = async (file: File) => {
-    if (!user) {
-      toast({
-        title: "Authentication Required",
-        description: "Please log in to upload your resume",
-        variant: "destructive"
-      });
-      return null;
-    }
-
-    console.log('uploadResume called with file:', file.name, 'for user:', user.id);
+    console.log('uploadResume called with file:', file.name);
 
     try {
       setIsLoading(true);
@@ -125,14 +116,14 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         throw new Error('File too large. Maximum size is 10MB.');
       }
 
-      // Generate unique filename
+      // Generate unique filename without user ID since no auth required
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-      const fileName = `${user.id}/${timestamp}_${sanitizedFileName}`;
+      const fileName = `${timestamp}_${sanitizedFileName}`;
       
       console.log('Uploading file to path:', fileName);
 
-      // Upload file directly to Supabase Storage
+      // Upload file directly to Supabase Storage without authentication
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('resumes')
         .upload(fileName, file, {
@@ -163,16 +154,18 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
       // Update local config
       updateConfig(resumeData);
 
-      // Save to database
-      const success = await saveConfig(resumeData, true); // silent save
-      
-      if (!success) {
-        // If database save fails, clean up uploaded file
-        await supabase.storage.from('resumes').remove([fileName]);
-        throw new Error('Failed to save resume information');
+      // Save to database if user is authenticated
+      if (user) {
+        const success = await saveConfig(resumeData, true); // silent save
+        
+        if (!success) {
+          // If database save fails, clean up uploaded file
+          await supabase.storage.from('resumes').remove([fileName]);
+          throw new Error('Failed to save resume information');
+        }
       }
 
-      console.log('Resume upload and database update completed successfully');
+      console.log('Resume upload completed successfully');
       
       return {
         fileName: fileName,

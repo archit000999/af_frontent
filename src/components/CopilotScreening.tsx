@@ -8,6 +8,7 @@ import { UserButton } from '@clerk/clerk-react';
 import LoadingScreen from './LoadingScreen';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const CopilotScreening = () => {
   const navigate = useNavigate();
@@ -142,8 +143,7 @@ const CopilotScreening = () => {
   const handleRemoveFile = async () => {
     if (formData.resumeFileName) {
       try {
-        // Remove file from storage
-        const { supabase } = await import('@/integrations/supabase/client');
+        // Remove file from storage (no auth required now)
         await supabase.storage.from('resumes').remove([formData.resumeFileName]);
       } catch (error) {
         console.error('Error removing file from storage:', error);
