@@ -233,6 +233,22 @@ const CopilotPreview = () => {
                           <span className="text-sm">{job.location}</span>
                         </div>
                       </div>
+
+                      {/* Hiring Manager Info */}
+                      <div className="space-y-2 pt-2 border-t border-gray-100">
+                        <div>
+                          <p className="text-xs font-medium text-gray-500 mb-1">Hiring Manager</p>
+                          <div className="bg-gray-200 rounded h-4 w-32" style={{ filter: 'blur(2px)' }}>
+                            <span className="text-xs text-gray-400 opacity-0">████████████</span>
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-gray-500 mb-1">Contact Email</p>
+                          <div className="bg-gray-200 rounded h-4 w-40" style={{ filter: 'blur(2px)' }}>
+                            <span className="text-xs text-gray-400 opacity-0">████████████████</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
