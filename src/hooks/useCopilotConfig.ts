@@ -10,10 +10,9 @@ import {
 import { 
   loadAllConfigs as loadAllConfigsService,
   saveConfigToDatabase,
-  deleteConfigFromDatabase,
-  uploadResumeFile
+  deleteConfigFromDatabase
 } from '@/services/copilotService';
-import { setSupabaseAuth } from '@/integrations/supabase/client';
+import { setSupabaseAuth, supabase } from '@/integrations/supabase/client';
 
 export const useCopilotConfig = (maxCopilots: number = 1) => {
   const { user } = useUser();
@@ -115,24 +114,76 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     try {
       setIsLoading(true);
       
-      // Get Supabase template token for authentication with Edge Function
-      const clerkToken = await getToken({ template: 'supabase' });
-      if (!clerkToken) {
-        throw new Error('No authentication token available');
+      // Validate file type
+      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      if (!allowedTypes.includes(file.type)) {
+        throw new Error('Invalid file type. Only PDF and Word documents are allowed.');
       }
 
-      const result = await uploadResumeFile(file, clerkToken);
-      console.log('Upload completed successfully:', result);
-      return result;
+      // Validate file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
+        throw new Error('File too large. Maximum size is 10MB.');
+      }
+
+      // Generate unique filename
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const fileName = `${user.id}/${timestamp}_${sanitizedFileName}`;
+      
+      console.log('Uploading file to path:', fileName);
+
+      // Upload file directly to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('resumes')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw new Error(`Upload failed: ${uploadError.message}`);
+      }
+
+      console.log('File uploaded successfully:', uploadData);
+
+      // Get public URL for the uploaded file
+      const { data: { publicUrl } } = supabase.storage
+        .from('resumes')
+        .getPublicUrl(fileName);
+
+      console.log('Generated public URL:', publicUrl);
+
+      // Update configuration with resume info
+      const resumeData = {
+        resumeFileName: fileName,
+        resumeFileUrl: publicUrl
+      };
+
+      // Update local config
+      updateConfig(resumeData);
+
+      // Save to database
+      const success = await saveConfig(resumeData, true); // silent save
+      
+      if (!success) {
+        // If database save fails, clean up uploaded file
+        await supabase.storage.from('resumes').remove([fileName]);
+        throw new Error('Failed to save resume information');
+      }
+
+      console.log('Resume upload and database update completed successfully');
+      
+      return {
+        fileName: fileName,
+        fileUrl: publicUrl
+      };
     } catch (error: any) {
       console.error('Error uploading resume:', error);
       
       let errorMessage = "Failed to upload resume";
       
-      // Provide more specific error messages based on the error
-      if (error?.message?.includes('row-level security')) {
-        errorMessage = "Permission denied. Please check your authentication.";
-      } else if (error?.message?.includes('413')) {
+      if (error?.message?.includes('413')) {
         errorMessage = "File too large. Please use a file smaller than 10MB.";
       } else if (error?.message?.includes('415')) {
         errorMessage = "Unsupported file type. Please use PDF or Word documents.";

@@ -85,7 +85,7 @@ const CopilotScreening = () => {
 
     console.log('File selected:', file.name, file.type, file.size);
 
-    // Validate file type
+    // Basic validation (detailed validation happens in uploadResume)
     const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     if (!allowedTypes.includes(file.type)) {
       toast({
@@ -96,7 +96,6 @@ const CopilotScreening = () => {
       return;
     }
 
-    // Validate file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
       toast({
         title: "File Too Large",
@@ -110,7 +109,6 @@ const CopilotScreening = () => {
     console.log('Starting file upload...');
     
     try {
-      // Upload file to Supabase storage
       const uploadResult = await uploadResume(file);
       console.log('Upload result:', uploadResult);
       
@@ -121,18 +119,12 @@ const CopilotScreening = () => {
           resumeFileName: uploadResult.fileName,
           resumeFileUrl: uploadResult.fileUrl
         }));
-        
-        // Update local config with resume info (database already updated by Edge Function)
-        updateConfig({
-          resumeFileName: uploadResult.fileName,
-          resumeFileUrl: uploadResult.fileUrl
-        });
 
         setErrors(prev => ({ ...prev, resume: false }));
         
         toast({
           title: "Success",
-          description: "Resume uploaded and saved successfully"
+          description: "Resume uploaded successfully"
         });
       }
     } catch (error) {
@@ -147,13 +139,24 @@ const CopilotScreening = () => {
     }
   };
 
-  const handleRemoveFile = () => {
+  const handleRemoveFile = async () => {
+    if (formData.resumeFileName) {
+      try {
+        // Remove file from storage
+        const { supabase } = await import('@/integrations/supabase/client');
+        await supabase.storage.from('resumes').remove([formData.resumeFileName]);
+      } catch (error) {
+        console.error('Error removing file from storage:', error);
+      }
+    }
+    
     setFormData(prev => ({
       ...prev,
       resumeFile: null,
       resumeFileName: '',
       resumeFileUrl: ''
     }));
+    
     updateConfig({
       resumeFileName: '',
       resumeFileUrl: ''
