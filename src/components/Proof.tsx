@@ -87,7 +87,7 @@ const Proof = () => {
                 </div>
                 <div>
                   <div className="font-semibold text-white">Michael Rodrigues</div>
-                  <div className="text-sm text-slate-400">Senior Developer at InnovateInc</div>
+                  <div className="text-sm text-slate-400">Operations Manager at Stripe</div>
                 </div>
               </div>
             </div>
