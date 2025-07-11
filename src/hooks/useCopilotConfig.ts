@@ -115,8 +115,8 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     try {
       setIsLoading(true);
       
-      // Get Clerk token for authentication
-      const clerkToken = await getToken();
+      // Get Supabase template token for authentication with Edge Function
+      const clerkToken = await getToken({ template: 'supabase' });
       if (!clerkToken) {
         throw new Error('No authentication token available');
       }

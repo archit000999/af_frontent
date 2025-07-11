@@ -94,62 +94,161 @@ Deno.serve(async (req) => {
       size: file.size
     });
 
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      console.log('Invalid file type:', file.type);
+      return new Response(
+        JSON.stringify({ error: 'Invalid file type. Only PDF and Word documents are allowed.' }),
+        { status: 415, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      console.log('File too large:', file.size);
+      return new Response(
+        JSON.stringify({ error: 'File too large. Maximum size is 10MB.' }),
+        { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     // Create Supabase client with service role key for server-side operations
     const supabaseServiceRole = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Generate file path
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${userId}/${Date.now()}.${fileExt}`;
+    // Generate unique filename
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const fileName = `${userId}_${timestamp}_${sanitizedFileName}`;
+    const filePath = `resumes/${fileName}`;
     
-    console.log('Generated file path:', fileName);
+    console.log('Generated file path:', filePath);
 
-    // Upload file to Supabase Storage
-    const fileArrayBuffer = await file.arrayBuffer();
-    const { data: uploadData, error: uploadError } = await supabaseServiceRole.storage
-      .from('resumes')
-      .upload(fileName, fileArrayBuffer, {
-        cacheControl: '3600',
-        upsert: true,
-        contentType: file.type
-      });
+    try {
+      // Upload file to Supabase Storage
+      const fileArrayBuffer = await file.arrayBuffer();
+      const { data: uploadData, error: uploadError } = await supabaseServiceRole.storage
+        .from('resumes')
+        .upload(filePath, fileArrayBuffer, {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: file.type
+        });
 
-    if (uploadError) {
-      console.error('Supabase storage error:', uploadError);
+      if (uploadError) {
+        console.error('Supabase storage error:', uploadError);
+        return new Response(
+          JSON.stringify({ error: 'Failed to upload file', details: uploadError.message }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      console.log('File uploaded successfully:', uploadData);
+
+      // Since bucket is private, generate signed URL for access
+      const { data: signedUrlData, error: signedUrlError } = await supabaseServiceRole.storage
+        .from('resumes')
+        .createSignedUrl(filePath, 3600 * 24 * 365); // 1 year expiry
+
+      if (signedUrlError) {
+        console.error('Error creating signed URL:', signedUrlError);
+        // Cleanup uploaded file on error
+        await supabaseServiceRole.storage.from('resumes').remove([filePath]);
+        return new Response(
+          JSON.stringify({ error: 'Failed to generate file URL' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      const fileUrl = signedUrlData.signedUrl;
+      console.log('Generated signed URL:', fileUrl);
+
+      // Update/create copilot configuration with resume info
+      const { data: existingConfigs, error: fetchError } = await supabaseServiceRole
+        .from('copilot_configurations')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (fetchError) {
+        console.error('Error fetching existing config:', fetchError);
+        // Continue with upload success even if DB update fails
+      } else {
+        const configData = {
+          user_id: userId,
+          resume_file_name: fileName,
+          resume_file_url: fileUrl,
+          updated_at: new Date().toISOString()
+        };
+
+        if (existingConfigs && existingConfigs.length > 0) {
+          // Update existing config
+          const { error: updateError } = await supabaseServiceRole
+            .from('copilot_configurations')
+            .update(configData)
+            .eq('id', existingConfigs[0].id);
+
+          if (updateError) {
+            console.error('Error updating config with resume info:', updateError);
+          } else {
+            console.log('Successfully updated config with resume info');
+          }
+        } else {
+          // Create new config with resume info
+          const { error: insertError } = await supabaseServiceRole
+            .from('copilot_configurations')
+            .insert([{
+              ...configData,
+              step_completed: 3,
+              screening_data: {},
+              filters_data: {},
+              final_config_data: {},
+              job_titles: [],
+              job_types: [],
+              work_location_types: [],
+              remote_locations: [],
+              onsite_locations: []
+            }]);
+
+          if (insertError) {
+            console.error('Error creating config with resume info:', insertError);
+          } else {
+            console.log('Successfully created new config with resume info');
+          }
+        }
+      }
+
+      // Return success response
+      const response = {
+        fileName: fileName,
+        filePath: filePath,
+        fileUrl: fileUrl
+      };
+
+      console.log('Upload and database update completed successfully:', response);
+
       return new Response(
-        JSON.stringify({ error: 'Failed to upload file', details: uploadError.message }),
+        JSON.stringify(response),
+        { 
+          status: 200, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+
+    } catch (uploadError) {
+      console.error('Error during upload process:', uploadError);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Upload failed', 
+          details: uploadError instanceof Error ? uploadError.message : 'Unknown error' 
+        }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    console.log('File uploaded successfully:', uploadData);
-
-    // Get the public URL (note: bucket is private, so this URL won't work directly)
-    const { data: { publicUrl } } = supabaseServiceRole.storage
-      .from('resumes')
-      .getPublicUrl(fileName);
-
-    console.log('Generated public URL:', publicUrl);
-
-    // Return success response
-    const response = {
-      fileName: file.name,
-      filePath: fileName,
-      fileUrl: publicUrl,
-      userId: userId
-    };
-
-    console.log('Upload successful, returning response:', response);
-
-    return new Response(
-      JSON.stringify(response),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
 
   } catch (error) {
     console.error('Error in upload-resume function:', error);

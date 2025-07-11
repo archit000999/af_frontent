@@ -122,7 +122,7 @@ const CopilotScreening = () => {
           resumeFileUrl: uploadResult.fileUrl
         }));
         
-        // Update config with resume info
+        // Update local config with resume info (database already updated by Edge Function)
         updateConfig({
           resumeFileName: uploadResult.fileName,
           resumeFileUrl: uploadResult.fileUrl
@@ -132,7 +132,7 @@ const CopilotScreening = () => {
         
         toast({
           title: "Success",
-          description: "Resume uploaded successfully"
+          description: "Resume uploaded and saved successfully"
         });
       }
     } catch (error) {
@@ -185,12 +185,10 @@ const CopilotScreening = () => {
         coverLetter: formData.coverLetter
       };
 
-      // Save all data including screening data and resume info
+      // Save screening data (resume info already saved by Edge Function)
       const success = await saveConfig({
         stepCompleted: 4,
-        screeningData,
-        resumeFileName: formData.resumeFileName,
-        resumeFileUrl: formData.resumeFileUrl
+        screeningData
       }, false);
 
       if (success) {
@@ -230,9 +228,7 @@ const CopilotScreening = () => {
 
     const success = await saveConfig({
       stepCompleted: 3,
-      screeningData,
-      resumeFileName: formData.resumeFileName,
-      resumeFileUrl: formData.resumeFileUrl
+      screeningData
     }, false);
     
     if (success) {
