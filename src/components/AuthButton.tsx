@@ -5,7 +5,7 @@ const AuthButton = () => {
   return <div className="flex items-center gap-4">
     <SignedOut>
       <SignInButton mode="modal" forceRedirectUrl="/home">
-        <Button variant="outline" className="border-white hover:bg-white text-white">Login</Button>
+        <Button variant="outline" className="border-blue-300 hover:bg-blue-400 bg-blue-500 hover:text-white text-white">Login</Button>
       </SignInButton>
     </SignedOut>
       <SignedIn>
