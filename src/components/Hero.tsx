@@ -10,14 +10,14 @@ const Hero = () => {
   const navigate = useNavigate();
   return <>
     {/* Fixed header with logo and auth */}
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 py-4">
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 py-4 bg-white/95 backdrop-blur-md border-b border-gray-200/20 shadow-sm">
       <div className="flex justify-between items-center">
         {/* ApplyFirst Logo */}
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
             <span className="text-white font-bold text-lg">A</span>
           </div>
-          <span className="text-white text-xl font-bold">ApplyFirst</span>
+          <span className="text-gray-900 text-xl font-bold">ApplyFirst</span>
         </div>
         
         {/* Auth buttons */}
