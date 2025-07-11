@@ -78,7 +78,7 @@ const Proof = () => {
               </p>
               <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full mr-4 overflow-hidden">
-                  <img src="/lovable-uploads/1852bbdc-4c69-4e2f-adff-a14a43d28d4a.png" alt="Mudit Dawar" className="w-full h-full object-cover" />
+                  <img src="/lovable-uploads/5d8cd8d0-4db7-4da7-8a95-efe105de0f7d.png" alt="Mudit Dawar" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <div className="font-semibold text-white">Mudit Dawar</div>
@@ -98,7 +98,7 @@ const Proof = () => {
               </p>
               <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full mr-4 overflow-hidden">
-                  <img src="/lovable-uploads/5d8cd8d0-4db7-4da7-8a95-efe105de0f7d.png" alt="Jordan Williams" className="w-full h-full object-cover" />
+                  <img src="/lovable-uploads/1852bbdc-4c69-4e2f-adff-a14a43d28d4a.png" alt="Jordan Williams" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <div className="font-semibold text-white">Jordan Williams</div>
