@@ -9,7 +9,7 @@ const HowItWorks = () => {
   }, {
     icon: Target,
     title: "You're in the First 10 Applicants",
-    description: "Our human agents manually apply to each job thereby ensuring you're among the first 10 applicants.",
+    description: "Our human agents manually apply to each job thereby ensuring you're among the first 10 applicants and not blocked by ATS bots.",
     step: "02",
     color: "from-indigo-500 to-purple-500"
   }, {
