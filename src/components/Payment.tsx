@@ -175,7 +175,7 @@ const Payment = () => {
       '20 personalized emails sent daily from your Gmail — complete with your resume, tailored messaging, and your name',
       'Save 20+ hours every week — spend less time applying, and more time preparing for interviews',
       '2–4 interviews guaranteed per month — or your next month is free',
-      'We onboard only 40 candidates per week, focused on roles paying $100K+'
+      'We onboard only 20 candidates per week, focused on roles paying $100K+'
     ],
     buttonText: 'Get Started',
     popular: true,
