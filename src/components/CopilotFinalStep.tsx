@@ -72,7 +72,7 @@ const CopilotFinalStep = () => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">AF</span>
+              <span className="text-white font-bold text-sm">A</span>
             </div>
             <span className="text-xl font-semibold text-gray-900">ApplyFirst</span>
           </div>
