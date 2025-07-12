@@ -153,7 +153,7 @@ const BackButton = ({ onBack }) => (
       className="px-8 py-3 flex items-center gap-2 border-purple-300 text-purple-600 hover:bg-purple-50"
     >
       <ArrowLeft className="w-4 h-4" />
-      Back to Preview
+      Back to application
     </Button>
   </div>
 );
