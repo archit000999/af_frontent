@@ -9,7 +9,7 @@ const HowItWorks = () => {
   }, {
     icon: Target,
     title: "You're in the First 10 Applicants",
-    description: "Our human agents manually apply to each job using our in-house Chrome extension — ensuring you're among the first 10 applicants.",
+    description: "Our human agents manually apply to each job thereby ensuring you're among the first 10 applicants.",
     step: "02",
     color: "from-indigo-500 to-purple-500"
   }, {
@@ -45,7 +45,7 @@ const HowItWorks = () => {
                     <span className="text-6xl font-bold bg-gradient-to-r from-slate-200 to-slate-300 bg-clip-text text-zinc-950">{step.step}</span>
                   </div>
                   <h3 className="text-2xl font-bold text-slate-900 mb-4">{step.title}</h3>
-                  <p className="text-slate-600 leading-relaxed text-lg">{step.description}</p>
+                   <p className="text-slate-600 leading-relaxed text-lg">{step.description}</p>
                 </div>
                 
                 {index < steps.length - 1 && <div className="hidden lg:flex absolute top-1/2 -right-6 transform -translate-y-1/2 z-10">
