@@ -59,7 +59,7 @@ const CopilotFinalStep = () => {
     if (success) {
       setTimeout(() => {
         setIsLoading(false);
-        navigate('/');
+        navigate('/payment');
       }, 2000);
     } else {
       setIsLoading(false);
