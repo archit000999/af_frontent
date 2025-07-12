@@ -3,7 +3,7 @@ const HowItWorks = () => {
   const steps = [{
     icon: Search,
     title: "We Monitor new Job postings",
-    description: "Our AI continuously monitors 500+ job boards including LinkedIn, company pages, and insider networks to find real opportunities.",
+    description: "Our AI continuously monitors job boards including LinkedIn, company pages, and insider networks to find real opportunities.",
     step: "01",
     color: "from-blue-500 to-indigo-500"
   }, {
