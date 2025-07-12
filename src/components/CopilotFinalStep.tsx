@@ -125,9 +125,7 @@ const CopilotFinalStep = () => {
                 
                 {/* Main Selection */}
                 <div>
-                  <h2 className="text-base font-semibold text-gray-900 mb-6">
-                    Select how your ApplyFirst should work:
-                  </h2>
+                  
                   
                   {/* Auto Apply Option */}
                   <div className="space-y-4">
