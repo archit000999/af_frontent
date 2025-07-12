@@ -59,7 +59,7 @@ const CopilotFinalStep = () => {
     if (success) {
       setTimeout(() => {
         setIsLoading(false);
-        navigate('/copilot-preview');
+        navigate('/');
       }, 2000);
     } else {
       setIsLoading(false);
