@@ -188,7 +188,7 @@ const Payment = () => {
   };
 
   const handleBack = () => {
-    navigate('/');
+    navigate('/home');
   };
 
   return (
