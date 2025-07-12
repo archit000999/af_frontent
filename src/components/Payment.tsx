@@ -188,7 +188,7 @@ const Payment = () => {
   };
 
   const handleBack = () => {
-    navigate('/copilot-preview');
+    navigate('/');
   };
 
   return (
