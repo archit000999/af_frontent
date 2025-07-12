@@ -131,18 +131,7 @@ const CopilotFinalStep = () => {
                   
                   {/* Auto Apply Option */}
                   <div className="space-y-4">
-                    <div className={`p-4 rounded-lg border cursor-pointer transition-all ${selectedMode === 'auto-apply' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedMode('auto-apply')}>
-                      <div className="flex items-start space-x-3">
-                        <div className={`w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${selectedMode === 'auto-apply' ? 'border-purple-500 bg-purple-500' : 'border-gray-300'}`}>
-                          {selectedMode === 'auto-apply' && <div className="w-2 h-2 bg-white rounded-full"></div>}
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-900">
-                            Automatically apply to jobs: your ApplyFirst will auto-fill and submit applications on your behalf
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    
 
                     {/* Auto Fill Option */}
                     
