@@ -208,7 +208,7 @@ const CopilotFinalStep = () => {
                   <div className="flex items-start space-x-3">
                     <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700">
-                      Your ApplyFirst scans 500+ job boards — including LinkedIn and 20M+ company websites — to find roles that match your background and preferences.
+                      Your ApplyFirst scans 50+ job boards — including LinkedIn and 20M+ company websites — to find roles that match your background and preferences.
                     </p>
                   </div>
                   
