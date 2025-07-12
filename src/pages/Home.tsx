@@ -242,10 +242,10 @@ const Home = () => {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Create Your First ApplyFirst</h3>
                 <p className="text-gray-600 mb-8 max-w-md mx-auto">
-                  Set up your job search preferences and let our AI ApplyFirst help you find the perfect opportunities.
+                  Set up your job search preferences and let ApplyFirst help you find the perfect opportunities.
                 </p>
                 <Button onClick={handleSetupCopilot} className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 text-lg font-semibold rounded-lg">
-                  Setup Your First ApplyFirst
+                  Setup ApplyFirst
                 </Button>
               </div>}
           </div>
