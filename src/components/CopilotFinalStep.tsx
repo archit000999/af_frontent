@@ -5,10 +5,14 @@ import { ArrowLeft, Settings, Check, ChevronRight, HelpCircle, Eye, RotateCcw } 
 import { useNavigate } from 'react-router-dom';
 import { UserButton } from '@clerk/clerk-react';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
-
 const CopilotFinalStep = () => {
   const navigate = useNavigate();
-  const { config, saveConfig, isLoading: configLoading, isInitialized } = useCopilotConfig();
+  const {
+    config,
+    saveConfig,
+    isLoading: configLoading,
+    isInitialized
+  } = useCopilotConfig();
   const [selectedMode, setSelectedMode] = useState('auto-apply');
   const [sentenceLength, setSentenceLength] = useState('balanced-mix');
   const [tone, setTone] = useState('neutral-casual');
@@ -31,14 +35,12 @@ const CopilotFinalStep = () => {
       }
     }
   }, [isInitialized, config]);
-
   const handleBack = () => {
     navigate('/copilot-screening');
   };
-
   const handleSaveConfiguration = async () => {
     setIsLoading(true);
-    
+
     // Prepare final configuration data to save
     const finalConfigData = {
       selectedMode,
@@ -47,13 +49,13 @@ const CopilotFinalStep = () => {
       vocabularyComplexity,
       isExpanded
     };
-    
+
     // Save final configuration
-    const success = await saveConfig({ 
-      stepCompleted: 4, // Mark as completed
+    const success = await saveConfig({
+      stepCompleted: 4,
+      // Mark as completed
       finalConfigData
     });
-    
     if (success) {
       setTimeout(() => {
         setIsLoading(false);
@@ -63,9 +65,7 @@ const CopilotFinalStep = () => {
       setIsLoading(false);
     }
   };
-
-  return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 to-purple-50 overflow-hidden">
+  return <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 to-purple-50 overflow-hidden">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex-shrink-0">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
@@ -83,10 +83,7 @@ const CopilotFinalStep = () => {
               
               <span>ApplyFirst</span>
             </div>
-            <div 
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm"
-              onClick={() => navigate('/applications')}
-            >
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-sm" onClick={() => navigate('/applications')}>
               <div className="w-6 h-6 flex items-center justify-center">
 
               </div>
@@ -98,13 +95,11 @@ const CopilotFinalStep = () => {
           {/* User Section */}
           <div className="flex items-center space-x-4">
             
-            <UserButton 
-              appearance={{
-                elements: {
-                  avatarBox: "w-8 h-8",
-                }
-              }}
-            />
+            <UserButton appearance={{
+            elements: {
+              avatarBox: "w-8 h-8"
+            }
+          }} />
           </div>
         </div>
       </header>
@@ -136,23 +131,10 @@ const CopilotFinalStep = () => {
                   
                   {/* Auto Apply Option */}
                   <div className="space-y-4">
-                    <div
-                      className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                        selectedMode === 'auto-apply'
-                          ? 'border-purple-500 bg-purple-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                      onClick={() => setSelectedMode('auto-apply')}
-                    >
+                    <div className={`p-4 rounded-lg border cursor-pointer transition-all ${selectedMode === 'auto-apply' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedMode('auto-apply')}>
                       <div className="flex items-start space-x-3">
-                        <div className={`w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${
-                          selectedMode === 'auto-apply'
-                            ? 'border-purple-500 bg-purple-500'
-                            : 'border-gray-300'
-                        }`}>
-                          {selectedMode === 'auto-apply' && (
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                          )}
+                        <div className={`w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${selectedMode === 'auto-apply' ? 'border-purple-500 bg-purple-500' : 'border-gray-300'}`}>
+                          {selectedMode === 'auto-apply' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                         </div>
                         <div>
                           <p className="text-sm text-gray-900">
@@ -163,32 +145,7 @@ const CopilotFinalStep = () => {
                     </div>
 
                     {/* Auto Fill Option */}
-                    <div
-                      className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                        selectedMode === 'auto-fill'
-                          ? 'border-purple-500 bg-purple-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                      onClick={() => setSelectedMode('auto-fill')}
-                    >
-                      <div className="flex items-start space-x-3">
-                        <div className={`w-6 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${
-                          selectedMode === 'auto-fill'
-                            ? 'border-purple-500 bg-purple-500'
-                            : 'border-gray-300'
-                        }`}>
-                          {selectedMode === 'auto-fill' && (
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                          )}
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-900">
-                            Auto-fill application forms but do not submit applications: you can review jobs and answers before 
-                            submitting. This will allow you to <span className="text-purple-600 font-semibold">train your ApplyFirst</span> <span className="text-purple-600">⚡</span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
 
@@ -196,23 +153,14 @@ const CopilotFinalStep = () => {
                 <div>
                   <h3 className="text-base font-semibold text-gray-900 mb-4">Writing Style</h3>
                   
-                  <div 
-                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
-                    onClick={() => setIsExpanded(!isExpanded)}
-                  >
+                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors" onClick={() => setIsExpanded(!isExpanded)}>
                     <span className="text-sm text-gray-700">Personalize how your ApplyFirst answers application questions.</span>
-                    <svg
-                      className={`w-5 h-5 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className={`w-5 h-5 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
                   
-                  {isExpanded && (
-                    <div className="mt-6">
+                  {isExpanded && <div className="mt-6">
                       {/* Writing Style Options */}
                       <div className="space-y-6">
                         {/* Sentence Length */}
@@ -265,8 +213,7 @@ const CopilotFinalStep = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    </div>}
                 </div>
 
                 {/* Features List */}
@@ -298,37 +245,22 @@ const CopilotFinalStep = () => {
             {/* Footer - Fixed */}
             <div className="flex-shrink-0 p-8 pt-4 border-t border-gray-200">
               <div className="flex items-center justify-between">
-                <Button
-                  variant="outline"
-                  onClick={handleBack}
-                  className="flex items-center space-x-2 px-6 py-3 text-sm"
-                  disabled={isLoading}
-                >
+                <Button variant="outline" onClick={handleBack} className="flex items-center space-x-2 px-6 py-3 text-sm" disabled={isLoading}>
                   <ArrowLeft className="w-4 h-4" />
                   <span>Back</span>
                 </Button>
                 
-                <Button
-                  onClick={handleSaveConfiguration}
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 text-sm"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <div className="flex items-center space-x-2">
+                <Button onClick={handleSaveConfiguration} className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 text-sm" disabled={isLoading}>
+                  {isLoading ? <div className="flex items-center space-x-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                       <span>Launching ApplyFirst...</span>
-                    </div>
-                  ) : (
-                    <span>Launch ApplyFirst</span>
-                  )}
+                    </div> : <span>Launch ApplyFirst</span>}
                 </Button>
               </div>
             </div>
           </div>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default CopilotFinalStep;
