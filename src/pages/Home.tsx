@@ -276,7 +276,7 @@ const Home = () => {
       </main>
 
       {/* Upgrade Dialog */}
-      <UpgradeDialog isOpen={isUpgradeDialogOpen} onClose={() => setIsUpgradeDialogOpen(false)} message={upgradeDialogType === 'elite' ? "You need an Elite plan to create multiple ApplyFirst." : "You need a Premium or Elite plan to activate ApplyFirst"} buttonText={upgradeDialogType === 'elite' ? "Upgrade to Elite" : "Upgrade to Elite"} />
+      <UpgradeDialog isOpen={isUpgradeDialogOpen} onClose={() => setIsUpgradeDialogOpen(false)} message={upgradeDialogType === 'elite' ? "You need an Elite plan to create multiple ApplyFirst." : "You need a premium plan to activate ApplyFirst"} buttonText={upgradeDialogType === 'elite' ? "Upgrade to Elite" : "Upgrade"} />
     </div>;
 };
 export default Home;
