@@ -27,6 +27,7 @@ import CopilotScreening from "./components/CopilotScreening";
 import CopilotFinalStep from "./components/CopilotFinalStep";
 import CopilotPreview from "./components/CopilotPreview";
 import Payment from "./components/Payment";
+import { IOSDebugPanel } from "./components/IOSDebugPanel";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,7 @@ const App = () => (
           </Suspense>
         </BrowserRouter>
       </TooltipProvider>
+      <IOSDebugPanel />
     </QueryClientProvider>
   </ErrorBoundary>
 );
