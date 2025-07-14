@@ -42,7 +42,7 @@ const Pricing = () => {
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <span className="text-2xl font-bold text-green-600">First Week Fee Waived Off</span>
                   </div>
-                  <p className="text-slate-700 font-medium mb-2">Upon participation in our upcoming webinar &quot;AI Strategies for Job Search - Mastering Cold Outreach.&quot;</p>
+                  <p className="text-slate-700 font-medium mb-2">Use promo code: Webinar99</p>
                   <button onClick={() => window.open('https://calendly.com/vaasu_bhartia/job-search-ai-webinar', '_blank')} className="text-blue-600 hover:text-blue-800 font-medium underline transition-colors">
                     Click here for the schedule.
                   </button>
