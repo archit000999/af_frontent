@@ -91,8 +91,6 @@ export const SupabaseAuthProvider: React.FC<SupabaseAuthProviderProps> = ({ chil
   const signInWithOAuth = async (provider: 'google' | 'github' | 'apple') => {
     
     // Get the current URL and set appropriate redirect
-    const currentUrl = new URL(window.location.href);
-    const redirectTo = `${currentUrl.origin}/home`;
     
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
