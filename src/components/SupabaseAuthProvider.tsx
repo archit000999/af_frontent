@@ -97,7 +97,7 @@ export const SupabaseAuthProvider: React.FC<SupabaseAuthProviderProps> = ({ chil
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: redirectTo
+         redirectTo: `${window.location.origin}/home`
       }
     });
     
