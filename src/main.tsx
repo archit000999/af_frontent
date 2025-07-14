@@ -2,16 +2,52 @@
 import { createRoot } from 'react-dom/client'
 import { ClerkProvider } from '@clerk/clerk-react'
 import App from './App.tsx'
+import ErrorBoundary from './components/ErrorBoundary.tsx'
 import './index.css'
 
 const PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYXBwbHlmaXJzdC50cnlzYWtpLmNvbSQ";
 
+// iOS-specific debugging
+const userAgent = navigator.userAgent;
+const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+console.log('Device detection:', { userAgent, isIOS });
+
 if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Clerk Publishable Key");
+  console.error("Missing Clerk Publishable Key");
 }
 
+// Graceful Clerk initialization for iOS
+const ClerkWrapper = ({ children }: { children: React.ReactNode }) => {
+  if (!PUBLISHABLE_KEY) {
+    console.warn("Clerk not initialized - running without authentication");
+    return <>{children}</>;
+  }
+
+  try {
+    return (
+      <ClerkProvider 
+        publishableKey={PUBLISHABLE_KEY} 
+        afterSignOutUrl="/"
+        appearance={{
+          baseTheme: undefined,
+          variables: {
+            colorPrimary: 'hsl(var(--primary))',
+          }
+        }}
+      >
+        {children}
+      </ClerkProvider>
+    );
+  } catch (error) {
+    console.error("Clerk initialization failed:", error);
+    return <>{children}</>;
+  }
+};
+
 createRoot(document.getElementById("root")!).render(
-  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-    <App />
-  </ClerkProvider>
+  <ErrorBoundary>
+    <ClerkWrapper>
+      <App />
+    </ClerkWrapper>
+  </ErrorBoundary>
 );
