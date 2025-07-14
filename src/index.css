@@ -103,3 +103,66 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* iOS Safari Specific Fixes */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari only styles */
+  
+  /* Fix viewport height issues */
+  html {
+    height: -webkit-fill-available;
+  }
+  
+  body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-height: calc(var(--vh, 1vh) * 100);
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Prevent zooming on input focus */
+  input, select, textarea {
+    font-size: 16px !important;
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 0;
+  }
+  
+  /* Fix button appearance */
+  button {
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Fix scroll behavior */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Ensure clickable elements work properly */
+  a, button, [role="button"], [tabindex] {
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Additional iOS Safari fixes for authentication modals */
+.ios-safari {
+  /* Prevent body scroll when modal is open */
+  --webkit-overflow-scrolling: auto;
+}
+
+.ios-safari .clerk-modal, 
+.ios-safari [data-clerk-modal] {
+  /* Ensure modals work properly on iOS */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  position: fixed !important;
+  z-index: 9999 !important;
+}

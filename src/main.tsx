@@ -4,13 +4,19 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import App from './App.tsx'
 import ErrorBoundary from './components/ErrorBoundary.tsx'
 import './index.css'
+import { debugAuthState, isIOSSafari } from './utils/iosAuthHelper.ts'
 
 const PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYXBwbHlmaXJzdC50cnlzYWtpLmNvbSQ";
 
 // iOS-specific debugging
 const userAgent = navigator.userAgent;
 const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-console.log('Device detection:', { userAgent, isIOS });
+console.log('Device detection:', { userAgent, isIOS, isIOSSafari: isIOSSafari() });
+
+// Run iOS debug if on iOS Safari
+if (isIOSSafari()) {
+  debugAuthState();
+}
 
 if (!PUBLISHABLE_KEY) {
   console.error("Missing Clerk Publishable Key");
