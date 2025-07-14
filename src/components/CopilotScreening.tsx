@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Upload, FileText, X, ChevronRight, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { UserButton } from '@clerk/clerk-react';
+import AuthButton from '@/components/AuthButton';
 import LoadingScreen from './LoadingScreen';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 import { useToast } from '@/hooks/use-toast';
@@ -269,13 +269,7 @@ const CopilotScreening = () => {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <UserButton 
-              appearance={{
-                elements: {
-                  avatarBox: "w-8 h-8",
-                }
-              }}
-            />
+            <AuthButton />
           </div>
         </div>
       </header>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Settings, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { UserButton } from '@clerk/clerk-react';
+import AuthButton from '@/components/AuthButton';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -145,13 +145,7 @@ const CopilotPreview = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            <UserButton 
-              appearance={{
-                elements: {
-                  avatarBox: "w-8 h-8",
-                }
-              }}
-            />
+            <AuthButton />
           </div>
         </div>
       </header>

@@ -4,7 +4,7 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Check, X, Edit, ArrowLeft, Settings, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { UserButton } from '@clerk/clerk-react';
+import AuthButton from '@/components/AuthButton';
 import { LocationSelectionDialog } from './LocationSelectionDialog';
 import LoadingScreen from './LoadingScreen';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
@@ -250,13 +250,7 @@ const CopilotSetup = () => {
           {/* User Section */}
           <div className="flex items-center space-x-4">
             
-            <UserButton 
-              appearance={{
-                elements: {
-                  avatarBox: "w-8 h-8",
-                }
-              }}
-            />
+            <AuthButton />
           </div>
         </div>
       </header>

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowLeft, Settings, Check, ChevronRight, HelpCircle, Eye, RotateCcw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { UserButton } from '@clerk/clerk-react';
+import AuthButton from '@/components/AuthButton';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 const CopilotFinalStep = () => {
   const navigate = useNavigate();
@@ -95,11 +95,7 @@ const CopilotFinalStep = () => {
           {/* User Section */}
           <div className="flex items-center space-x-4">
             
-            <UserButton appearance={{
-            elements: {
-              avatarBox: "w-8 h-8"
-            }
-          }} />
+            <AuthButton />
           </div>
         </div>
       </header>

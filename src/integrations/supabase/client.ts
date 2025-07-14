@@ -13,19 +13,7 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
+    // Enable better error handling for iOS Safari
+    debug: import.meta.env.DEV,
   }
 });
-
-// Function to set custom JWT from Clerk
-export const setSupabaseAuth = async (token: string | null) => {
-  if (token) {
-    // Set custom auth token for Supabase
-    await supabase.auth.setSession({
-      access_token: token,
-      refresh_token: token, // For custom JWT, we use the same token
-    });
-  } else {
-    // Clear auth
-    await supabase.auth.signOut();
-  }
-};

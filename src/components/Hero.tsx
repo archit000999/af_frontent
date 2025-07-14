@@ -1,11 +1,22 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle } from "lucide-react";
-import { SignUpButton, SignedIn, SignedOut } from '@clerk/clerk-react';
+import { useSupabaseAuth } from './SupabaseAuthProvider';
 import { useNavigate } from 'react-router-dom';
 import ApplicationForm from "./ApplicationForm";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { AuthForm } from './AuthForm';
 const Hero = () => {
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const { user } = useSupabaseAuth();
   const navigate = useNavigate();
   return (
     <section id="home" className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen">
@@ -32,19 +43,30 @@ const Hero = () => {
           <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">ApplyFirst monitors job boards in real time, instantly contacts hiring managers for intro call, and applies to jobs on your behalf. Human-led, AI-assisted</p>
           
           <div className="flex justify-center mb-16">
-            <SignedOut>
-              <SignUpButton mode="modal" forceRedirectUrl="/home">
-                <Button variant="outline" size="lg" className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
-                  Try it now
-                </Button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
+            {!user ? (
+              <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="lg" className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
+                    Try For Free
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Get Started</DialogTitle>
+                    <DialogDescription>
+                      Sign in to your account or create a new one to start landing interviews on autopilot.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <AuthForm />
+                </DialogContent>
+              </Dialog>
+            ) : (
               <Button onClick={() => navigate('/home')} variant="outline" size="lg" className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300">
                 Go to Dashboard
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-            </SignedIn>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">

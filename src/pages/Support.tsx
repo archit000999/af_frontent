@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar, MessageCircle, X, AlertTriangle } from 'lucide-react';
@@ -12,10 +11,12 @@ import { Label } from '@/components/ui/label';
 import { useSubscription } from '@/hooks/useSubscription';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useSupabaseAuth } from '@/components/SupabaseAuthProvider';
+import AuthButton from '@/components/AuthButton';
 
 const Support = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user } = useSupabaseAuth();
   const { toast } = useToast();
   const { isSubscribed } = useSubscription();
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
@@ -70,7 +71,7 @@ const Support = () => {
         .insert([
           {
             user_id: user.id,
-            user_email: user.emailAddresses[0]?.emailAddress,
+            user_email: user.email,
             stripe_email: stripeEmail.trim(),
             reason: selectedReason,
             additional_feedback: additionalFeedback.trim() || null
@@ -148,11 +149,7 @@ const Support = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            <UserButton appearance={{
-              elements: {
-                avatarBox: "w-8 h-8"
-              }
-            }} />
+            <AuthButton />
           </div>
         </div>
       </header>
