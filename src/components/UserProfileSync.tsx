@@ -1,25 +1,25 @@
 
-import { useUser } from "@clerk/clerk-react";
+import { useSupabaseAuth } from "./SupabaseAuthProvider";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function UserProfileSync() {
-  const { isSignedIn, user } = useUser();
+  const { user } = useSupabaseAuth();
 
   useEffect(() => {
-    if (isSignedIn && user) {
+    if (user) {
       const insertUser = async () => {
-        const { id, emailAddresses, firstName, lastName, imageUrl } = user;
+        const { id, email, user_metadata } = user;
 
         // Use upsert to handle both new users and updates
         const { data, error } = await supabase
           .from("profiles")
           .upsert([
             {
-              user_id: id, // Using clerk user ID
-              email: emailAddresses[0]?.emailAddress,
-              full_name: `${firstName || ''} ${lastName || ''}`.trim() || null,
-              avatar_url: imageUrl || null,
+              user_id: id, // Using Supabase user ID
+              email: email,
+              full_name: user_metadata?.full_name || user_metadata?.name || null,
+              avatar_url: user_metadata?.avatar_url || user_metadata?.picture || null,
             }
           ], {
             onConflict: 'user_id'
@@ -34,7 +34,7 @@ export default function UserProfileSync() {
 
       insertUser();
     }
-  }, [isSignedIn, user]);
+  }, [user]);
 
   return null; // This component doesn't render anything
 }

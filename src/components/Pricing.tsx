@@ -1,7 +1,22 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Shield, DollarSign, ArrowRight, Sparkles } from "lucide-react";
-import { SignInButton } from '@clerk/clerk-react';
+import { useSupabaseAuth } from './SupabaseAuthProvider';
+import { useNavigate } from 'react-router-dom';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { AuthForm } from './AuthForm';
+
 const Pricing = () => {
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const { user } = useSupabaseAuth();
+  const navigate = useNavigate();
   const features = ["AI scans job boards in real time, and our human agents apply to 20 matching jobs on your behalf every day", "We find the right hiring managers using LinkedIn research and verified emails from trusted data providers", "20 personalized emails sent daily from your Gmail. Complete with your resume and hyper-personalized messaging.", "Save 20+ hours every week. Spend less time applying, and more time preparing for interviews.", "2–4 interviews guaranteed per month. Or your next month is free.", "We only onboard 20 candidates each week, focused on roles paying $100K+"];
   return <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
       <div className="max-w-7xl mx-auto">
@@ -66,11 +81,28 @@ const Pricing = () => {
               
 
               <div className="space-y-4">
-                <SignInButton mode="modal" forceRedirectUrl="/home">
-                  <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                    See If You Qualify <ArrowRight className="ml-2 h-6 w-6" />
+                {!user ? (
+                  <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
+                    <DialogTrigger asChild>
+                      <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                        See If You Qualify <ArrowRight className="ml-2 h-6 w-6" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>See If You Qualify</DialogTitle>
+                        <DialogDescription>
+                          Sign in to your account or create a new one to check your eligibility for our concierge service.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <AuthForm onSuccess={() => setShowAuthDialog(false)} />
+                    </DialogContent>
+                  </Dialog>
+                ) : (
+                  <Button onClick={() => navigate('/home')} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                    Go to Dashboard <ArrowRight className="ml-2 h-6 w-6" />
                   </Button>
-                </SignInButton>
+                )}
                 <p className="text-center text-sm text-slate-500">
                   Free consultation • No commitment • Setup in 24 hours
                 </p>

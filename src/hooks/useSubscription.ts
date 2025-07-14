@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useUser } from '@clerk/clerk-react';
+import { useSupabaseAuth } from '@/components/SupabaseAuthProvider';
 import { supabase } from '@/integrations/supabase/client';
 
 interface SubscriptionStatus {
@@ -13,7 +13,7 @@ interface SubscriptionStatus {
 }
 
 export const useSubscription = () => {
-  const { user } = useUser();
+  const { user } = useSupabaseAuth();
   const [subscriptionStatus, setSubscriptionStatus] = useState<SubscriptionStatus>({
     isSubscribed: false,
     planType: null,
@@ -24,22 +24,22 @@ export const useSubscription = () => {
   });
 
   useEffect(() => {
-    if (user?.emailAddresses[0]?.emailAddress) {
+    if (user?.email) {
       checkSubscriptionStatus();
     }
   }, [user]);
 
   const checkSubscriptionStatus = async () => {
-    if (!user?.emailAddresses[0]?.emailAddress) return;
+    if (!user?.email) return;
 
     try {
-      console.log('🔍 Checking subscription for email:', user.emailAddresses[0].emailAddress);
+      console.log('🔍 Checking subscription for email:', user.email);
       
       // First, let's check ALL payments for this user to see what's in the database
       const { data: allPayments, error: allError } = await supabase
         .from('payments')
         .select('*')
-        .eq('user_email', user.emailAddresses[0].emailAddress)
+        .eq('user_email', user.email)
         .order('created_at', { ascending: false });
 
       console.log('🗂️ ALL payments for user:', allPayments);
@@ -48,7 +48,7 @@ export const useSubscription = () => {
       const { data, error } = await supabase
         .from('payments')
         .select('plan_type, status, stripe_subscription_id, created_at, amount')
-        .eq('user_email', user.emailAddresses[0].emailAddress)
+        .eq('user_email', user.email)
         .in('status', ['completed', 'paid']) // Check for both completed and paid status
         .order('created_at', { ascending: false })
         .limit(1);

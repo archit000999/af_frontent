@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useUser, useAuth } from '@clerk/clerk-react';
+import { useSupabaseAuth } from '@/components/SupabaseAuthProvider';
 import { useToast } from '@/hooks/use-toast';
 import { CopilotConfig } from '@/types/copilot';
 import { 
@@ -15,33 +15,14 @@ import {
 import { setSupabaseAuth, supabase } from '@/integrations/supabase/client';
 
 export const useCopilotConfig = (maxCopilots: number = 1) => {
-  const { user } = useUser();
-  const { getToken } = useAuth();
+  const { user, session } = useSupabaseAuth();
   const { toast } = useToast();
   const [config, setConfig] = useState<CopilotConfig>(createEmptyConfig());
   const [allConfigs, setAllConfigs] = useState<CopilotConfig[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Set Supabase auth when user changes
-  useEffect(() => {
-    const updateAuth = async () => {
-      if (user) {
-        try {
-          const token = await getToken({ template: 'supabase' });
-          await setSupabaseAuth(token);
-          console.log('Supabase auth updated with Clerk token');
-        } catch (error) {
-          console.error('Error getting Clerk token:', error);
-        }
-      } else {
-        await setSupabaseAuth(null);
-      }
-    };
-    
-    updateAuth();
-  }, [user, getToken]);
-
+  // Auth is already handled by SupabaseAuthProvider, no need for additional setup
   // Load all existing configurations on mount
   useEffect(() => {
     if (user && !isInitialized) {
@@ -165,7 +146,6 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         }
       }
 
-      console.log('Resume upload completed successfully');
       
       return {
         fileName: fileName,
@@ -240,7 +220,6 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
       }
       return true;
     } catch (error) {
-      console.error('Error saving config:', error);
       if (!silent) {
         toast({
           title: "Error",

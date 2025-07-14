@@ -1,4 +1,3 @@
-import { UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, Settings, MapPin, Clock, Briefcase, Edit, Crown } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
@@ -7,10 +6,10 @@ import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useEffect, useState } from 'react';
 import UpgradeDialog from '@/components/UpgradeDialog';
+import { useSupabaseAuth } from '@/components/SupabaseAuthProvider';
+import AuthButton from '@/components/AuthButton';
 const Home = () => {
-  const {
-    user
-  } = useUser();
+  const { user } = useSupabaseAuth();
   const navigate = useNavigate();
   const {
     isSubscribed,
@@ -145,11 +144,7 @@ const Home = () => {
                 <span className="text-sm font-medium text-purple-700">{getPlanDisplayName()}</span>
               </div>}
             
-            <UserButton appearance={{
-            elements: {
-              avatarBox: "w-8 h-8"
-            }
-          }} />
+            <AuthButton />
           </div>
         </div>
       </header>

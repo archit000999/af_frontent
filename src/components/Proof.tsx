@@ -1,7 +1,21 @@
 import { TrendingUp, Users, Clock, Star, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SignInButton } from '@clerk/clerk-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { useSupabaseAuth } from "./SupabaseAuthProvider";
+import { useState } from "react";
+import { AuthForm } from "./AuthForm";
+import { useNavigate } from "react-router-dom";
 const Proof = () => {
+ const [showAuthDialog, setShowAuthDialog] = useState(false);
+    const { user } = useSupabaseAuth();
+    const navigate = useNavigate();
   const stats = [{
     icon: TrendingUp,
     number: "10-15",
@@ -94,11 +108,33 @@ const Proof = () => {
           </div>
           
           <div className="text-center mt-12">
-            <SignInButton mode="modal" forceRedirectUrl="/home">
-              <Button size="lg" className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-12 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+            <div className="space-y-4">
+                {!user ? (
+                  <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
+                    <DialogTrigger asChild>
+                      <Button size="lg" className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-12 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                 Start Landing Interviews <ArrowRight className="ml-2 h-6 w-6" />
               </Button>
-            </SignInButton>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Start Landing Interviews</DialogTitle>
+                        <DialogDescription>
+                          Sign in to your account or create a new one to check your eligibility for our concierge service.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <AuthForm onSuccess={() => setShowAuthDialog(false)} />
+                    </DialogContent>
+                  </Dialog>
+                ) : (
+                  <Button onClick={() => navigate('/home')} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                    Go to Dashboard <ArrowRight className="ml-2 h-6 w-6" />
+                  </Button>
+                )}
+                <p className="text-center text-sm text-slate-500">
+                  Free consultation • No commitment • Setup in 24 hours
+                </p>
+              </div>
           </div>
         </div>
       </div>

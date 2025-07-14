@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { UserButton } from '@clerk/clerk-react';
 import { Settings, Search, HelpCircle, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import AuthButton from '@/components/AuthButton';
 
 const Applications = () => {
   const navigate = useNavigate();
@@ -44,13 +44,7 @@ const Applications = () => {
           {/* User Section */}
           <div className="flex items-center space-x-4">
             
-            <UserButton 
-              appearance={{
-                elements: {
-                  avatarBox: "w-8 h-8",
-                }
-              }}
-            />
+            <AuthButton />
           </div>
         </div>
       </header>
