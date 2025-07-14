@@ -8,6 +8,7 @@ import Proof from "@/components/Proof";
 import Pricing from "@/components/Pricing";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
+import WebinarSection from "@/components/WebinarSection";
 
 const Index = () => {
   return (
@@ -26,6 +27,7 @@ const Index = () => {
       <div id="proof">
         <Proof />
       </div>
+      <WebinarSection />
       <div id="pricing">
         <Pricing />
       </div>
