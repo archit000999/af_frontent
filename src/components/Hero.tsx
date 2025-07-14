@@ -1,34 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle } from "lucide-react";
 import { SignUpButton, SignedIn, SignedOut } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import ApplicationForm from "./ApplicationForm";
-import AuthButton from "./AuthButton";
 const Hero = () => {
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
   const navigate = useNavigate();
-  return <>
-    {/* Fixed header with logo and auth */}
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 py-4 bg-white/95 backdrop-blur-md border-b border-gray-200/20 shadow-sm">
-      <div className="flex justify-between items-center">
-        {/* ApplyFirst Logo */}
-        <div className="flex flex-col items-start">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-lg">A</span>
-            </div>
-            <span className="text-gray-900 text-xl font-bold">ApplyFirst</span>
-          </div>
-          <span className="text-gray-500 text-xs ml-13 -mt-1 mx-[52px] my-0 py-0">powered by Saki AI</span>
-        </div>
-        
-        {/* Auth buttons */}
-        <AuthButton />
-      </div>
-    </header>
-
-    <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen">
+  return (
+    <section id="home" className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen">
       {/* Background effects */}
       <div className="absolute inset-0 opacity-20" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
@@ -89,6 +69,6 @@ const Hero = () => {
       
       <ApplicationForm open={isApplicationFormOpen} onOpenChange={setIsApplicationFormOpen} />
     </section>
-  </>;
+  );
 };
 export default Hero;
