@@ -4,7 +4,7 @@ import { SignInButton } from '@clerk/clerk-react';
 const Proof = () => {
   const stats = [{
     icon: TrendingUp,
-    number: "2-4",
+    number: "10-15",
     label: "Interviews in 1 month average",
     color: "from-green-400 to-emerald-500"
   }, {
