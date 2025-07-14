@@ -8,10 +8,8 @@ const Navbar = () => {
 
   const navigationItems = [
     { name: "Home", href: "#home" },
-    { name: "Problem", href: "#problem" },
-    { name: "How It Works", href: "#how-it-works" },
-    { name: "ATS Issue", href: "#ats-problem" },
-    { name: "Proof", href: "#proof" },
+    { name: "Why ApplyFirst", href: "#problem" },
+    { name: "How it Works", href: "#how-it-works" },
     { name: "Pricing", href: "#pricing" },
     { name: "FAQ", href: "#faq" },
   ];
