@@ -97,12 +97,10 @@ const Carousel = React.forwardRef<
     )
 
     React.useEffect(() => {
-      if (!api || !setApi) {
-        return
-      }
+      if (!api || !setApi) return;
 
-      setApi(api)
-    }, [api, setApi])
+      setApi((prev) => (prev === api ? prev : api));
+    }, [api, setApi]);
 
     React.useEffect(() => {
       if (!api) {
