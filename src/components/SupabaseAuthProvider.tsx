@@ -33,7 +33,7 @@ export const SupabaseAuthProvider: React.FC<SupabaseAuthProviderProps> = ({ chil
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('🔐 [AUTH-DEBUG] SupabaseAuthProvider initializing...');
+    let mounted = true;
 
     // Get initial session
     const getInitialSession = async () => {
@@ -47,17 +47,19 @@ export const SupabaseAuthProvider: React.FC<SupabaseAuthProviderProps> = ({ chil
         });
         
         if (error) {
-          console.error('❌ [AUTH-DEBUG] Error getting initial session:', error);
+          console.error('Error getting initial session:', error);
         } else {
-          setSession(session);
-          setUser(session?.user ?? null);
-          console.log('✅ [AUTH-DEBUG] Initial session set successfully');
+          if (mounted) {
+            setSession(session);
+            setUser(session?.user ?? null);
+          }
         }
       } catch (error) {
-        console.error('❌ [AUTH-DEBUG] Exception getting initial session:', error);
+        console.error('Exception getting initial session:', error);
       } finally {
-        setLoading(false);
-        console.log('🔐 [AUTH-DEBUG] Loading state set to false');
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 
@@ -67,23 +69,19 @@ export const SupabaseAuthProvider: React.FC<SupabaseAuthProviderProps> = ({ chil
     console.log('🔐 [AUTH-DEBUG] Setting up auth state change listener...');
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('🔐 [AUTH-DEBUG] Auth state changed:', { 
-          event, 
-          hasSession: !!session,
-          hasUser: !!session?.user,
-          userId: session?.user?.id 
-        });
-        
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
+        console.log('Auth state changed:', event, session?.user?.id);
+        if (mounted) {
+          setSession(session);
+          setUser(session?.user ?? null);
+          setLoading(false);
+        }
       }
     );
 
     console.log('✅ [AUTH-DEBUG] Auth state change listener set up');
 
     return () => {
-      console.log('🔐 [AUTH-DEBUG] Cleaning up auth subscription...');
+      mounted = false;
       subscription.unsubscribe();
     };
   }, []);

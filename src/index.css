@@ -103,3 +103,65 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .ios-safari {
+    /* Fix viewport height on iOS */
+    height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    height: calc(var(--vh, 1vh) * 100);
+  }
+  
+  /* Prevent zoom on input focus */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="search"],
+  textarea,
+  select {
+    font-size: 16px !important;
+    transform: scale(1);
+  }
+  
+  /* Fix iOS Safari scrolling issues */
+  body {
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  /* Prevent iOS Safari bounce */
+  body {
+    overscroll-behavior: none;
+  }
+  
+  /* Fix iOS input appearance */
+  input,
+  textarea,
+  select {
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+  
+  /* Ensure proper rendering */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Enhanced error boundary styles for iOS */
+.error-boundary {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}

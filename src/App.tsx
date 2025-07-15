@@ -1,14 +1,14 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Suspense } from "react";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Suspense, useEffect } from "react";
 import UserProfileSync from "./components/UserProfileSync";
 import { SupabaseAuthProvider } from "./components/SupabaseAuthProvider";
 import ErrorBoundary from "./components/ErrorBoundary";
 import LoadingFallback from "./components/LoadingFallback";
+import { useSupabaseAuth } from "./components/SupabaseAuthProvider";
 import Index from "./pages/Index";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
@@ -32,17 +32,46 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  console.log('🚀 [APP-DEBUG] App component rendering...');
-  
-  return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <UserProfileSync />
-          <BrowserRouter>
+// Navigation controller to prevent redirect loops
+const NavigationController = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useSupabaseAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Only run navigation logic when loading is complete
+    if (loading) return;
+
+    const currentPath = location.pathname;
+    const isPublicRoute = ['/', '/auth', '/privacy-policy', '/terms-of-service', '/how-copilot-works', '/how-to-train-copilot', '/how-to-apply-external', '/faq'].includes(currentPath);
+    
+    // If user is authenticated and on a public route, redirect to home
+    if (user && (currentPath === '/' || currentPath === '/auth')) {
+      console.log('Authenticated user on public route, redirecting to /home');
+      navigate('/home', { replace: true });
+      return;
+    }
+
+    // If user is not authenticated and on a protected route, redirect to home
+    if (!user && !isPublicRoute) {
+      console.log('Unauthenticated user on protected route, redirecting to /');
+      navigate('/', { replace: true });
+      return;
+    }
+  }, [user, loading, location.pathname, navigate]);
+
+  return <>{children}</>;
+};
+
+const App = () => (
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <UserProfileSync />
+        <BrowserRouter>
+          <NavigationController>
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 <Route path="/" element={<Index />} />
@@ -70,11 +99,11 @@ const App = () => {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
-  );
-};
+          </NavigationController>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
+);
 
 export default App;
