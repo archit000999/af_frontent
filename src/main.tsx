@@ -2,26 +2,61 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import ErrorBoundary from './components/ErrorBoundary.tsx'
+import IOSCompatibilityChecker from './components/IOSCompatibilityChecker.tsx'
 import { SupabaseAuthProvider } from './components/SupabaseAuthProvider.tsx'
 import './index.css'
-import { debugAuthState, isIOSSafari } from './utils/iosAuthHelper.ts'
+import { debugAuthState, isIOSSafari, waitForSupabaseReady } from './utils/iosAuthHelper.ts'
 
-// iOS-specific debugging
+// iOS-specific debugging and initialization
 const userAgent = navigator.userAgent;
 const isIOS = /iPad|iPhone|iPod/.test(userAgent);
 console.log('🚀 App Starting - Device detection:', { userAgent, isIOS, isIOSSafari: isIOSSafari() });
 
-// Run iOS debug if on iOS Safari
-if (isIOSSafari()) {
-  debugAuthState();
-}
+// Initialize app with proper error handling
+const initializeApp = async () => {
+  try {
+    // Run iOS debug if on iOS Safari
+    if (isIOSSafari()) {
+      debugAuthState();
+      await waitForSupabaseReady();
+    }
 
-console.log('✅ Using Supabase Auth instead of Clerk');
+    console.log('✅ Using Supabase Auth instead of Clerk');
 
-createRoot(document.getElementById("root")!).render(
-  <ErrorBoundary>
-    <SupabaseAuthProvider>
-      <App />
-    </SupabaseAuthProvider>
-  </ErrorBoundary>
-);
+    const rootElement = document.getElementById("root");
+    if (!rootElement) {
+      throw new Error("Root element not found");
+    }
+
+    createRoot(rootElement).render(
+      <ErrorBoundary>
+        <IOSCompatibilityChecker>
+          <SupabaseAuthProvider>
+            <App />
+          </SupabaseAuthProvider>
+        </IOSCompatibilityChecker>
+      </ErrorBoundary>
+    );
+  } catch (error) {
+    console.error('Failed to initialize app:', error);
+    // Fallback rendering
+    const rootElement = document.getElementById("root");
+    if (rootElement) {
+      rootElement.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+          <div>
+            <h2 style="color: #ef4444; margin-bottom: 16px;">Loading Error</h2>
+            <p style="color: #64748b; margin-bottom: 16px;">Please refresh the page or try again later.</p>
+            <button onclick="window.location.reload()" style="padding: 10px 20px; margin-top: 10px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">Refresh</button>
+            <div style="margin-top: 16px; font-size: 12px; color: #94a3b8;">
+              Error: ${error instanceof Error ? error.message : 'Unknown error'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  }
+};
+
+// Initialize the app
+initializeApp();

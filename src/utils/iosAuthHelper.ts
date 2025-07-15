@@ -67,29 +67,29 @@ export const enableIOSCompatibilityMode = (): void => {
   document.body.classList.add('ios-safari');
 };
 
-export const waitForClerkReady = (maxAttempts = 30): Promise<boolean> => {
+export const waitForSupabaseReady = (maxAttempts = 30): Promise<boolean> => {
   return new Promise((resolve) => {
     let attempts = 0;
     
-    const checkClerk = () => {
+    const checkSupabase = () => {
       attempts++;
       
-      // Check if Clerk is available
-      if ((window as any).Clerk && typeof (window as any).Clerk.load === 'function') {
+      // Check if Supabase is available
+      if (typeof window !== 'undefined' && (window as any).supabase) {
         resolve(true);
         return;
       }
       
       if (attempts >= maxAttempts) {
-        console.error('Clerk failed to load after maximum attempts');
+        console.error('Supabase failed to load after maximum attempts');
         resolve(false);
         return;
       }
       
-      setTimeout(checkClerk, 100);
+      setTimeout(checkSupabase, 100);
     };
     
-    checkClerk();
+    checkSupabase();
   });
 };
 
