@@ -47,9 +47,9 @@ const initializeApp = async () => {
     createRoot(rootElement).render(
       <ErrorBoundary>
         <IOSCompatibilityChecker>
-          <SupabaseAuthProvider>
+          {/* <SupabaseAuthProvider> */}
             <App />
-          </SupabaseAuthProvider>
+          {/* </SupabaseAuthProvider> */}
         </IOSCompatibilityChecker>
       </ErrorBoundary>
     );
