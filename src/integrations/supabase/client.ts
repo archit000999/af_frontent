@@ -8,9 +8,41 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
+// Create iOS Safari compatible storage
+const createSafeStorage = () => {
+  try {
+    // Test if localStorage is available and working
+    const testKey = '__supabase_test__';
+    localStorage.setItem(testKey, 'test');
+    localStorage.removeItem(testKey);
+    return localStorage;
+  } catch (e) {
+    console.warn('🍎 [iOS-SAFARI] localStorage not available, using fallback storage');
+    // Fallback to sessionStorage or in-memory storage for iOS Safari
+    try {
+      const testKey = '__supabase_test__';
+      sessionStorage.setItem(testKey, 'test');
+      sessionStorage.removeItem(testKey);
+      return sessionStorage;
+    } catch (e2) {
+      console.warn('🍎 [iOS-SAFARI] sessionStorage also not available, using in-memory storage');
+      // In-memory storage fallback for extreme iOS Safari restrictions
+      const memoryStorage = new Map<string, string>();
+      return {
+        getItem: (key: string) => memoryStorage.get(key) || null,
+        setItem: (key: string, value: string) => { memoryStorage.set(key, value); },
+        removeItem: (key: string) => { memoryStorage.delete(key); },
+        clear: () => memoryStorage.clear(),
+        key: (index: number) => Array.from(memoryStorage.keys())[index] || null,
+        get length() { return memoryStorage.size; }
+      } as Storage;
+    }
+  }
+};
+
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    storage: localStorage,
+    storage: createSafeStorage(),
     persistSession: true,
     autoRefreshToken: true,
     // Enable better error handling for iOS Safari
