@@ -1,13 +1,16 @@
 
-import { useSupabaseAuth } from "./SupabaseAuthProvider";
+import { useNoSupabaseAuth } from "./NoSupabaseAuthProvider";
 import { useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+// import { supabase } from "@/integrations/supabase/client"; // DISABLED for iOS Safari debugging
 
 export default function UserProfileSync() {
-  const { user } = useSupabaseAuth();
+  const { user } = useNoSupabaseAuth();
 
   useEffect(() => {
     if (user) {
+      console.log('🔐 [USER-PROFILE-SYNC] Mock user profile sync for:', user.email);
+      // Supabase operations disabled for iOS Safari debugging
+      /*
       const insertUser = async () => {
         const { id, email, user_metadata } = user;
 
@@ -33,6 +36,7 @@ export default function UserProfileSync() {
       };
 
       insertUser();
+      */
     }
   }, [user]);
 

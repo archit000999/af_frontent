@@ -40,11 +40,7 @@ export const SupabaseAuthProvider: React.FC<SupabaseAuthProviderProps> = ({ chil
       console.log('🔐 [AUTH-DEBUG] Getting initial session...');
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
-        console.log('🔐 [AUTH-DEBUG] Initial session result:', { 
-          hasSession: !!session, 
-          hasUser: !!session?.user,
-          error: error?.message 
-        });
+       
         
         if (error) {
           console.error('Error getting initial session:', error);

@@ -8,13 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useSupabaseAuth } from "./SupabaseAuthProvider";
+import { useNoSupabaseAuth } from "./NoSupabaseAuthProvider";
 import { useState } from "react";
 import { AuthForm } from "./AuthForm";
 import { useNavigate } from "react-router-dom";
 const Proof = () => {
  const [showAuthDialog, setShowAuthDialog] = useState(false);
-    const { user } = useSupabaseAuth();
+    const { user } = useNoSupabaseAuth();
     const navigate = useNavigate();
   const stats = [{
     icon: TrendingUp,

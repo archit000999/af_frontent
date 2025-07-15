@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Shield, DollarSign, ArrowRight, Sparkles } from "lucide-react";
-import { useSupabaseAuth } from './SupabaseAuthProvider';
+import { useNoSupabaseAuth } from './NoSupabaseAuthProvider';
 import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
@@ -15,7 +15,7 @@ import { AuthForm } from './AuthForm';
 
 const Pricing = () => {
   const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const { user } = useSupabaseAuth();
+  const { user } = useNoSupabaseAuth();
   const navigate = useNavigate();
   const features = ["AI scans job boards in real time, and our human agents apply to 20 matching jobs on your behalf every day", "We find the right hiring managers using LinkedIn research and verified emails from trusted data providers", "20 personalized emails sent daily from your Gmail. Complete with your resume and hyper-personalized messaging.", "Save 20+ hours every week. Spend less time applying, and more time preparing for interviews.", "2–4 interviews guaranteed per month. Or your next month is free.", "We only onboard 20 candidates each week, focused on roles paying $100K+"];
   return <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">

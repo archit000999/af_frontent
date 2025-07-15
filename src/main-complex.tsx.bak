@@ -1,0 +1,229 @@
+
+import { createRoot } from 'react-dom/client'
+import App from './App.tsx'
+import ErrorBoundary from './components/ErrorBoundary.tsx'
+import { NoSupabaseAuthProvider } from './components/NoSupabaseAuthProvider.tsx'
+import './index.css'
+import { debugAuthState, isIOSSafari } from './utils/iosAuthHelper.ts'
+import { createIOSDebugOverlay } from './utils/simpleIOSDebug.ts'
+
+// iOS-specific debugging and initialization
+const userAgent = navigator.userAgent;
+const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+const isIOSSafariBrowser = isIOSSafari();
+
+console.log('🚀 [MOBILE-DEBUG] App Starting - Device detection:', { 
+  userAgent, 
+  isIOS, 
+  isMobile,
+  isIOSSafari: isIOSSafariBrowser,
+  screen: { width: window.screen.width, height: window.screen.height },
+  viewport: { width: window.innerWidth, height: window.innerHeight },
+  platform: navigator.platform,
+  language: navigator.language
+});
+
+// Check if DOM is ready
+console.log('🚀 [MOBILE-DEBUG] DOM readyState:', document.readyState);
+console.log('🚀 [MOBILE-DEBUG] Root element exists:', !!document.getElementById("root"));
+
+// Initialize app with proper error handling
+const initializeApp = async () => {
+  try {
+    // Run iOS debug if on iOS Safari
+    if (isIOSSafari()) {
+      console.log('🍎 [iOS-SAFARI] Detected iOS Safari, enabling compatibility mode...');
+      debugAuthState();
+    }
+
+    console.log('✅ Using Supabase Auth instead of Clerk');
+
+    const rootElement = document.getElementById("root");
+    if (!rootElement) {
+      throw new Error("Root element not found");
+    }
+
+    createRoot(rootElement).render(
+      <ErrorBoundary>
+        <NoSupabaseAuthProvider>
+          <App />
+        </NoSupabaseAuthProvider>
+      </ErrorBoundary>
+    );
+
+    // Add simple debug overlay for mobile devices - multiple approaches
+    setTimeout(() => {
+      try {
+        createIOSDebugOverlay();
+        console.log('✅ Debug overlay created');
+      } catch (error) {
+        console.error('❌ Failed to create debug overlay:', error);
+      }
+    }, 100);
+
+    // BACKUP: Add a simple HTML debug button that always works
+    if (isMobile) {
+      setTimeout(() => {
+        const existingButton = document.getElementById('simple-debug-btn');
+        if (!existingButton) {
+          const simpleButton = document.createElement('div');
+          simpleButton.id = 'simple-debug-btn';
+          simpleButton.innerHTML = isIOS ? '🍎 DEBUG' : '📱 DEBUG';
+          simpleButton.style.cssText = `
+            position: fixed !important;
+            top: 10px !important;
+            right: 10px !important;
+            width: 80px !important;
+            height: 40px !important;
+            background: #ff0000 !important;
+            color: white !important;
+            border: 3px solid #ffffff !important;
+            border-radius: 8px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 12px !important;
+            font-weight: bold !important;
+            z-index: 999999 !important;
+            cursor: pointer !important;
+            user-select: none !important;
+            box-shadow: 0 0 20px rgba(255,0,0,0.8) !important;
+            text-align: center !important;
+            line-height: 1 !important;
+          `;
+          
+          simpleButton.onclick = () => {
+            const info = {
+              url: window.location.href,
+              userAgent: navigator.userAgent,
+              viewport: `${window.innerWidth}x${window.innerHeight}`,
+              screen: `${screen.width}x${screen.height}`,
+              isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
+              errors: []
+            };
+
+            // Test storage
+            try {
+              localStorage.setItem('test', 'test');
+              localStorage.removeItem('test');
+            } catch (e) {
+              info.errors.push(`localStorage: ${e.message}`);
+            }
+
+            alert(`DEBUG INFO:
+URL: ${info.url}
+Viewport: ${info.viewport}
+Screen: ${info.screen}
+iOS: ${info.isIOS}
+Errors: ${info.errors.length > 0 ? info.errors.join(', ') : 'None'}
+
+Copy this info and send to developer!`);
+          };
+          
+          document.body.appendChild(simpleButton);
+          console.log('✅ Simple debug button added to page');
+        }
+      }, 500);
+    }
+  } catch (error) {
+    console.error('❌ Failed to initialize app:', error);
+    
+    // Enhanced fallback rendering with mobile considerations
+    const rootElement = document.getElementById("root");
+    if (rootElement) {
+      rootElement.innerHTML = `
+        <div style="
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          min-height: 100vh; 
+          min-height: calc(var(--vh, 1vh) * 100);
+          padding: 20px; 
+          text-align: center; 
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+        ">
+          <div style="
+            background: rgba(255, 255, 255, 0.1); 
+            padding: 30px; 
+            border-radius: 12px; 
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            width: 100%;
+          ">
+            <h2 style="color: #ff6b6b; margin-bottom: 16px; font-size: 24px;">⚠️ Loading Error</h2>
+            <p style="margin-bottom: 16px; opacity: 0.9;">
+              ${isIOS ? '🍎 iOS Safari detected. ' : ''}
+              ${isMobile ? '📱 Mobile device detected. ' : ''}
+              Please refresh the page or try again later.
+            </p>
+            <button 
+              onclick="window.location.reload()" 
+              style="
+                padding: 12px 24px; 
+                margin-top: 10px; 
+                background: #4CAF50; 
+                color: white; 
+                border: none; 
+                border-radius: 6px; 
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+              "
+            >
+              🔄 Refresh
+            </button>
+            <button 
+              onclick="alert('DEBUG INFO: URL=' + window.location.href + ', UserAgent=' + navigator.userAgent + ', Viewport=' + window.innerWidth + 'x' + window.innerHeight + ', Screen=' + screen.width + 'x' + screen.height)" 
+              style="
+                padding: 12px 24px; 
+                margin: 10px 0 0 10px; 
+                background: #ff0000; 
+                color: white; 
+                border: none; 
+                border-radius: 6px; 
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+              "
+            >
+              🍎 DEBUG
+            </button>
+            <div style="
+              margin-top: 20px; 
+              font-size: 12px; 
+              opacity: 0.7;
+              word-break: break-word;
+            ">
+              <strong>Error:</strong> ${error instanceof Error ? error.message : 'Unknown error'}<br/>
+              <strong>Device:</strong> ${isIOS ? 'iOS' : 'Other'}<br/>
+              <strong>Safari:</strong> ${isIOSSafariBrowser ? 'Yes' : 'No'}<br/>
+              <strong>Mobile:</strong> ${isMobile ? 'Yes' : 'No'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  }
+};
+
+// Initialize the app
+// Set CSS custom property for mobile viewport height fix
+if (isMobile) {
+  const setVH = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  };
+  
+  setVH();
+  window.addEventListener('resize', setVH);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(setVH, 100);
+  });
+}
+
+initializeApp();

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle } from "lucide-react";
-import { useSupabaseAuth } from './SupabaseAuthProvider';
+import { useNoSupabaseAuth } from './NoSupabaseAuthProvider';
 import { useNavigate } from 'react-router-dom';
 import ApplicationForm from "./ApplicationForm";
 import {
@@ -19,7 +19,7 @@ const Hero = () => {
   
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const { user } = useSupabaseAuth();
+  const { user } = useNoSupabaseAuth();
   
   console.log('🏠 [HERO-DEBUG] Auth context loaded successfully, user:', !!user);
   const navigate = useNavigate();

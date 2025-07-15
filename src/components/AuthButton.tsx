@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSupabaseAuth } from './SupabaseAuthProvider';
+import { useNoSupabaseAuth } from './NoSupabaseAuthProvider';
 import { AuthForm } from './AuthForm';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,7 +25,7 @@ interface AuthButtonProps {
 }
 
 const AuthButton: React.FC<AuthButtonProps> = ({ className }) => {
-  const { user, signOut, loading } = useSupabaseAuth();
+  const { user, signOut, loading } = useNoSupabaseAuth();
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const handleSignOut = async () => {

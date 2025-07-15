@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useSupabaseAuth } from './SupabaseAuthProvider';
+import { useNoSupabaseAuth } from './NoSupabaseAuthProvider';
 import LoadingScreen from './LoadingScreen';
 
 interface ProtectedRouteProps {
@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, loading } = useSupabaseAuth();
+  const { user, loading } = useNoSupabaseAuth();
   const location = useLocation();
 
   // Show loading screen while checking authentication

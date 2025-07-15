@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSupabaseAuth } from './SupabaseAuthProvider';
+import { useNoSupabaseAuth } from './NoSupabaseAuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ interface AuthFormProps {
 }
 
 export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
-  const { signIn, signUp, signInWithOAuth, resetPassword, loading } = useSupabaseAuth();
+  const { signIn, signUp, signInWithOAuth, resetPassword, loading } = useNoSupabaseAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
