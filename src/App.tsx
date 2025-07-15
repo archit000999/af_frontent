@@ -32,34 +32,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
-// Navigation controller to prevent redirect loops
+// Simplified navigation - remove the redirect loops that cause infinite recursion
 const NavigationController = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useSupabaseAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    // Only run navigation logic when loading is complete
-    if (loading) return;
-
-    const currentPath = location.pathname;
-    const isPublicRoute = ['/', '/auth', '/privacy-policy', '/terms-of-service', '/how-copilot-works', '/how-to-train-copilot', '/how-to-apply-external', '/faq'].includes(currentPath);
-    
-    // If user is authenticated and on a public route, redirect to home
-    if (user && (currentPath === '/' || currentPath === '/auth')) {
-      console.log('Authenticated user on public route, redirecting to /home');
-      navigate('/home', { replace: true });
-      return;
-    }
-
-    // If user is not authenticated and on a protected route, redirect to home
-    if (!user && !isPublicRoute) {
-      console.log('Unauthenticated user on protected route, redirecting to /');
-      navigate('/', { replace: true });
-      return;
-    }
-  }, [user, loading, location.pathname, navigate]);
-
   return <>{children}</>;
 };
 
