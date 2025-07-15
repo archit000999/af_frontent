@@ -33,34 +33,57 @@ export const SupabaseAuthProvider: React.FC<SupabaseAuthProviderProps> = ({ chil
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('🔐 [AUTH-DEBUG] SupabaseAuthProvider initializing...');
 
     // Get initial session
     const getInitialSession = async () => {
+      console.log('🔐 [AUTH-DEBUG] Getting initial session...');
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
+        console.log('🔐 [AUTH-DEBUG] Initial session result:', { 
+          hasSession: !!session, 
+          hasUser: !!session?.user,
+          error: error?.message 
+        });
+        
         if (error) {
+          console.error('❌ [AUTH-DEBUG] Error getting initial session:', error);
         } else {
           setSession(session);
           setUser(session?.user ?? null);
+          console.log('✅ [AUTH-DEBUG] Initial session set successfully');
         }
       } catch (error) {
+        console.error('❌ [AUTH-DEBUG] Exception getting initial session:', error);
       } finally {
         setLoading(false);
+        console.log('🔐 [AUTH-DEBUG] Loading state set to false');
       }
     };
 
     getInitialSession();
 
     // Listen for auth changes
+    console.log('🔐 [AUTH-DEBUG] Setting up auth state change listener...');
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('🔐 [AUTH-DEBUG] Auth state changed:', { 
+          event, 
+          hasSession: !!session,
+          hasUser: !!session?.user,
+          userId: session?.user?.id 
+        });
+        
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
       }
     );
 
+    console.log('✅ [AUTH-DEBUG] Auth state change listener set up');
+
     return () => {
+      console.log('🔐 [AUTH-DEBUG] Cleaning up auth subscription...');
       subscription.unsubscribe();
     };
   }, []);

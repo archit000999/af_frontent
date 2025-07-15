@@ -31,45 +31,49 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <UserProfileSync />
-        <BrowserRouter>
-          <Suspense fallback={<LoadingFallback />}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
-              <Route path="/how-copilot-works" element={<HowCopilotWorks />} />
-              <Route path="/how-to-train-copilot" element={<HowToTrainCopilot />} />
-              <Route path="/how-to-apply-external" element={<HowToApplyExternal />} />
-              <Route path="/faq" element={<FAQ />} />
-              
-              {/* Protected Routes - Require Authentication */}
-              <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-              <Route path="/applications" element={<ProtectedRoute><Applications /></ProtectedRoute>} />
-              <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
-              <Route path="/copilot-setup" element={<ProtectedRoute><CopilotSetup /></ProtectedRoute>} />
-              <Route path="/copilot-filters" element={<ProtectedRoute><CopilotFilters /></ProtectedRoute>} />
-              <Route path="/copilot-screening" element={<ProtectedRoute><CopilotScreening /></ProtectedRoute>} />
-              <Route path="/copilot-final-step" element={<ProtectedRoute><CopilotFinalStep /></ProtectedRoute>} />
-              <Route path="/copilot-preview" element={<ProtectedRoute><CopilotPreview /></ProtectedRoute>} />
-              <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
-              <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccess /></ProtectedRoute>} />
-              
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
-);
+const App = () => {
+  console.log('🚀 [APP-DEBUG] App component rendering...');
+  
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <UserProfileSync />
+          <BrowserRouter>
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/how-copilot-works" element={<HowCopilotWorks />} />
+                <Route path="/how-to-train-copilot" element={<HowToTrainCopilot />} />
+                <Route path="/how-to-apply-external" element={<HowToApplyExternal />} />
+                <Route path="/faq" element={<FAQ />} />
+                
+                {/* Protected Routes - Require Authentication */}
+                <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                <Route path="/applications" element={<ProtectedRoute><Applications /></ProtectedRoute>} />
+                <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
+                <Route path="/copilot-setup" element={<ProtectedRoute><CopilotSetup /></ProtectedRoute>} />
+                <Route path="/copilot-filters" element={<ProtectedRoute><CopilotFilters /></ProtectedRoute>} />
+                <Route path="/copilot-screening" element={<ProtectedRoute><CopilotScreening /></ProtectedRoute>} />
+                <Route path="/copilot-final-step" element={<ProtectedRoute><CopilotFinalStep /></ProtectedRoute>} />
+                <Route path="/copilot-preview" element={<ProtectedRoute><CopilotPreview /></ProtectedRoute>} />
+                <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+                <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccess /></ProtectedRoute>} />
+                
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+};
 
 export default App;
