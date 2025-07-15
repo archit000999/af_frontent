@@ -10,7 +10,23 @@ import { debugAuthState, isIOSSafari, waitForSupabaseReady } from './utils/iosAu
 // iOS-specific debugging and initialization
 const userAgent = navigator.userAgent;
 const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-console.log('🚀 App Starting - Device detection:', { userAgent, isIOS, isIOSSafari: isIOSSafari() });
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+const isIOSSafariBrowser = isIOSSafari();
+
+console.log('🚀 [MOBILE-DEBUG] App Starting - Device detection:', { 
+  userAgent, 
+  isIOS, 
+  isMobile,
+  isIOSSafari: isIOSSafariBrowser,
+  screen: { width: window.screen.width, height: window.screen.height },
+  viewport: { width: window.innerWidth, height: window.innerHeight },
+  platform: navigator.platform,
+  language: navigator.language
+});
+
+// Check if DOM is ready
+console.log('🚀 [MOBILE-DEBUG] DOM readyState:', document.readyState);
+console.log('🚀 [MOBILE-DEBUG] Root element exists:', !!document.getElementById("root"));
 
 // Initialize app with proper error handling
 const initializeApp = async () => {

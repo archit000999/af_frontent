@@ -37,8 +37,15 @@ export const SupabaseAuthProvider: React.FC<SupabaseAuthProviderProps> = ({ chil
 
     // Get initial session
     const getInitialSession = async () => {
+      console.log('🔐 [AUTH-DEBUG] Getting initial session...');
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
+        console.log('🔐 [AUTH-DEBUG] Initial session result:', { 
+          hasSession: !!session, 
+          hasUser: !!session?.user,
+          error: error?.message 
+        });
+        
         if (error) {
           console.error('Error getting initial session:', error);
         } else {
@@ -59,6 +66,7 @@ export const SupabaseAuthProvider: React.FC<SupabaseAuthProviderProps> = ({ chil
     getInitialSession();
 
     // Listen for auth changes
+    console.log('🔐 [AUTH-DEBUG] Setting up auth state change listener...');
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
@@ -69,6 +77,8 @@ export const SupabaseAuthProvider: React.FC<SupabaseAuthProviderProps> = ({ chil
         }
       }
     );
+
+    console.log('✅ [AUTH-DEBUG] Auth state change listener set up');
 
     return () => {
       mounted = false;

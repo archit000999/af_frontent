@@ -12,7 +12,7 @@ import {
   saveConfigToDatabase,
   deleteConfigFromDatabase
 } from '@/services/copilotService';
-import { setSupabaseAuth, supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useCopilotConfig = (maxCopilots: number = 1) => {
   const { user, session } = useSupabaseAuth();

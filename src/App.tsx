@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Suspense, useEffect } from "react";
 import UserProfileSync from "./components/UserProfileSync";
+import { SupabaseAuthProvider } from "./components/SupabaseAuthProvider";
 import ErrorBoundary from "./components/ErrorBoundary";
 import LoadingFallback from "./components/LoadingFallback";
 import { useSupabaseAuth } from "./components/SupabaseAuthProvider";
