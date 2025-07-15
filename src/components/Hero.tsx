@@ -13,10 +13,25 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { AuthForm } from './AuthForm';
+
 const Hero = () => {
+  console.log('🏠 [HERO-DEBUG] Hero component rendering...');
+  
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const { user } = useSupabaseAuth();
+  
+  // Add error boundary for auth hook
+  let user = null;
+  let authError = false;
+  
+  try {
+    const authContext = useSupabaseAuth();
+    user = authContext.user;
+    console.log('🏠 [HERO-DEBUG] Auth context loaded successfully, user:', !!user);
+  } catch (error) {
+    console.error('🏠 [HERO-DEBUG] Failed to load auth context:', error);
+    authError = true;
+  }
   const navigate = useNavigate();
   return (
     <section id="home" className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen">
