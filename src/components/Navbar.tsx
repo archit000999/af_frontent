@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
-import { set } from "date-fns";
+import AuthButton from "./AuthButton";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,11 +50,9 @@ const Navbar = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
-          {/* Auth buttons */}
-          <Button
-            variant="outline"
-            size="sm"
-            className="hidden lg:inline-flex">Login</Button>
+          {/* Auth button */}
+          <AuthButton className="hidden lg:inline-flex" />
+          
           {/* Mobile menu button */}
           <Button
             variant="ghost"
@@ -80,6 +78,9 @@ const Navbar = () => {
                 {item.name}
               </button>
             ))}
+            <div className="pt-3 border-t border-gray-200/20">
+              <AuthButton className="w-full" />
+            </div>
           </nav>
         </div>
       )}

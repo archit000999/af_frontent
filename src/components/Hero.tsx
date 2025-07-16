@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "./ui/button";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import ApplicationForm from "./ApplicationForm";
@@ -7,13 +7,23 @@ import {
   Dialog,
   DialogContent,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from './ui/dialog';
 import { AuthForm } from "./AuthForm";
+import { useAuth } from "../contexts/AuthContext";
 
 const Hero = () => {
+  const { isAuthenticated } = useAuth();
   const [open, setOpen] = useState(false);
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleGetStartedClick = () => {
+    if (isAuthenticated) {
+      navigate('/home');
+    } else {
+      setOpen(true);
+    }
+  };
   return (
     <section id="home" className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen">
       {/* Background effects */}
@@ -39,22 +49,32 @@ const Hero = () => {
           <p className="text-xl sm:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">ApplyFirst monitors job boards in real time, instantly contacts hiring managers for intro call, and applies to jobs on your behalf. Human-led, AI-assisted</p>
           
           <div className="flex justify-center mb-16">
-            <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            size="lg"
-            className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300"
-          >
-            Get Started
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          {/* You can optionally add a DialogHeader/Title here */}
-          <AuthForm onSuccess={() => setOpen(false)} />
-        </DialogContent>
-      </Dialog>
+            {isAuthenticated ? (
+              <Button
+                onClick={handleGetStartedClick}
+                size="lg"
+                className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300"
+              >
+                Go to Dashboard
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            ) : (
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="px-10 py-6 text-xl border-2 border-white text-white bg-white/10 hover:bg-white hover:text-slate-900 backdrop-blur-sm font-semibold transition-all duration-300"
+                  >
+                    Get Started
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <AuthForm onSuccess={() => setOpen(false)} />
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">

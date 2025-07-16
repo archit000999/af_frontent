@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from './ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { ArrowLeft, Settings, Check, ChevronRight, HelpCircle, Eye, RotateCcw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useCopilotConfig } from '@/hooks/useCopilotConfig';
+import { useCopilotConfig } from '../hooks/useCopilotConfig';
+import AuthButton from './AuthButton';
 const CopilotFinalStep = () => {
   const navigate = useNavigate();
   const {
@@ -93,6 +94,7 @@ const CopilotFinalStep = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
+            <AuthButton />
           </div>
         </div>
       </header>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Input } from '@/components/ui/input';
+import { Button } from './ui/button';
+import { Switch } from './ui/switch';
+import { Input } from './ui/input';
 import { Check, X, Edit, ArrowLeft, Settings, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { LocationSelectionDialog } from './LocationSelectionDialog';
 import LoadingScreen from './LoadingScreen';
-import { useCopilotConfig } from '@/hooks/useCopilotConfig';
+import { useCopilotConfig } from '../hooks/useCopilotConfig';
+import AuthButton from './AuthButton';
 import {
   Command,
   CommandEmpty,
@@ -14,12 +15,12 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "./ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "./ui/popover";
 
 // Famous job titles for suggestions
 const POPULAR_JOB_TITLES = [
@@ -248,6 +249,7 @@ const CopilotSetup = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
+            <AuthButton />
           </div>
         </div>
       </header>

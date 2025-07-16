@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
 import { Upload, FileText, X, ChevronRight, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-// import AuthButton from '@/components/AuthButton';
+import AuthButton from './AuthButton';
 import LoadingScreen from './LoadingScreen';
-import { useCopilotConfig } from '@/hooks/useCopilotConfig';
-import { useToast } from '@/hooks/use-toast';
+import { useCopilotConfig } from '../hooks/useCopilotConfig';
+import { useToast } from '../hooks/use-toast';
 
 
 const CopilotScreening = () => {
@@ -269,7 +269,7 @@ const CopilotScreening = () => {
           </nav>
 
           <div className="flex items-center space-x-4">
-            {/* <AuthButton /> */}
+            <AuthButton />
           </div>
         </div>
       </header>

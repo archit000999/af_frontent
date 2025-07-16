@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "./ui/button";
 import { Play } from "lucide-react";
 import { useState } from "react";
 import ErrorBoundary from "./ErrorBoundary";
@@ -7,8 +7,8 @@ const WebinarSection = () => {
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const [iframeError, setIframeError] = useState(false);
 
-  return (
-    <ErrorBoundary fallback={
+  if (iframeError) {
+    return (
       <section className="py-20 bg-gradient-to-br from-background to-muted">
         <div className="container mx-auto px-4">
           <div className="text-center">
@@ -21,7 +21,11 @@ const WebinarSection = () => {
           </div>
         </div>
       </section>
-    }>
+    );
+  }
+
+  return (
+    <ErrorBoundary>
       <section className="py-20 bg-gradient-to-br from-background to-muted">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">

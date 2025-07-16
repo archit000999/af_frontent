@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { CopilotConfig } from '@/types/copilot';
+import { useToast } from './use-toast';
+import { CopilotConfig } from '../types/copilot';
 import { 
   createEmptyConfig, 
   canCreateNewCopilot as canCreateNewCopilotUtil, 
   getPlanName 
-} from '@/utils/copilotUtils';
+} from '../utils/copilotUtils';
 import { 
   loadAllConfigs as loadAllConfigsService,
   saveConfigToDatabase,
   deleteConfigFromDatabase
-} from '@/services/copilotService';
+} from '../services/copilotService';
+import { useAuth } from '../contexts/AuthContext';
 
 export const useCopilotConfig = (maxCopilots: number = 1) => {
   const { toast } = useToast();
+  const { user, isAuthenticated } = useAuth();
   const [config, setConfig] = useState<CopilotConfig>(createEmptyConfig());
   const [allConfigs, setAllConfigs] = useState<CopilotConfig[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,15 +23,17 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
   
   // Load all existing configurations on mount
   useEffect(() => {
-    if (!isInitialized) {
+    if (!isInitialized && isAuthenticated && user) {
       loadAllConfigs();
     }
-  }, [isInitialized]);
+  }, [isInitialized, isAuthenticated, user]);
 
   const loadAllConfigs = async () => {
+    if (!user) return;
+    
     setIsLoading(true);
     try {
-      const configs = await loadAllConfigsService('demo-user');
+      const configs = await loadAllConfigsService(user.id);
       setAllConfigs(configs);
 
       // Set the most recent config as current
@@ -149,6 +153,8 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
   };
 
   const saveConfig = async (updatedConfig?: Partial<CopilotConfig>, silent: boolean = false) => {
+    if (!user) return false;
+    
     const configToSave = updatedConfig ? { ...config, ...updatedConfig } : config;
     if (!silent) {
       setIsLoading(true);
@@ -168,7 +174,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         return false;
       }
 
-      const savedConfig = await saveConfigToDatabase(configToSave, 'demo-user');
+      const savedConfig = await saveConfigToDatabase(configToSave, user.id);
       setConfig(savedConfig);
 
       // Refresh all configs to keep them in sync

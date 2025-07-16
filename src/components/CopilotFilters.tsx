@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from './ui/button';
+import { Switch } from './ui/switch';
+import { Checkbox } from './ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { ArrowLeft, Settings, ChevronRight, ChevronDown, X, HelpCircle, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useCopilotConfig } from '@/hooks/useCopilotConfig';
+import { useCopilotConfig } from '../hooks/useCopilotConfig';
+import AuthButton from './AuthButton';
 
 const CopilotFilters = () => {
   const navigate = useNavigate();
@@ -294,6 +295,7 @@ const CopilotFilters = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
+            <AuthButton />
           </div>
         </div>
       </header>

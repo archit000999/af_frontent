@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useAuth } from '../contexts/AuthContext';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Alert, AlertDescription } from './ui/alert';
 import { Loader2, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 
 interface AuthFormProps {
@@ -13,10 +14,13 @@ interface AuthFormProps {
 }
 
 export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
+  const { login, register } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,17 +32,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
     setIsLoading(true);
     setError(null);
     
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Simple validation for demo
-    if (email && password) {
+    try {
+      await login(email, password);
       setSuccess('Successfully signed in!');
       onSuccess?.();
-      // Redirect to home after successful sign in
       navigate('/home');
-    } else {
-      setError('Please enter valid email and password');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Sign in failed');
     }
     
     setIsLoading(false);
@@ -55,30 +55,23 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
       return;
     }
     
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Simple validation for demo
-    if (email && password) {
+    try {
+      await register({
+        email,
+        password,
+        firstName,
+        lastName,
+      });
       setSuccess('Account created successfully! You can now sign in.');
       setActiveTab('signin');
-    } else {
-      setError('Please enter valid email and password');
+      // Clear form
+      setPassword('');
+      setConfirmPassword('');
+      setFirstName('');
+      setLastName('');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Registration failed');
     }
-    
-    setIsLoading(false);
-  };
-
-  const handleOAuthSignIn = async (provider: 'google' | 'github' | 'apple') => {
-    setIsLoading(true);
-    setError(null);
-    
-    // Simulate OAuth flow
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    setSuccess(`Successfully signed in with ${provider}!`);
-    onSuccess?.();
-    navigate('/home');
     
     setIsLoading(false);
   };
@@ -92,10 +85,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
     setIsLoading(true);
     setError(null);
     
-    // Simulate password reset
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    setSuccess('Password reset email sent!');
+    // For now, just show a message
+    setSuccess('Password reset feature coming soon!');
     
     setIsLoading(false);
   };
@@ -179,6 +170,35 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
           
           <TabsContent value="signup" className="space-y-4">
             <form onSubmit={handleSignUp} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <div className="relative">
+                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="text"
+                      placeholder="First Name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="relative">
+                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="text"
+                      placeholder="Last Name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              
               <div className="space-y-2">
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
@@ -228,37 +248,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
             </form>
           </TabsContent>
         </Tabs>
-        
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 gap-3">
-          <Button 
-            variant="outline" 
-            onClick={() => handleOAuthSignIn('google')}
-            disabled={isLoading}
-            className="w-full"
-          >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-            Continue with Google
-          </Button>
-          
-          {/* <Button 
-            variant="outline" 
-            onClick={() => handleOAuthSignIn('github')}
-            disabled={isLoading}
-            className="w-full"
-          >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-            Continue with GitHub
-          </Button> */}
-        </div>
         
         {error && (
           <Alert className="mt-4" variant="destructive">

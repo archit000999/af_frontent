@@ -1,6 +1,7 @@
 
 export interface CopilotConfig {
   id?: string;
+  name?: string;
   workLocationTypes: string[];
   remoteLocations: string[];
   onsiteLocations: string[];

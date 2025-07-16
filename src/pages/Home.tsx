@@ -1,11 +1,12 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '../components/ui/button';
 import { ChevronDown, Settings, MapPin, Clock, Briefcase, Edit, Crown } from 'lucide-react';
-import { Switch } from '@/components/ui/switch';
+import { Switch } from '../components/ui/switch';
 import { useNavigate, Link } from 'react-router-dom';
-import { useCopilotConfig } from '@/hooks/useCopilotConfig';
-import { useSubscription } from '@/hooks/useSubscription';
+import { useCopilotConfig } from '../hooks/useCopilotConfig';
+import { useSubscription } from '../hooks/useSubscription';
 import { useEffect, useState } from 'react';
-import UpgradeDialog from '@/components/UpgradeDialog';
+import UpgradeDialog from '../components/UpgradeDialog';
+import AuthButton from '../components/AuthButton';
 const Home = () => {
   const navigate = useNavigate();
   const {
@@ -98,6 +99,23 @@ const Home = () => {
     }
   };
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
+    {/* Header with Logo and User Avatar */}
+    <header className="bg-white shadow-sm border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+              <span className="text-white font-bold text-sm">A</span>
+            </div>
+            <span className="text-gray-900 text-lg font-bold">ApplyFirst</span>
+          </Link>
+          
+          {/* User Avatar */}
+          <AuthButton />
+        </div>
+      </div>
+    </header>
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">

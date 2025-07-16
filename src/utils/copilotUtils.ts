@@ -1,7 +1,8 @@
 
-import { CopilotConfig } from '@/types/copilot';
+import { CopilotConfig } from '../types/copilot';
 
 export const createEmptyConfig = (): CopilotConfig => ({
+  name: undefined,
   workLocationTypes: [],
   remoteLocations: [],
   onsiteLocations: [],
