@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Settings, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import AuthButton from '@/components/AuthButton';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
-import { supabase } from '@/integrations/supabase/client';
+
 
 interface Job {
   id: number;
@@ -45,18 +44,36 @@ const CopilotPreview = () => {
       setApiMessage('');
 
       try {
-        
-        
-        const { data, error: functionError } = await supabase.functions.invoke('fetch-jobs', {
-          body: {
-            jobTitles: config.jobTitles,
-            workLocationTypes: config.workLocationTypes,
-            remoteLocations: config.remoteLocations,
-            onsiteLocations: config.onsiteLocations
+        // Mock job fetching for demo
+        const mockJobs = [
+          {
+            id: 1,
+            title: `${config.jobTitles[0] || 'Software Engineer'}`,
+            company: 'Tech Company Inc.',
+            location: config.onsiteLocations[0] || 'San Francisco, CA',
+            type: config.workLocationTypes[0] || 'Full-time',
+            description: 'Exciting opportunity to work with cutting-edge technology...',
+            salary: '$120,000 - $150,000',
+            posted: '2 days ago'
+          },
+          {
+            id: 2,
+            title: `Senior ${config.jobTitles[0] || 'Developer'}`,
+            company: 'Innovation Labs',
+            location: config.remoteLocations[0] || 'Remote',
+            type: 'Remote',
+            description: 'Join our team of passionate developers...',
+            salary: '$140,000 - $180,000',
+            posted: '1 week ago'
           }
-        });
+        ];
 
-        
+        const data = {
+          jobs: mockJobs,
+          source: 'demo',
+          message: 'Demo jobs generated based on your criteria'
+        };
+        const functionError = null;
 
         if (functionError) {
           throw new Error(functionError.message || 'Failed to fetch jobs');
@@ -66,9 +83,6 @@ const CopilotPreview = () => {
           setJobs(data.jobs);
           setDataSource(data.source || 'unknown');
           setApiMessage(data.message || '');
-          
-          if (data.error) {
-          }
         } else {
           throw new Error('No jobs data received');
         }
@@ -145,7 +159,6 @@ const CopilotPreview = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            <AuthButton />
           </div>
         </div>
       </header>

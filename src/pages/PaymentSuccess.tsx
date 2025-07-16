@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, ArrowRight, Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+
 import { useSubscription } from '@/hooks/useSubscription';
 
 const PaymentSuccess = () => {
@@ -28,10 +28,19 @@ const PaymentSuccess = () => {
     try {
       console.log('Processing payment success for session:', sessionId);
       
-      // Call the handle-payment-success function
-      const { data, error } = await supabase.functions.invoke('handle-payment-success', {
-        body: { sessionId }
-      });
+      // Handle payment success (localStorage for demo)
+      const paymentData = {
+        sessionId,
+        processedAt: new Date().toISOString(),
+        status: 'success'
+      };
+      
+      // Store payment success in localStorage for demo implementation
+      localStorage.setItem('last_payment_success', JSON.stringify(paymentData));
+      
+      // Always successful for demo
+      const data = { success: true };
+      const error = null;
 
       if (error) {
         console.error('Error processing payment success:', error);

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Shield, DollarSign, ArrowRight, Sparkles } from "lucide-react";
-import { useNoSupabaseAuth } from './NoSupabaseAuthProvider';
 import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
@@ -11,11 +10,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { AuthForm } from './AuthForm';
+// import { AuthForm } from "./AuthForm";
 
 const Pricing = () => {
+  const [user, setUser] = useState(null); // Mock user state
   const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const { user } = useNoSupabaseAuth();
   const navigate = useNavigate();
   const features = ["AI scans job boards in real time, and our human agents apply to 20 matching jobs on your behalf every day", "We find the right hiring managers using LinkedIn research and verified emails from trusted data providers", "20 personalized emails sent daily from your Gmail. Complete with your resume and hyper-personalized messaging.", "Save 20+ hours every week. Spend less time applying, and more time preparing for interviews.", "2–4 interviews guaranteed per month. Or your next month is free.", "We only onboard 20 candidates each week, focused on roles paying $100K+"];
   return <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
@@ -81,7 +80,7 @@ const Pricing = () => {
               
 
               <div className="space-y-4">
-                {!user ? (
+                {user ? (
                   <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
                     <DialogTrigger asChild>
                       <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
@@ -95,7 +94,7 @@ const Pricing = () => {
                           Sign in to your account or create a new one to check your eligibility for our concierge service.
                         </DialogDescription>
                       </DialogHeader>
-                      <AuthForm onSuccess={() => setShowAuthDialog(false)} />
+                      {/* <AuthForm onSuccess={() => setShowAuthDialog(false)} /> */}
                     </DialogContent>
                   </Dialog>
                 ) : (

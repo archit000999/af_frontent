@@ -10,16 +10,7 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import WebinarSection from "@/components/WebinarSection";
 
-const Index = () => {
-  console.log('🏠 [PAGE-DEBUG] Index page rendering...');
-  
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  console.log('🏠 [PAGE-DEBUG] Index page device info:', {
-    isMobile,
-    userAgent: navigator.userAgent,
-    windowSize: { width: window.innerWidth, height: window.innerHeight }
-  });
-  
+const Index = () => { 
   return (
     <div className="min-h-screen bg-white">
       <Navbar />

@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import AuthButton from "./AuthButton";
+import { set } from "date-fns";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navigationItems = [
     { name: "Home", href: "#home" },
-    { name: "Why ApplyFirst", href: "#problem" },
+    { name: "WhyApplyFirst", href: "#problem" },
     { name: "How it Works", href: "#how-it-works" },
     { name: "Pricing", href: "#pricing" },
     { name: "FAQ", href: "#faq" },
@@ -51,8 +51,10 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-4">
           {/* Auth buttons */}
-          <AuthButton />
-          
+          <Button
+            variant="outline"
+            size="sm"
+            className="hidden lg:inline-flex">Login</Button>
           {/* Mobile menu button */}
           <Button
             variant="ghost"

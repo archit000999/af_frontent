@@ -6,10 +6,7 @@ import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useEffect, useState } from 'react';
 import UpgradeDialog from '@/components/UpgradeDialog';
-import { useSupabaseAuth } from '@/components/SupabaseAuthProvider';
-import AuthButton from '@/components/AuthButton';
 const Home = () => {
-  const { user } = useSupabaseAuth();
   const navigate = useNavigate();
   const {
     isSubscribed,
@@ -34,11 +31,7 @@ const Home = () => {
   const [upgradeDialogType, setUpgradeDialogType] = useState<'subscription' | 'elite'>('subscription');
 
   // Refresh subscription status when component mounts or when returning from payment
-  useEffect(() => {
-    if (user) {
-      refreshSubscription();
-    }
-  }, [user, refreshSubscription]);
+
   const handleSetupCopilot = () => {
     // Check if user is trying to create a second copilot without Elite plan
     if (allConfigs.length >= 1 && planType !== 'elite') {
@@ -47,10 +40,6 @@ const Home = () => {
       return;
     }
     if (createNewCopilot()) {
-      // Clear any cached configuration data from localStorage
-      localStorage.removeItem('copilot-config-draft');
-      localStorage.removeItem('copilot-config');
-
       // Navigate to setup with fresh state
       navigate('/copilot-setup');
     }
@@ -143,8 +132,6 @@ const Home = () => {
                 <Crown className="w-4 h-4 text-purple-600" />
                 <span className="text-sm font-medium text-purple-700">{getPlanDisplayName()}</span>
               </div>}
-            
-            <AuthButton />
           </div>
         </div>
       </header>

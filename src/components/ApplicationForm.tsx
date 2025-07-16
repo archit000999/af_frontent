@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { supabase } from "@/integrations/supabase/client";
+
 import { toast } from "sonner";
 
 interface ApplicationFormProps {
@@ -34,17 +34,23 @@ const ApplicationForm = ({ open, onOpenChange }: ApplicationFormProps) => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase
-        .from('applications')
-        .insert({
-          full_name: formData.fullName,
-          email: formData.email,
-          phone_number: formData.phoneNumber,
-          linkedin_url: formData.linkedinUrl,
-          is_in_us: formData.isInUS,
-          career_track: formData.careerTrack,
-          is_currently_employed: formData.isCurrentlyEmployed,
-        });
+      // Store application data in localStorage for demo
+      const applicationData = {
+        full_name: formData.fullName,
+        email: formData.email,
+        phone_number: formData.phoneNumber,
+        linkedin_url: formData.linkedinUrl,
+        is_in_us: formData.isInUS,
+        career_track: formData.careerTrack,
+        is_currently_employed: formData.isCurrentlyEmployed,
+        submitted_at: new Date().toISOString()
+      };
+
+      const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+      existingApplications.push(applicationData);
+      localStorage.setItem('applications', JSON.stringify(existingApplications));
+
+      const error = null; // Always successful for demo
 
       if (error) {
         toast.error("Failed to submit application. Please try again.");

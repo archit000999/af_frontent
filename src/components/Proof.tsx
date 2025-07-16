@@ -8,13 +8,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useNoSupabaseAuth } from "./NoSupabaseAuthProvider";
 import { useState } from "react";
-import { AuthForm } from "./AuthForm";
 import { useNavigate } from "react-router-dom";
+// import { AuthForm } from "./AuthForm";
 const Proof = () => {
+  const [user, setUser] = useState(null); // Mock user state
  const [showAuthDialog, setShowAuthDialog] = useState(false);
-    const { user } = useNoSupabaseAuth();
     const navigate = useNavigate();
   const stats = [{
     icon: TrendingUp,
@@ -109,7 +108,7 @@ const Proof = () => {
           
           <div className="text-center mt-12">
             <div className="space-y-4">
-                {!user ? (
+                {user ? (
                   <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
                     <DialogTrigger asChild>
                       <Button size="lg" className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-12 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
@@ -123,7 +122,7 @@ const Proof = () => {
                           Sign in to your account or create a new one to check your eligibility for our concierge service.
                         </DialogDescription>
                       </DialogHeader>
-                      <AuthForm onSuccess={() => setShowAuthDialog(false)} />
+                      {/* <AuthForm onSuccess={() => setShowAuthDialog(false)} /> */}
                     </DialogContent>
                   </Dialog>
                 ) : (

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useSupabaseAuth } from '@/components/SupabaseAuthProvider';
 import { useToast } from '@/hooks/use-toast';
 import { CopilotConfig } from '@/types/copilot';
 import { 
@@ -12,30 +11,25 @@ import {
   saveConfigToDatabase,
   deleteConfigFromDatabase
 } from '@/services/copilotService';
-import { supabase } from '@/integrations/supabase/client';
 
 export const useCopilotConfig = (maxCopilots: number = 1) => {
-  const { user, session } = useSupabaseAuth();
   const { toast } = useToast();
   const [config, setConfig] = useState<CopilotConfig>(createEmptyConfig());
   const [allConfigs, setAllConfigs] = useState<CopilotConfig[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
-
-  // Auth is already handled by SupabaseAuthProvider, no need for additional setup
+  
   // Load all existing configurations on mount
   useEffect(() => {
-    if (user && !isInitialized) {
+    if (!isInitialized) {
       loadAllConfigs();
     }
-  }, [user, isInitialized]);
+  }, [isInitialized]);
 
   const loadAllConfigs = async () => {
-    if (!user) return;
-    
     setIsLoading(true);
     try {
-      const configs = await loadAllConfigsService(user.id);
+      const configs = await loadAllConfigsService('demo-user');
       setAllConfigs(configs);
 
       // Set the most recent config as current
@@ -97,59 +91,38 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         throw new Error('File too large. Maximum size is 10MB.');
       }
 
-      // Generate unique filename without user ID since no auth required
+      // Generate unique filename
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const fileName = `${timestamp}_${sanitizedFileName}`;
       
-      console.log('Uploading file to path:', fileName);
+      console.log('Processing file:', fileName);
 
-      // Upload file directly to Supabase Storage without authentication
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('resumes')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+      // Create a file URL for local storage
+      const fileUrl = URL.createObjectURL(file);
 
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw new Error(`Upload failed: ${uploadError.message}`);
-      }
-
-      console.log('File uploaded successfully:', uploadData);
-
-      // Get public URL for the uploaded file
-      const { data: { publicUrl } } = supabase.storage
-        .from('resumes')
-        .getPublicUrl(fileName);
-
-      console.log('Generated public URL:', publicUrl);
+      console.log('File processed successfully');
 
       // Update configuration with resume info
       const resumeData = {
         resumeFileName: fileName,
-        resumeFileUrl: publicUrl
+        resumeFileUrl: fileUrl
       };
 
       // Update local config
       updateConfig(resumeData);
 
-      // Save to database if user is authenticated
-      if (user) {
-        const success = await saveConfig(resumeData, true); // silent save
-        
-        if (!success) {
-          // If database save fails, clean up uploaded file
-          await supabase.storage.from('resumes').remove([fileName]);
-          throw new Error('Failed to save resume information');
-        }
+      // Auto-save the config
+      const success = await saveConfig(resumeData, true); // silent save
+      
+      if (!success) {
+        throw new Error('Failed to save resume information');
       }
 
       
       return {
         fileName: fileName,
-        fileUrl: publicUrl
+        fileUrl: fileUrl
       };
     } catch (error: any) {
       console.error('Error uploading resume:', error);
@@ -176,17 +149,6 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
   };
 
   const saveConfig = async (updatedConfig?: Partial<CopilotConfig>, silent: boolean = false) => {
-    if (!user) {
-      if (!silent) {
-        toast({
-          title: "Authentication Required",
-          description: "Please log in to save your configuration",
-          variant: "destructive"
-        });
-      }
-      return false;
-    }
-
     const configToSave = updatedConfig ? { ...config, ...updatedConfig } : config;
     if (!silent) {
       setIsLoading(true);
@@ -206,7 +168,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
         return false;
       }
 
-      const savedConfig = await saveConfigToDatabase(configToSave, user.id);
+      const savedConfig = await saveConfigToDatabase(configToSave, 'demo-user');
       setConfig(savedConfig);
 
       // Refresh all configs to keep them in sync
@@ -247,11 +209,9 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
   };
 
   const deleteConfig = async (configId: string) => {
-    if (!user) return false;
-
     try {
       setIsLoading(true);
-      await deleteConfigFromDatabase(configId, user.id);
+      await deleteConfigFromDatabase(configId, 'demo-user');
       
       // Refresh configs
       await loadAllConfigs();

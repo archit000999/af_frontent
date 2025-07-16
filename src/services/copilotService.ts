@@ -1,95 +1,80 @@
-
-import { supabase } from '@/integrations/supabase/client';
 import { CopilotConfig } from '@/types/copilot';
-import { mapDatabaseToConfig, mapConfigToDatabase } from '@/utils/copilotUtils';
+
+// Simple in-memory storage for demo
+let configsStore: Record<string, CopilotConfig[]> = {};
 
 export const loadAllConfigs = async (userId: string): Promise<CopilotConfig[]> => {
-  const { data, error } = await supabase
-    .from('copilot_configurations')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    throw error;
+  try {
+    return configsStore[userId] || [];
+  } catch (error) {
+    console.error('Error loading configs:', error);
+    return [];
   }
+};
 
-  return data?.map(mapDatabaseToConfig) || [];
+export const loadAllConfigsService = async (userId: string): Promise<CopilotConfig[]> => {
+  return loadAllConfigs(userId);
 };
 
 export const saveConfigToDatabase = async (config: CopilotConfig, userId: string): Promise<CopilotConfig> => {
-  const configData = mapConfigToDatabase(config, userId);
-
-  let result;
-  if (config.id) {
-    // Update existing configuration
-    result = await supabase
-      .from('copilot_configurations')
-      .update(configData)
-      .eq('id', config.id)
-      .select()
-      .single();
-  } else {
-    // Create new configuration
-    result = await supabase
-      .from('copilot_configurations')
-      .insert([configData])
-      .select()
-      .single();
-  }
-
-  if (result.error) {
-    throw result.error;
-  }
-
-  return mapDatabaseToConfig(result.data);
-};
-
-export const deleteConfigFromDatabase = async (configId: string, userId: string): Promise<void> => {
-  const { error } = await supabase
-    .from('copilot_configurations')
-    .delete()
-    .eq('id', configId)
-    .eq('user_id', userId);
-
-  if (error) {
+  try {
+    if (!configsStore[userId]) {
+      configsStore[userId] = [];
+    }
+    
+    if (config.id) {
+      // Update existing configuration
+      const index = configsStore[userId].findIndex((c: CopilotConfig) => c.id === config.id);
+      if (index !== -1) {
+        configsStore[userId][index] = config;
+      } else {
+        configsStore[userId].push(config);
+      }
+    } else {
+      // Create new configuration
+      const newConfig = { ...config, id: `config_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` };
+      configsStore[userId].push(newConfig);
+      return newConfig;
+    }
+    
+    return config;
+  } catch (error) {
+    console.error('Error saving config:', error);
     throw error;
   }
 };
 
-export const uploadResumeFile = async (file: File, clerkToken: string) => {
-  console.log('Starting uploadResumeFile with:', { fileName: file.name, fileType: file.type, fileSize: file.size });
-  
+export const deleteConfigFromDatabase = async (configId: string, userId: string): Promise<boolean> => {
   try {
-    // Create FormData for the file upload
-    const formData = new FormData();
-    formData.append('file', file);
-
-    // Call the Edge Function instead of direct Supabase
-    const response = await fetch('https://osuyeptufjtmqsydulmq.supabase.co/functions/v1/upload-resume', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${clerkToken}`,
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Upload failed' }));
-      console.error('Edge function error:', errorData);
-      throw new Error(errorData.error || 'Upload failed');
+    if (!configsStore[userId]) {
+      return false;
     }
+    
+    const index = configsStore[userId].findIndex(c => c.id === configId);
+    if (index !== -1) {
+      configsStore[userId].splice(index, 1);
+      return true;
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('Error deleting config:', error);
+    throw error;
+  }
+};
 
-    const result = await response.json();
-    console.log('Upload successful:', result);
-
+export const uploadFile = async (file: File): Promise<{ fileName: string; fileUrl: string }> => {
+  try {
+    // Create a simple file URL for demo purposes
+    const fileUrl = URL.createObjectURL(file);
+    const fileName = file.name;
+    
     return {
-      fileName: result.fileName,
-      filePath: result.filePath,
-      fileUrl: result.fileUrl
+      fileName,
+      fileUrl
     };
   } catch (error) {
-    console.error('Error in uploadResumeFile:', error);
+    console.error('Error uploading file:', error);
     throw error;
   }
 };

@@ -9,14 +9,11 @@ import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { useSubscription } from '@/hooks/useSubscription';
-import { supabase } from '@/integrations/supabase/client';
+
 import { useToast } from '@/hooks/use-toast';
-import { useSupabaseAuth } from '@/components/SupabaseAuthProvider';
-import AuthButton from '@/components/AuthButton';
 
 const Support = () => {
   const navigate = useNavigate();
-  const { user } = useSupabaseAuth();
   const { toast } = useToast();
   const { isSubscribed } = useSubscription();
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
@@ -35,14 +32,7 @@ const Support = () => {
   ];
 
   const handleCancelSubscription = async () => {
-    if (!user) {
-      toast({
-        title: "Error",
-        description: "User not found. Please log in again.",
-        variant: "destructive"
-      });
-      return;
-    }
+  
 
     if (!selectedReason) {
       toast({
@@ -65,18 +55,13 @@ const Support = () => {
     setIsProcessing(true);
 
     try {
-      // Save cancellation request to Supabase
-      const { error } = await supabase
-        .from('cancellation_requests' as any)
-        .insert([
-          {
-            user_id: user.id,
-            user_email: user.email,
-            stripe_email: stripeEmail.trim(),
-            reason: selectedReason,
-            additional_feedback: additionalFeedback.trim() || null
-          }
-        ]);
+      // Simulate cancellation request processing
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      console.log('Cancellation request processed');
+
+      // Always successful for demo
+      const error = null;
 
       if (error) {
         console.error('Error saving cancellation request:', error);
@@ -149,7 +134,7 @@ const Support = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            <AuthButton />
+   
           </div>
         </div>
       </header>

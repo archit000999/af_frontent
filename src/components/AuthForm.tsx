@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNoSupabaseAuth } from './NoSupabaseAuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +13,6 @@ interface AuthFormProps {
 }
 
 export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
-  const { signIn, signUp, signInWithOAuth, resetPassword, loading } = useNoSupabaseAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,15 +28,17 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
     setIsLoading(true);
     setError(null);
     
-    const { error } = await signIn(email, password);
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    if (error) {
-      setError(error.message);
-    } else {
+    // Simple validation for demo
+    if (email && password) {
       setSuccess('Successfully signed in!');
       onSuccess?.();
       // Redirect to home after successful sign in
-       navigate('/home');
+      navigate('/home');
+    } else {
+      setError('Please enter valid email and password');
     }
     
     setIsLoading(false);
@@ -55,14 +55,15 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
       return;
     }
     
-    const { error } = await signUp(email, password);
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    if (error) {
-      setError(error.message);
+    // Simple validation for demo
+    if (email && password) {
+      setSuccess('Account created successfully! You can now sign in.');
+      setActiveTab('signin');
     } else {
-      setSuccess('Check your email to confirm your account!');
-      // For sign up, don't redirect immediately since email confirmation is required
-      // The user will be redirected when they click the confirmation link
+      setError('Please enter valid email and password');
     }
     
     setIsLoading(false);
@@ -72,14 +73,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
     setIsLoading(true);
     setError(null);
     
-  const { error } = await signInWithOAuth(provider);
+    // Simulate OAuth flow
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    if (error) {
-      setError(error.message);
-    } else {
-      // OAuth will handle the redirect through Supabase's built-in flow
-      onSuccess?.();
-    }
+    setSuccess(`Successfully signed in with ${provider}!`);
+    onSuccess?.();
+    navigate('/home');
     
     setIsLoading(false);
   };
@@ -93,18 +92,15 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
     setIsLoading(true);
     setError(null);
     
-    const { error } = await resetPassword(email);
+    // Simulate password reset
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    if (error) {
-      setError(error.message);
-    } else {
-      setSuccess('Password reset email sent!');
-    }
+    setSuccess('Password reset email sent!');
     
     setIsLoading(false);
   };
 
-  if (loading) {
+  if (isLoading && !email && !password) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="h-8 w-8 animate-spin" />

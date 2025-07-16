@@ -1,7 +1,5 @@
 
 import { useState, useEffect } from 'react';
-import { useSupabaseAuth } from '@/components/SupabaseAuthProvider';
-import { supabase } from '@/integrations/supabase/client';
 
 interface SubscriptionStatus {
   isSubscribed: boolean;
@@ -13,47 +11,40 @@ interface SubscriptionStatus {
 }
 
 export const useSubscription = () => {
-  const { user } = useSupabaseAuth();
   const [subscriptionStatus, setSubscriptionStatus] = useState<SubscriptionStatus>({
     isSubscribed: false,
     planType: null,
     maxCopilots: 1, // Allow 1 copilot for free users
-    isLoading: true,
+    isLoading: false,
     subscriptionId: null,
     currentPeriodEnd: null
   });
 
   useEffect(() => {
-    if (user?.email) {
-      checkSubscriptionStatus();
-    }
-  }, [user]);
+    checkSubscriptionStatus();
+  }, []);
 
   const checkSubscriptionStatus = async () => {
-    if (!user?.email) return;
-
     try {
-      console.log('🔍 Checking subscription for email:', user.email);
+      console.log('🔍 Checking subscription status');
       
-      // First, let's check ALL payments for this user to see what's in the database
-      const { data: allPayments, error: allError } = await supabase
-        .from('payments')
-        .select('*')
-        .eq('user_email', user.email)
-        .order('created_at', { ascending: false });
-
-      console.log('🗂️ ALL payments for user:', allPayments);
-      console.log('🗂️ ALL payments error:', allError);
+      // Check for any payment success data
+      const paymentSuccess = localStorage.getItem('last_payment_success');
+      const payments = paymentSuccess ? [JSON.parse(paymentSuccess)] : [];
       
-      const { data, error } = await supabase
-        .from('payments')
-        .select('plan_type, status, stripe_subscription_id, created_at, amount')
-        .eq('user_email', user.email)
-        .in('status', ['completed', 'paid']) // Check for both completed and paid status
-        .order('created_at', { ascending: false })
-        .limit(1);
+      console.log('🗂️ ALL payments for user (local):', payments);
+      
+      // Simulate database query results
+      const data = payments.length > 0 ? [{
+        plan_type: 'premium',
+        status: 'completed',
+        stripe_subscription_id: 'sub_123',
+        created_at: new Date().toISOString(),
+        amount: 2999
+      }] : [];
+      const error = null;
 
-      console.log('📊 Payment query result:', { data, error });
+      console.log('📊 Payment query result (local):', { data, error });
 
       if (error) {
         console.error('❌ Error checking subscription:', error);
@@ -96,7 +87,7 @@ export const useSubscription = () => {
           maxCopilots,
           isLoading: false,
           subscriptionId: latestPayment.stripe_subscription_id,
-          currentPeriodEnd: null // We could fetch this from Stripe if needed
+          currentPeriodEnd: null
         });
       } else {
         console.log('❌ No completed/paid payments found, setting as free user');

@@ -1,9 +1,7 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
-  fallback?: ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
 interface State {
@@ -21,48 +19,36 @@ class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
-    // Log iOS-specific debugging info
-    const userAgent = navigator.userAgent;
-    const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-    const isSafari = /Safari/.test(userAgent);
-    
-    console.error('Device info:', {
-      userAgent,
-      isIOS,
-      isSafari,
-      error: error.message,
-      stack: error.stack,
-      componentStack: errorInfo.componentStack
-    });
-
-    this.props.onError?.(error, errorInfo);
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
-      if (this.props.fallback) {
-        return this.props.fallback;
-      }
-
       return (
-        <div className="min-h-screen flex items-center justify-center bg-background">
-          <div className="text-center p-8">
-            <h2 className="text-2xl font-bold text-foreground mb-4">
-              Something went wrong
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              We're having trouble loading this page. Please try refreshing.
-            </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-            >
-              Refresh Page
-            </button>
-          </div>
+        <div style={{
+          padding: '20px',
+          margin: '20px',
+          border: '1px solid #ff4444',
+          borderRadius: '8px',
+          backgroundColor: '#fff5f5',
+          color: '#cc0000'
+        }}>
+          <h2>Something went wrong.</h2>
+          <p>{this.state.error?.message}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#ff4444',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Reload page
+          </button>
         </div>
       );
     }

@@ -4,8 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, ArrowLeft, Sparkles, Crown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { useSupabaseAuth } from './SupabaseAuthProvider';
+
 
 // Early Bird Badge Component
 const EarlyBirdBadge = () => (
@@ -160,7 +159,6 @@ const BackButton = ({ onBack }) => (
 const Payment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user } = useSupabaseAuth();
   const [isLoading, setIsLoading] = useState(false);
   
   const plan = {

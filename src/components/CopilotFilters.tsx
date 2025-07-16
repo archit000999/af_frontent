@@ -5,7 +5,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowLeft, Settings, ChevronRight, ChevronDown, X, HelpCircle, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import AuthButton from '@/components/AuthButton';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
 
 const CopilotFilters = () => {
@@ -295,8 +294,6 @@ const CopilotFilters = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            
-            <AuthButton />
           </div>
         </div>
       </header>

@@ -4,7 +4,6 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Check, X, Edit, ArrowLeft, Settings, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import AuthButton from '@/components/AuthButton';
 import { LocationSelectionDialog } from './LocationSelectionDialog';
 import LoadingScreen from './LoadingScreen';
 import { useCopilotConfig } from '@/hooks/useCopilotConfig';
@@ -249,8 +248,6 @@ const CopilotSetup = () => {
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            
-            <AuthButton />
           </div>
         </div>
       </header>
