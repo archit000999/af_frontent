@@ -99,66 +99,52 @@ const Home = () => {
     }
   };
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
-    {/* Header with Logo and User Avatar */}
+    {/* Combined Header */}
     <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-sm">
-              <span className="text-white font-bold text-sm">A</span>
+              <span className="text-white font-bold text-lg">A</span>
             </div>
-            <span className="text-gray-900 text-lg font-bold">ApplyFirst</span>
+            <span className="text-gray-900 text-xl font-bold">ApplyFirst</span>
           </Link>
           
-          {/* User Avatar */}
-          <AuthButton />
-        </div>
-      </div>
-    </header>
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between max-w-7xl mx-auto">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">A</span>
-            </div>
-            <span className="text-xl font-semibold text-gray-900">ApplyFirst</span>
-          </div>
-
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center space-x-2 text-purple-600 font-medium text-base">
+            <div onClick={() => navigate('/home')} className="flex items-center space-x-2 text-purple-600 font-medium text-base cursor-pointer">
               <button>ApplyFirst</button>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/applications')}>
-              <div className="w-6 h-6 flex items-center justify-center">
-              </div>
-              <button>Applications</button>
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base">
+              <div className="w-6 h-6 flex items-center justify-center"></div>
+              <button onClick={() => navigate('/applications')}>Applications</button>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/support')}>
-              <div className="w-6 h-6 flex items-center justify-center">
-              </div>
+            <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 cursor-pointer text-base" onClick={() => navigate('/support')}> 
+              <div className="w-6 h-6 flex items-center justify-center"></div>
               <button>Support</button>
             </div>
           </nav>
 
           {/* User Section */}
           <div className="flex items-center space-x-4">
-            {isSubscribed && <div className="flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-blue-100 px-3 py-1 rounded-full">
+            {isSubscribed && (
+              <div className="flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-blue-100 px-3 py-1 rounded-full">
                 <Crown className="w-4 h-4 text-purple-600" />
                 <span className="text-sm font-medium text-purple-700">{getPlanDisplayName()}</span>
-              </div>}
+              </div>
+            )}
+            <AuthButton />
           </div>
         </div>
-      </header>
+      </div>
+    </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="max-w-6xl">
           <div className="mb-12">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">ApplyFirst</h1>
+            {/* <h1 className="text-3xl font-bold text-gray-900 mb-4">ApplyFirst</h1> */}
             
             {/* Debug info for subscription status */}
             {/* {process.env.NODE_ENV === 'development' && (

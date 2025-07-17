@@ -18,7 +18,9 @@ export const createEmptyConfig = (): CopilotConfig => ({
 });
 
 export const canCreateNewCopilot = (allConfigs: CopilotConfig[], maxCopilots: number): boolean => {
-  return allConfigs.length < Math.max(maxCopilots, 1);
+  // Count only completed configurations (stepCompleted === 4) for the limit
+  const completedConfigs = allConfigs.filter(config => (config.stepCompleted || 1) === 4);
+  return completedConfigs.length < Math.max(maxCopilots, 1);
 };
 
 export const getPlanName = (maxCopilots: number): string => {

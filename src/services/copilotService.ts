@@ -157,6 +157,7 @@ const mapBackendToConfig = (backendConfig: any): CopilotConfig => {
 export const loadAllConfigs = async (userId: string): Promise<CopilotConfig[]> => {
   try {
     const response = await copilotAPI.getAll();
+    // Backend now returns 'copilots' array
     return (response.copilots || []).map(mapBackendToConfig);
   } catch (error) {
     console.error('Error loading configs:', error);

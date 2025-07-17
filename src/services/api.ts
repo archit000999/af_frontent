@@ -89,8 +89,9 @@ export const copilotAPI = {
   },
 
   create: async (copilotData: any) => {
+    // Use PATCH for both create and update operations
     return apiCall('/copilot', {
-      method: 'POST',
+      method: 'PATCH',
       body: JSON.stringify(copilotData),
     });
   },
@@ -100,16 +101,10 @@ export const copilotAPI = {
   },
 
   update: async (id: string, data: any) => {
+    // Use PATCH for updates
     return apiCall(`/copilot/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       body: JSON.stringify(data),
-    });
-  },
-
-  updateStep: async (id: string, step: number, data: any) => {
-    return apiCall(`/copilot/${id}/step`, {
-      method: 'PUT',
-      body: JSON.stringify({ step, data }),
     });
   },
 

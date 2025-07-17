@@ -73,8 +73,17 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
       return false;
     }
 
-    // Reset to fresh state for new copilot
-    setConfig(createEmptyConfig());
+    // Check if there's an existing incomplete configuration
+    const incompleteConfig = allConfigs.find(c => (c.stepCompleted || 1) < 4);
+    
+    if (incompleteConfig) {
+      // Continue with the existing incomplete configuration
+      setConfig(incompleteConfig);
+    } else {
+      // Reset to fresh state for truly new copilot
+      setConfig(createEmptyConfig());
+    }
+    
     return true;
   };
 
@@ -161,17 +170,42 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
     }
 
     try {
-      // Check limits for new configurations
-      if (!configToSave.id && !canCreateNewCopilot() && maxCopilots > 0) {
-        const planName = getPlanName(maxCopilots);
-        if (!silent) {
-          toast({
-            title: "Limit Reached",
-            description: `You can only create up to ${Math.max(maxCopilots, 1)} copilot configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
-            variant: "destructive"
-          });
+      // For new configurations, check if user already has one in progress
+      if (!configToSave.id) {
+        // Check if user already has a configuration in progress (stepCompleted < 4)
+        const existingConfig = allConfigs.find(c => (c.stepCompleted || 1) < 4);
+        
+        if (existingConfig) {
+          // Update the existing in-progress configuration instead of creating new one
+          configToSave.id = existingConfig.id;
+          // Make sure stepCompleted is updated correctly
+          configToSave.stepCompleted = Math.max(
+            existingConfig.stepCompleted || 1, 
+            configToSave.stepCompleted || 1
+          );
+        } else {
+          // Check limits for truly new configurations
+          if (!canCreateNewCopilot() && maxCopilots > 0) {
+            const planName = getPlanName(maxCopilots);
+            if (!silent) {
+              toast({
+                title: "Limit Reached",
+                description: `You can only create up to ${Math.max(maxCopilots, 1)} copilot configuration${Math.max(maxCopilots, 1) > 1 ? 's' : ''} with your ${planName} plan`,
+                variant: "destructive"
+              });
+            }
+            return false;
+          }
         }
-        return false;
+      } else {
+        // For existing configs, ensure stepCompleted is progressing forward
+        const existingConfig = allConfigs.find(c => c.id === configToSave.id);
+        if (existingConfig) {
+          configToSave.stepCompleted = Math.max(
+            existingConfig.stepCompleted || 1, 
+            configToSave.stepCompleted || 1
+          );
+        }
       }
 
       const savedConfig = await saveConfigToDatabase(configToSave, user.id);
@@ -188,6 +222,7 @@ export const useCopilotConfig = (maxCopilots: number = 1) => {
       }
       return true;
     } catch (error) {
+      console.error('Save config error:', error);
       if (!silent) {
         toast({
           title: "Error",
